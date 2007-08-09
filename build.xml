@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<project name="fictionbook" basedir="." default="build">
+
+    <!-- version definition -->
+    <property file="src/ru/gelin/fictionbook/resources/version.properties"/>
+
+    <!-- directories definitions -->
+    <property name="src"      value="src"/>
+    <property name="build"    value="build"/>
+    <property name="classes"  value="${build}/classes"/>
+    <property name="lib"      value="lib"/>
+    <property name="dist"     value="dist"/>
+    <property name="javadoc"  value="docs/api"/>
+
+    <fileset id="licenses" dir=".">
+        <include name="LICENSE.txt"/>
+        <!--include name="THIRDPARTYLICENSE.txt"/-->
+        <!--include name="NOTICE.txt"/-->
+    </fileset>
+
+    <tstamp>
+        <format property="TSTAMP" pattern="yyyy-MM-dd'T'HH"/>
+    </tstamp>
+
+    <import file="tools/targets/viewer.xml"/>
+
+    <!-- clean target -->
+    <target name="clean" description="delete compiled files">
+        <delete dir="${build}"/>
+    </target>
+
+    <!-- copy resources -->
+    <target name="resources" description="copy resources">
+        <native2ascii encoding="UTF-8"
+                      src="${src}"
+                      dest="${classes}"
+                      includes="**/*.properties"/>
+    </target>
+
+    <!-- compile target -->
+    <target name="compile" depends="viewer.compile"
+            description="compile projects"/>
+
+    <!-- jar target -->
+    <target name="jar" depends="compile, resources, viewer.jar"
+            description="make projects' jar archives"/>
+
+    <!-- build target -->
+    <target name="build" depends="compile, jar"
+            description="makes full build of projects"/>
+
+    <!-- dist target -->
+    <target name="dist" depends="clean, compile, jar"
+            description="makes project distribution">
+        <mkdir dir="${dist}"/>
+        <zip destfile="${dist}/${ant.project.name}.zip">
+            <fileset dir=".">
+                <include name="**"/>
+                <exclude name="build/**"/>
+                <exclude name="dist/**"/>
+            </fileset>
+        </zip>
+    </target>
+
+    <!-- Docs target -->
+    <target name="javadoc" description="creates projects' API documentation">
+        <delete dir="${javadoc}"/>
+        <mkdir dir="${javadoc}"/>
+        <javadoc destdir="${javadoc}"
+                 windowtitle="${ant.project.name} API"
+                 use="true"
+                 nodeprecatedlist="true">
+            <packageset dir="${src}">
+                <include name="ru/gelin/fictionbook/**"/>
+            </packageset>
+            <bottom><![CDATA[<i>Copyright &#169; 2007  Denis Nelubin aka Gelin</i>]]></bottom>
+            <!--link offline="true" href="http://java.sun.com/j2se/1.4.2/docs/api/" packagelistLoc="${templates.srcdir}"/-->
+        </javadoc>
+    </target>
+
+</project>
