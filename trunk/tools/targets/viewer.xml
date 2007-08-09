@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="fbviewer">
+
+    <property name="viewer.name" value="fbviewer"/>
+    <patternset id="viewer.files">
+        <include name="ru/gelin/fictionbook/viewer/**"/>
+    </patternset>
+
+    <!-- compile target -->
+    <target name="viewer.compile" description="compile viewer">
+        <mkdir dir="${classes}"/>
+        <javac srcdir="${src}" destdir="${classes}"
+                debug="true" debuglevel="source,lines,vars">
+            <patternset refid="viewer.files"/>
+            <exclude name="**/resources/**"/>
+        </javac>
+    </target>
+
+    <!-- jar target -->
+    <target name="viewer.jar" depends="viewer.compile, resources"
+            description="makes fbviewer.jar archive">
+        <mkdir dir="${lib}"/>
+        <jar destfile="${lib}/${viewer.name}.jar" basedir="${classes}">
+            <manifest>
+                <attribute name="Implementation-URL" value="http://gelin.ru/project/fictionbook"/>
+                <attribute name="Implementation-Vendor" value="Gelin"/>
+                <attribute name="Implementation-Version" value="${version} ${TSTAMP}"/>
+                <attribute name="Main-Class" value="ru.gelin.fictionbook.viewer.Main"/>
+            </manifest>
+            <patternset refid="viewer.files"/>
+            <zipfileset refid="licenses" prefix=""/>
+        </jar>
+    </target>
+
+</project>
