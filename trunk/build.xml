@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <project name="fictionbook" basedir="." default="build">
 
+    <import file="tools/targets/viewer.xml"/>
+
     <!-- version definition -->
     <property file="src/ru/gelin/fictionbook/resources/version.properties"/>
 
@@ -9,8 +11,27 @@
     <property name="build"    value="build"/>
     <property name="classes"  value="${build}/classes"/>
     <property name="lib"      value="lib"/>
+    <property name="contrib"  value="${lib}/thirdparty"/>
     <property name="dist"     value="dist"/>
+
+    <property name="test.src"       value="test"/>
+    <property name="test.classes"   value="${build}/test"/>
+    <property name="test.contrib"   value="${lib}/test"/>
+    <property name="test.doc"       value="docs/test"/>
+
     <property name="javadoc"  value="docs/api"/>
+
+    <path id="compile.path">
+        <fileset dir="${lib}" includes="*.jar"/>
+        <pathelement path="${classes}"/>
+        <fileset dir="${contrib}" includes="*.jar"/>
+    </path>
+
+    <path id="test.path">
+        <pathelement path="${test.classes}"/>
+        <fileset dir="${test.contrib}" includes="*.jar"/>
+        <path refid="compile.path"/>
+    </path>
 
     <fileset id="licenses" dir=".">
         <include name="LICENSE.txt"/>
@@ -22,14 +43,11 @@
         <format property="TSTAMP" pattern="yyyy-MM-dd'T'HH"/>
     </tstamp>
 
-    <import file="tools/targets/viewer.xml"/>
 
-    <!-- clean target -->
     <target name="clean" description="delete compiled files">
         <delete dir="${build}"/>
     </target>
 
-    <!-- copy resources -->
     <target name="resources" description="copy resources">
         <native2ascii encoding="UTF-8"
                       src="${src}"
@@ -37,19 +55,27 @@
                       includes="**/*.properties"/>
     </target>
 
-    <!-- compile target -->
     <target name="compile" depends="viewer.compile"
             description="compile projects"/>
 
-    <!-- jar target -->
+    <target name="test" depends="viewer.test"
+            description="run projects' tests">
+        <mkdir dir="${test.doc}/report"/>
+        <mkdir dir="${test.doc}/report/html"/>
+        <junitreport todir="${test.doc}/report">
+            <fileset dir="${test.doc}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report todir="${test.doc}/report/html"/>
+        </junitreport>
+    </target>
+
     <target name="jar" depends="compile, resources, viewer.jar"
             description="make projects' jar archives"/>
 
-    <!-- build target -->
-    <target name="build" depends="compile, jar"
+    <target name="build" depends="compile, test, jar"
             description="makes full build of projects"/>
 
-    <!-- dist target -->
     <target name="dist" depends="clean, compile, jar"
             description="makes project distribution">
         <mkdir dir="${dist}"/>
@@ -62,7 +88,6 @@
         </zip>
     </target>
 
-    <!-- Docs target -->
     <target name="javadoc" description="creates projects' API documentation">
         <delete dir="${javadoc}"/>
         <mkdir dir="${javadoc}"/>

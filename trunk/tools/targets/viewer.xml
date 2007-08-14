@@ -6,17 +6,39 @@
         <include name="ru/gelin/fictionbook/viewer/**"/>
     </patternset>
 
-    <!-- compile target -->
     <target name="viewer.compile" description="compile viewer">
         <mkdir dir="${classes}"/>
         <javac srcdir="${src}" destdir="${classes}"
                 debug="true" debuglevel="source,lines,vars">
+            <classpath refid="compile.path"/>
             <patternset refid="viewer.files"/>
             <exclude name="**/resources/**"/>
         </javac>
     </target>
 
-    <!-- jar target -->
+    <target name="viewer.compile-test">
+        <mkdir dir="${test.classes}"/>
+        <javac srcdir="${test.src}" destdir="${test.classes}"
+                debug="true" debuglevel="source,lines,vars">
+            <classpath refid="test.path"/>
+            <patternset refid="viewer.files"/>
+            <exclude name="**/resources/**"/>
+        </javac>
+    </target>
+
+    <target name="viewer.test" depends="viewer.compile-test">
+        <mkdir dir="${test.doc}"/>
+        <junit printsummary="yes">
+            <classpath refid="test.path"/>
+            <formatter type="xml"/>
+            <batchtest todir="${test.doc}">
+                <fileset dir="${test.classes}">
+                    <patternset refid="viewer.files"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
     <target name="viewer.jar" depends="viewer.compile, resources"
             description="makes fbviewer.jar archive">
         <mkdir dir="${lib}"/>
