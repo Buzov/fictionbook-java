@@ -4,6 +4,8 @@
     <property name="viewer.name" value="fbviewer"/>
     <patternset id="viewer.files">
         <include name="ru/gelin/fictionbook/viewer/**"/>
+        <include name="ru/gelin/fictionbook/*"/>
+        <include name="ru/gelin/fictionbook/resources/*"/>
     </patternset>
 
     <target name="viewer.compile" description="compile viewer">
@@ -46,8 +48,9 @@
             <manifest>
                 <attribute name="Implementation-URL" value="http://gelin.ru/project/fictionbook"/>
                 <attribute name="Implementation-Vendor" value="Gelin"/>
-                <attribute name="Implementation-Version" value="${version} ${TSTAMP}"/>
+                <attribute name="Implementation-Version" value="${version}"/>
                 <attribute name="Main-Class" value="ru.gelin.fictionbook.viewer.Main"/>
+                <attribute name="Date" value="${TSTAMP}"/>
             </manifest>
             <patternset refid="viewer.files"/>
             <zipfileset refid="licenses" prefix=""/>
