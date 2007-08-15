@@ -23,8 +23,8 @@
 package ru.gelin.fictionbook;
 
 import java.util.Properties;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 
 /**
  *  Reads Tools version from properties and returns and prints it.
@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
 public class Version {
 
     /** commons logging instance */
-    static Log log = LogFactory.getLog(Version.class);
+    //static Log log = LogFactory.getLog(Version.class);
 
     /** version value */
     protected static String version;
@@ -47,7 +47,8 @@ public class Version {
             props.load(Version.class.getResourceAsStream("resources/version.properties"));
             version = props.getProperty("version");
             } catch (Exception e) {
-                log.warn("can't get version", e);
+                //log.warn("can't get version", e);
+                System.err.println("can't get version: " + e);
                 version = "<not defined>";
             }
         }
