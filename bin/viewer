@@ -1,0 +1,14 @@
+#!/bin/sh
+
+FB_HOME=..
+
+CLASSPATH="$CLASSPATH"
+CLASSPATH="$CLASSPATH:$FB_HOME/lib/thirdparty/commons-logging.jar"
+CLASSPATH="$CLASSPATH:$FB_HOME/lib/thirdparty/dom4j.jar"
+CLASSPATH="$CLASSPATH:$FB_HOME/lib/fbcommon.jar"
+CLASSPATH="$CLASSPATH:$FB_HOME/lib/fbviewer.jar"
+
+OPTIONS=""
+OPTIONS="$OPTIONS -cp $CLASSPATH"
+
+$JAVA_HOME/bin/java $OPTIONS ru.gelin.fictionbook.viewer.Main

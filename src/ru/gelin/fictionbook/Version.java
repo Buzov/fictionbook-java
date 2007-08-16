@@ -56,10 +56,29 @@ public class Version {
     }
 
     /**
+     *  Creates common copyright notice using specified programm component
+     *  name.
+     *  @param  name    component name, for example, "Fiction Book Tools"
+     *  @return formatted copyright notice
+     */
+    public static String getCopyrightNotice(String name) {
+        StringBuilder str = new StringBuilder();
+        str.append(name);
+        str.append(" v.");
+        str.append(getVersion());
+        str.append("  Copyright (C) 2007  Denis Nelubin aka Gelin\n");
+        str.append(name);
+        str.append(" comes with ABSOLUTELY NO WARRANTY\n");
+        str.append("This is free software, and you are welcome to redistribute it\n");
+        str.append("under certain conditions. For details see LICENSE.txt.\n");
+        return str.toString();
+    }
+
+    /**
      *  Prints this Fiction Book Tools version to System.out and exits.
      */
     public static void main(String[] args) {
-        System.out.println(getVersion());
+        System.out.println(getCopyrightNotice("Fiction Book Tools"));
     }
 
 }
