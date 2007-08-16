@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <project name="fictionbook" basedir="." default="build">
 
+    <import file="tools/targets/common.xml"/>
     <import file="tools/targets/viewer.xml"/>
 
     <!-- version definition -->
@@ -55,10 +56,14 @@
                       includes="**/*.properties"/>
     </target>
 
-    <target name="compile" depends="viewer.compile"
+    <target name="compile"
+            depends="common.compile,
+                     viewer.compile"
             description="compile projects"/>
 
-    <target name="test" depends="viewer.test"
+    <target name="test"
+            depends="common.test,
+                     viewer.test"
             description="run projects' tests">
         <mkdir dir="${test.doc}/report"/>
         <mkdir dir="${test.doc}/report/html"/>
@@ -70,7 +75,10 @@
         </junitreport>
     </target>
 
-    <target name="jar" depends="compile, resources, viewer.jar"
+    <target name="jar"
+            depends="compile, resources,
+                     common.jar,
+                     viewer.jar"
             description="make projects' jar archives"/>
 
     <target name="build" depends="compile, test, jar"
