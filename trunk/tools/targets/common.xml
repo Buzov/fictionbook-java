@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<project name="fbcommon">
+
+    <property name="common.name" value="fbcommon"/>
+    <patternset id="common.files">
+        <include name="ru/gelin/fictionbook/common/**"/>
+        <include name="ru/gelin/fictionbook/*"/>
+        <include name="ru/gelin/fictionbook/resources/*"/>
+    </patternset>
+
+    <target name="common.compile" description="compile common">
+        <mkdir dir="${classes}"/>
+        <javac srcdir="${src}" destdir="${classes}"
+                debug="true" debuglevel="source,lines,vars">
+            <classpath refid="compile.path"/>
+            <patternset refid="common.files"/>
+            <exclude name="**/resources/**"/>
+        </javac>
+    </target>
+
+    <target name="common.compile-test">
+        <mkdir dir="${test.classes}"/>
+        <javac srcdir="${test.src}" destdir="${test.classes}"
+                debug="true" debuglevel="source,lines,vars">
+            <classpath refid="test.path"/>
+            <patternset refid="common.files"/>
+            <exclude name="**/resources/**"/>
+        </javac>
+    </target>
+
+    <target name="common.test" depends="common.compile-test">
+        <mkdir dir="${test.doc}"/>
+        <junit printsummary="yes">
+            <classpath refid="test.path"/>
+            <formatter type="xml"/>
+            <batchtest todir="${test.doc}">
+                <fileset dir="${test.classes}">
+                    <patternset refid="common.files"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="common.jar" depends="common.compile, resources"
+            description="makes fbcommon.jar archive">
+        <mkdir dir="${lib}"/>
+        <jar destfile="${lib}/${common.name}.jar" basedir="${classes}">
+            <manifest>
+                <attribute name="Implementation-URL" value="http://gelin.ru/project/fictionbook"/>
+                <attribute name="Implementation-Vendor" value="Gelin"/>
+                <attribute name="Implementation-Version" value="${version}"/>
+                <attribute name="Date" value="${TSTAMP}"/>
+            </manifest>
+            <patternset refid="common.files"/>
+            <zipfileset refid="licenses" prefix=""/>
+        </jar>
+    </target>
+
+</project>
