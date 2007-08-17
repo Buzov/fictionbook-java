@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <project name="fictionbook" basedir="." default="build">
 
+    <import file="tools/targets/swing.xml"/>
     <import file="tools/targets/common.xml"/>
     <import file="tools/targets/viewer.xml"/>
 
@@ -57,12 +58,22 @@
     </target>
 
     <target name="compile"
-            depends="common.compile,
+            depends="swing.compile,
+                     common.compile,
                      viewer.compile"
             description="compile projects"/>
 
+    <target name="test.resources">
+        <native2ascii encoding="UTF-8"
+                      src="${test.src}"
+                      dest="${test.classes}"
+                      includes="**/*.properties"/>
+    </target>
+
     <target name="test"
-            depends="common.test,
+            depends="test.resources,
+                     swing.test,
+                     common.test,
                      viewer.test"
             description="run projects' tests">
         <mkdir dir="${test.doc}/report"/>
@@ -77,6 +88,7 @@
 
     <target name="jar"
             depends="compile, resources,
+                     swing.jar,
                      common.jar,
                      viewer.jar"
             description="make projects' jar archives"/>
