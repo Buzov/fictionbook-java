@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<project name="gswing">
+
+    <property name="swing.name" value="gswing"/>
+    <property name="swing.version" value="0.1"/>
+    <patternset id="swing.files">
+        <include name="ru/gelin/swing/**"/>
+    </patternset>
+
+    <target name="swing.compile" description="compile swing">
+        <mkdir dir="${classes}"/>
+        <javac srcdir="${src}" destdir="${classes}"
+                debug="true" debuglevel="source,lines,vars">
+            <classpath refid="compile.path"/>
+            <patternset refid="swing.files"/>
+            <exclude name="**/resources/**"/>
+        </javac>
+    </target>
+
+    <target name="swing.compile-test">
+        <mkdir dir="${test.classes}"/>
+        <javac srcdir="${test.src}" destdir="${test.classes}"
+                debug="true" debuglevel="source,lines,vars">
+            <classpath refid="test.path"/>
+            <patternset refid="swing.files"/>
+            <exclude name="**/resources/**"/>
+        </javac>
+    </target>
+
+    <target name="swing.test" depends="swing.compile-test">
+        <mkdir dir="${test.doc}"/>
+        <junit printsummary="yes">
+            <classpath refid="test.path"/>
+            <formatter type="xml"/>
+            <batchtest todir="${test.doc}">
+                <fileset dir="${test.classes}">
+                    <patternset refid="swing.files"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="swing.jar" depends="swing.compile, resources"
+            description="makes gswing.jar archive">
+        <mkdir dir="${lib}"/>
+        <jar destfile="${lib}/${swing.name}.jar" basedir="${classes}">
+            <manifest>
+                <attribute name="Implementation-URL" value="http://gelin.ru/"/>
+                <attribute name="Implementation-Vendor" value="Gelin"/>
+                <attribute name="Implementation-Version" value="${swing.version}"/>
+                <attribute name="Date" value="${TSTAMP}"/>
+            </manifest>
+            <patternset refid="swing.files"/>
+            <zipfileset refid="licenses" prefix=""/>
+        </jar>
+    </target>
+
+</project>
