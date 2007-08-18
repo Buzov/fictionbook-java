@@ -22,23 +22,31 @@
 
 package ru.gelin.fictionbook.viewer.actions;
 
-import java.awt.event.ActionEvent;
+import org.junit.*;
+import static org.junit.Assert.*;
+
 import javax.swing.AbstractAction;
 
-/**
- *  Action which is performed when exiting from Viewer.
- */
-public class ExitAction extends AbstractAction {
+public class ActionFactoryTest {
 
-    /**
-     *  This method is called when it's need to exit from Viewer.
-     */
-    public void actionPerformed(ActionEvent aoEvent) {
-        //TODO save all what requires saving
-        //TODO maybe it's not required to exit here
-        System.exit(0);
+    @Before public void setUp() {
     }
 
+    @Test public void testGetInstance() {
+        assertNull(ActionFactory.factory);
+        ActionFactory factory = ActionFactory.getInstance();
+        assertNotNull(ActionFactory.factory);
+        ActionFactory factory2 = ActionFactory.getInstance();
+        assertSame(factory, factory2);
+    }
 
+    @Test public void testGetExitAction() {
+        ActionFactory factory = ActionFactory.getInstance();
+        AbstractAction action = factory.getAction(ActionFactory.Type.EXIT);
+        assertEquals("ru.gelin.fictionbook.viewer.actions.ExitAction",
+            action.getClass().getName());
+        AbstractAction action2 = factory.getAction(ActionFactory.Type.EXIT);
+        assertSame(action, action2);
+    }
 
 }

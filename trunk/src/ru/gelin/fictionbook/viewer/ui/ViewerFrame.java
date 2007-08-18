@@ -24,8 +24,13 @@ package ru.gelin.fictionbook.viewer.ui;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import ru.gelin.swing.utils.Messages;
+import ru.gelin.fictionbook.viewer.actions.ActionFactory;
 
 /**
  *  Main window if Fiction Book Viewer.
@@ -38,7 +43,21 @@ public class ViewerFrame extends JFrame {
     public ViewerFrame() {
         super();
         setTitle(msg.get("frame.title"));
+        makeMenu();
         addWindowListener(new ViewerWindowListener());
+    }
+
+    protected void makeMenu() {
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        JMenu menu = new JMenu(msg.get("menu.file"));
+        menu.setMnemonic(KeyEvent.VK_F);
+        menuBar.add(menu);
+        JMenuItem menuItem = new JMenuItem(msg.get("menu.file.open"));
+        menu.add(menuItem);
+        menu.addSeparator();
+        menuItem = new JMenuItem(msg.get("menu.file.exit"));
+        menu.add(menuItem);
     }
 
     protected class ViewerWindowListener extends WindowAdapter {
@@ -46,9 +65,8 @@ public class ViewerFrame extends JFrame {
          *  Saves some options and exits the application when window is closed.
          */
         public void windowClosing(WindowEvent e) {
-            //TODO save all what requires saving
-            //TODO maybe it's not required to exit here
-            System.exit(0);
+            ActionFactory factory = ActionFactory.getInstance();
+            factory.getAction(ActionFactory.Type.EXIT).actionPerformed(null);
         }
     }
 
