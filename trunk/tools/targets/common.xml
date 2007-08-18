@@ -33,6 +33,7 @@
         <junit printsummary="yes">
             <classpath refid="test.path"/>
             <formatter type="xml"/>
+            <syspropertyset refid="test.properties"/>
             <batchtest todir="${test.doc}">
                 <fileset dir="${test.classes}">
                     <patternset refid="common.files"/>
