@@ -34,12 +34,21 @@ public class MessagesTest {
     protected Locale locale = new Locale("ru");
 
     @Before public void setUp() {
+        //to avoid affecting of default locale
+        Locale.setDefault(new Locale("", "", ""));
     }
 
     @Test public void testConstructor() {
         Messages msg = new Messages(baseName, locale);
         assertNotNull(msg.bundle);
         assertEquals(locale, msg.bundle.getLocale());
+    }
+
+    @Test public void testConstructorNoLocaleBundle() {
+        Messages msg = new Messages(baseName, Locale.JAPAN);
+        assertNotNull(msg.bundle);
+        assertEquals(Locale.getDefault().getLanguage(),
+            msg.bundle.getLocale().getLanguage());
     }
 
     @Test public void testConstructorInvalidBundle() {

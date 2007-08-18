@@ -20,6 +20,8 @@
     <property name="test.classes"   value="${build}/test"/>
     <property name="test.contrib"   value="${lib}/test"/>
     <property name="test.doc"       value="docs/test"/>
+    <property name="java.util.logging.config.file"
+              location="${test.src}/logging.properties"/>
 
     <property name="javadoc"  value="docs/api"/>
 
@@ -40,6 +42,10 @@
         <!--include name="THIRDPARTYLICENSE.txt"/-->
         <!--include name="NOTICE.txt"/-->
     </fileset>
+
+    <propertyset id="test.properties">
+        <propertyref name="java.util.logging.config.file"/>
+    </propertyset>
 
     <tstamp>
         <format property="TSTAMP" pattern="yyyy-MM-dd'T'HH"/>

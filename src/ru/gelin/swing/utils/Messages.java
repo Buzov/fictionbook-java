@@ -61,6 +61,10 @@ public class Messages {
     protected Messages(String baseName, Locale locale) {
         try {
             bundle = ResourceBundle.getBundle(baseName, locale);
+            if (log.isDebugEnabled()) {
+                log.debug("created resource bundle " + baseName +
+                    " " + bundle.getLocale());
+            }
         } catch (MissingResourceException e) {
             log.error("can't load resource bundle '" + baseName + "'");
         }
@@ -87,7 +91,7 @@ public class Messages {
                 "' and locale " + locale);
         }
         String key = getKey(baseName, locale);
-        Messages result = instances.get(locale);
+        Messages result = instances.get(key);
         if (result == null) {
             result = new Messages(baseName, locale);
             instances.put(key, result);
