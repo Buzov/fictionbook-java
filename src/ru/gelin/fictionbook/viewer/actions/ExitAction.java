@@ -24,11 +24,21 @@ package ru.gelin.fictionbook.viewer.actions;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
+import ru.gelin.swing.utils.Messages;
 
 /**
  *  Action which is performed when exiting from Viewer.
  */
 public class ExitAction extends AbstractAction {
+
+    /** localized messages instance */
+    Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
+
+    public ExitAction() {
+        super();
+        putValue(NAME, msg.get("menu.file.exit"));
+        putValue(SHORT_DESCRIPTION, msg.get("menu.file.exit.tooltip"));
+    }
 
     /**
      *  This method is called when it's need to exit from Viewer.
