@@ -40,6 +40,9 @@ public class ViewerFrame extends JFrame {
     /** localized messages instance */
     Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
 
+    /** actions */
+    ActionFactory actions = ActionFactory.getInstance();
+
     public ViewerFrame() {
         super();
         setTitle(msg.get("frame.title"));
@@ -56,7 +59,7 @@ public class ViewerFrame extends JFrame {
         JMenuItem menuItem = new JMenuItem(msg.get("menu.file.open"));
         menu.add(menuItem);
         menu.addSeparator();
-        menuItem = new JMenuItem(msg.get("menu.file.exit"));
+        menuItem = new JMenuItem(actions.getAction(ActionFactory.Type.EXIT));
         menu.add(menuItem);
     }
 
@@ -65,8 +68,7 @@ public class ViewerFrame extends JFrame {
          *  Saves some options and exits the application when window is closed.
          */
         public void windowClosing(WindowEvent e) {
-            ActionFactory factory = ActionFactory.getInstance();
-            factory.getAction(ActionFactory.Type.EXIT).actionPerformed(null);
+            actions.getAction(ActionFactory.Type.EXIT).actionPerformed(null);
         }
     }
 
