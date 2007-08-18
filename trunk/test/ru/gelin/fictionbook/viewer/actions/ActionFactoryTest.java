@@ -49,4 +49,20 @@ public class ActionFactoryTest {
         assertSame(action, action2);
     }
 
+    @Test public void testGetOpenAction() {
+        ActionFactory factory = ActionFactory.getInstance();
+        AbstractAction action = factory.getAction(ActionFactory.Type.OPEN);
+        assertEquals("ru.gelin.fictionbook.viewer.actions.OpenAction",
+            action.getClass().getName());
+        AbstractAction action2 = factory.getAction(ActionFactory.Type.OPEN);
+        assertSame(action, action2);
+    }
+
+    @Test public void testGetActionDiff() {
+        ActionFactory factory = ActionFactory.getInstance();
+        AbstractAction action = factory.getAction(ActionFactory.Type.OPEN);
+        AbstractAction action2 = factory.getAction(ActionFactory.Type.EXIT);
+        assertNotSame(action, action2);
+    }
+
 }

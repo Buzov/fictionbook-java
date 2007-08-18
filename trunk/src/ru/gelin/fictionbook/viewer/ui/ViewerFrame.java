@@ -56,7 +56,7 @@ public class ViewerFrame extends JFrame {
         JMenu menu = new JMenu(msg.get("menu.file"));
         menu.setMnemonic(KeyEvent.VK_F);
         menuBar.add(menu);
-        JMenuItem menuItem = new JMenuItem(msg.get("menu.file.open"));
+        JMenuItem menuItem = new JMenuItem(actions.getAction(ActionFactory.Type.OPEN));
         menu.add(menuItem);
         menu.addSeparator();
         menuItem = new JMenuItem(actions.getAction(ActionFactory.Type.EXIT));

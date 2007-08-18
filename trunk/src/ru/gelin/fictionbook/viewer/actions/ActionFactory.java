@@ -62,9 +62,12 @@ public class ActionFactory {
         AbstractAction result = actions.get(type);
         if (result == null) {
             switch (type) {
+            case OPEN:
+                result = new OpenAction();
+                break;
             case EXIT:
                 result = new ExitAction();
-            break;
+                break;
             }
             actions.put(type, result);
         }
