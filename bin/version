@@ -1,12 +1,6 @@
 #!/bin/sh
 
-FB_HOME=..
-
-CLASSPATH="$CLASSPATH"
-CLASSPATH="$CLASSPATH:$FB_HOME/lib/fbcommon.jar"
-
-OPTIONS=""
-OPTIONS="$OPTIONS -cp $CLASSPATH"
+. `dirname $0`/setenv
 
 $JAVA_HOME/bin/java $OPTIONS ru.gelin.fictionbook.Version
 

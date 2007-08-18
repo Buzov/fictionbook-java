@@ -22,9 +22,8 @@
 
 package ru.gelin.fictionbook.viewer;
 
-import javax.swing.JFrame;
 import ru.gelin.fictionbook.Version;
-//import ru.gelin.fictionbook.viewer.ui.ViewerFrame;
+import ru.gelin.fictionbook.viewer.ui.ViewerFrame;
 
 /**
  *  This class runs Fiction Book Viewer as stanalone application.
@@ -33,11 +32,10 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println(Version.getCopyrightNotice("Fiction Book Viewer"));
+        ViewerFrame frame = new ViewerFrame();
+        frame.pack();
+        frame.show();
         //TODO open file from command line
-        //JFrame frame = new ViewerFrame();
-        //frame.setContentPane(new ViewerPane());
-        //frame.pack();
-        //frame.show();
     }
 
 }
