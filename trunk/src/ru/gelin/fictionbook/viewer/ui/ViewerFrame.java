@@ -22,6 +22,8 @@
 
 package ru.gelin.fictionbook.viewer.ui;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import ru.gelin.swing.utils.Messages;
 
@@ -31,11 +33,23 @@ import ru.gelin.swing.utils.Messages;
 public class ViewerFrame extends JFrame {
 
     /** localized messages instance */
-    Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resource/messages");
+    Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
 
     public ViewerFrame() {
         super();
         setTitle(msg.get("frame.title"));
+        addWindowListener(new ViewerWindowListener());
+    }
+
+    protected class ViewerWindowListener extends WindowAdapter {
+        /**
+         *  Saves some options and exits the application when window is closed.
+         */
+        public void windowClosing(WindowEvent e) {
+            //TODO save all what requires saving
+            //TODO maybe it's not required to exit here
+            System.exit(0);
+        }
     }
 
 }
