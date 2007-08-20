@@ -57,7 +57,10 @@ public class ViewerFrame extends JFrame implements FBDocumentHolder {
      *  document is conveyed to ViewerPane.
      */
     public void setFBDocument(FBDocument document) {
-        //TODO implement this method
+        //TODO convey document to ViewerPane
+        if (document != null) {
+            setTitle(msg.get("frame.title.document", new String[] { document.getBookTitle() }));
+        }
     }
 
     protected void makeMenu() {
