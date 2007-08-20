@@ -24,35 +24,58 @@ package ru.gelin.fictionbook.viewer.actions;
 
 import java.util.Map;
 import java.util.EnumMap;
+import java.util.WeakHashMap;
 import javax.swing.AbstractAction;
+import ru.gelin.fictionbook.common.FBDocumentHolder;
 
 /**
  *  Creates action by name.
+ *  Action factory takes reference to FBDocumentHolder. Each created
+ *  action takes this reference too. So action can create FBDocument
+ *  and set it to FBDocumentHolder.
  */
 public class ActionFactory {
 
     /** action types */
     public enum Type { OPEN, EXIT };
 
+    /** factory instances */
+    //WeakHashMap to avoid potential memory leaks (?)
+    protected static Map<FBDocumentHolder, ActionFactory> factories =
+        new WeakHashMap<FBDocumentHolder, ActionFactory>();
+
     /** map of actions */
     protected Map<Type, AbstractAction> actions =
         new EnumMap<Type, AbstractAction>(Type.class);
 
-    /** factory instance */
-    protected static ActionFactory factory;
+    /** document holder reference */
+    protected FBDocumentHolder documentHolder;
 
     protected ActionFactory() {
         //not public default constructor
     }
 
     /**
-     *  Returns ActionFactory instance.
+     *  Creates factory for specified FBDocumentHolder.
+     *  @param  documentHolder  document holder reference which will convey to
+     *                          actions created by this factory
      */
-    public static ActionFactory getInstance() {
-        if (factory == null) {
-            factory = new ActionFactory();
+    protected ActionFactory(FBDocumentHolder documentHolder) {
+        this.documentHolder = documentHolder;
+    }
+
+    /**
+     *  Returns ActionFactory instance.
+     *  @param  documentHolder  document holder reference which will convey to
+     *                          actions created by this factory
+     */
+    public static ActionFactory getInstance(FBDocumentHolder documentHolder) {
+        ActionFactory result = factories.get(documentHolder);
+        if (result == null) {
+            result = new ActionFactory(documentHolder);
+            factories.put(documentHolder, result);
         }
-        return factory;
+        return result;
     }
 
     /**
@@ -63,7 +86,7 @@ public class ActionFactory {
         if (result == null) {
             switch (type) {
             case OPEN:
-                result = new OpenAction();
+                result = new OpenAction(documentHolder);
                 break;
             case EXIT:
                 result = new ExitAction();
