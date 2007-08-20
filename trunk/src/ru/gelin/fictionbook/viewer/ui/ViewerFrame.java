@@ -30,24 +30,34 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import ru.gelin.swing.utils.Messages;
+import ru.gelin.fictionbook.common.FBDocument;
+import ru.gelin.fictionbook.common.FBDocumentHolder;
 import ru.gelin.fictionbook.viewer.actions.ActionFactory;
 
 /**
  *  Main window if Fiction Book Viewer.
  */
-public class ViewerFrame extends JFrame {
+public class ViewerFrame extends JFrame implements FBDocumentHolder {
 
     /** localized messages instance */
     Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
 
     /** actions */
-    ActionFactory actions = ActionFactory.getInstance();
+    ActionFactory actions = ActionFactory.getInstance(this);
 
     public ViewerFrame() {
         super();
         setTitle(msg.get("frame.title"));
         makeMenu();
         addWindowListener(new ViewerWindowListener());
+    }
+
+    /**
+     *  When Fiction Book document is set, title of a frame is changed and
+     *  document is conveyed to ViewerPane.
+     */
+    public void setFBDocument(FBDocument document) {
+        //TODO implement this method
     }
 
     protected void makeMenu() {

@@ -27,6 +27,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import ru.gelin.swing.utils.Messages;
+import ru.gelin.fictionbook.common.FBDocumentHolder;
 
 /**
  *  Action which is performed for opening new document in Viewer.
@@ -36,8 +37,12 @@ public class OpenAction extends AbstractAction {
     /** localized messages instance */
     Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
 
-    public OpenAction() {
+    /** document holder instance */
+    FBDocumentHolder documentHolder;
+
+    public OpenAction(FBDocumentHolder documentHolder) {
         super();
+        this.documentHolder = documentHolder;
         putValue(NAME, msg.get("menu.file.open"));
         putValue(MNEMONIC_KEY, KeyEvent.VK_O);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl O"));
@@ -52,7 +57,5 @@ public class OpenAction extends AbstractAction {
         //TODO maybe it's not required to exit here
         //System.exit(0);
     }
-
-
 
 }

@@ -35,7 +35,7 @@
             <formatter type="xml"/>
             <syspropertyset refid="test.properties"/>
             <batchtest todir="${test.doc}">
-                <fileset dir="${test.classes}">
+                <fileset dir="${test.src}">
                     <patternset refid="common.files"/>
                 </fileset>
             </batchtest>
