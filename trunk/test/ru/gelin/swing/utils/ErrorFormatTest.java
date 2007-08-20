@@ -1,5 +1,5 @@
 /*
- *  Fiction Book Tools.
+ *  Swing Utils.
  *  Copyright (C) 2007  Denis Nelubin aka Gelin
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -20,18 +20,20 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.common;
+package ru.gelin.swing.utils;
 
-/**
- *  Any class which require reference to FBDocument should implement
- *  this interface.
- */
-public interface FBDocumentHolder {
+import org.junit.*;
+import static org.junit.Assert.*;
 
-    /**
-     *  Sets Fiction Book Document for this instance.
-     *  @param  document    FBDocument to be set or null if no document should be set
-     */
-    void setFBDocument(FBDocument document);
+public class ErrorFormatTest {
+
+    @Before public void setUp() {
+    }
+
+    @Test public void testFormat() {
+        String text = "Error on line 1 of document file:///home/gelin/work/java/fictionbook/LICENSE.txt : Content is not allowed in prolog. Nested exception: Content is not allowed in prolog.";
+        assertEquals("Error on line 1 of document file:///home/gelin/work/java/fictionbook/LICENSE.txt :\nContent is not allowed in prolog.\nNested exception:\nContent is not allowed in prolog.",
+            ErrorFormat.format(text));
+    }
 
 }

@@ -1,5 +1,5 @@
 /*
- *  Fiction Book Tools.
+ *  Swing Utils.
  *  Copyright (C) 2007  Denis Nelubin aka Gelin
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -20,18 +20,27 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.common;
+package ru.gelin.swing.utils;
+
+import java.util.Locale;
+import java.util.regex.Pattern;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- *  Any class which require reference to FBDocument should implement
- *  this interface.
+ *  Formats error message inserting new line characters.
  */
-public interface FBDocumentHolder {
+public class ErrorFormat {
 
-    /**
-     *  Sets Fiction Book Document for this instance.
-     *  @param  document    FBDocument to be set or null if no document should be set
-     */
-    void setFBDocument(FBDocument document);
+    /** commons logging instance */
+    protected static Log log = LogFactory.getLog(ErrorFormat.class);
+
+    protected static Pattern nlPattern = Pattern.compile("(:|\\.)\\s+");
+
+    public static String format(String message) {
+        String result = nlPattern.matcher(message).replaceAll("$1\n");
+        log.debug(result);
+        return result;
+    }
 
 }

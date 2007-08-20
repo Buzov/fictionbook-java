@@ -28,11 +28,15 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ru.gelin.swing.utils.Messages;
+import ru.gelin.swing.utils.ErrorFormat;
+import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBDocumentHolder;
 import ru.gelin.fictionbook.common.FBFileFilter;
+import ru.gelin.fictionbook.common.FBException;
 
 /**
  *  Action which is performed for opening new document in Viewer.
@@ -43,7 +47,7 @@ public class OpenAction extends AbstractAction {
     protected Log log = LogFactory.getLog(this.getClass());
 
     /** localized messages instance */
-    Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
+    protected static Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
 
     /** document holder instance */
     FBDocumentHolder documentHolder;
@@ -62,6 +66,9 @@ public class OpenAction extends AbstractAction {
      */
     public void actionPerformed(ActionEvent aoEvent) {
         File file = chooseFile();
+        if (file != null) {
+            documentHolder.setFBDocument(openDocument(file));
+        }
     }
 
     /**
@@ -78,6 +85,27 @@ public class OpenAction extends AbstractAction {
             if (log.isInfoEnabled()) {
                 log.info(result + " file is selected");
             }
+        }
+        return result;
+    }
+
+    /**
+     *  Tries to create FBDocument from specified file.
+     *  If document can't be created error message dialog appears.
+     *  @param   file   file to open
+     *  @return new document or null
+     */
+    public static FBDocument openDocument(File file) {
+        FBDocument result = null;
+        try {
+            result = new FBDocument(file);
+        } catch (FBException e) {
+            JOptionPane.showMessageDialog(null,
+                msg.get("opendocument.error",
+                    new String[] { file.toString(),
+                                   ErrorFormat.format(e.getCause().getMessage()) }),
+                msg.get("opendocument.error.title"),
+                JOptionPane.ERROR_MESSAGE);
         }
         return result;
     }
