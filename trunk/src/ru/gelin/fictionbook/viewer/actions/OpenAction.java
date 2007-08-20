@@ -22,17 +22,25 @@
 
 package ru.gelin.fictionbook.viewer.actions;
 
+import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
+import javax.swing.JFileChooser;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ru.gelin.swing.utils.Messages;
 import ru.gelin.fictionbook.common.FBDocumentHolder;
+import ru.gelin.fictionbook.common.FBFileFilter;
 
 /**
  *  Action which is performed for opening new document in Viewer.
  */
 public class OpenAction extends AbstractAction {
+
+    /** commons logging instance */
+    protected Log log = LogFactory.getLog(this.getClass());
 
     /** localized messages instance */
     Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
@@ -53,9 +61,25 @@ public class OpenAction extends AbstractAction {
      *  This method is called when it's need to open new document.
      */
     public void actionPerformed(ActionEvent aoEvent) {
-        //TODO save all what requires saving
-        //TODO maybe it's not required to exit here
-        //System.exit(0);
+        File file = chooseFile();
+    }
+
+    /**
+     *  Shows file chosing dialog and returns choosed file or null if
+     *  file was not selected.
+     */
+    protected File chooseFile() {
+        File result = null;
+        JFileChooser chooser = new JFileChooser();
+        chooser.addChoosableFileFilter(new FBFileFilter());
+        int returnValue = chooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            result = chooser.getSelectedFile();
+            if (log.isInfoEnabled()) {
+                log.info(result + " file is selected");
+            }
+        }
+        return result;
     }
 
 }
