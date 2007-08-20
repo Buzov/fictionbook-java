@@ -66,4 +66,17 @@ public class FBDocument {
         return dom;
     }
 
+    /**
+     *  Returns value of /FictionBook/description/title-info/book-title
+     *  element.
+     */
+    public String getBookTitle() {
+        //log.debug(dom.selectSingleNode("/FictionBook").getPath());
+        //log.debug(dom.selectSingleNode("/*[name()='FictionBook']/*[name()='description']").getPath());
+        return dom.valueOf("/*[name()='FictionBook']" +
+            "/*[name()='description']" +
+            "/*[name()='title-info']" +
+            "/*[name()='book-title']");
+    }
+
 }
