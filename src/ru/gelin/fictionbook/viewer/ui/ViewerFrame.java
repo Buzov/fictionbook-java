@@ -40,10 +40,10 @@ import ru.gelin.fictionbook.viewer.actions.ActionFactory;
 public class ViewerFrame extends JFrame implements FBDocumentHolder {
 
     /** localized messages instance */
-    Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
+    protected Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
 
     /** actions */
-    ActionFactory actions = ActionFactory.getInstance(this);
+    protected ActionFactory actions = ActionFactory.getInstance(this);
 
     public ViewerFrame() {
         super();
