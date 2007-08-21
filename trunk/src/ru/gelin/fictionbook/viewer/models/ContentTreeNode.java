@@ -20,31 +20,34 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer.ui;
+package ru.gelin.fictionbook.viewer.models;
 
-import java.awt.Dimension;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
-import javax.swing.JTextPane;
+import org.dom4j.Node;
 import ru.gelin.fictionbook.common.FBDocument;
-import ru.gelin.fictionbook.common.FBDocumentHolder;
 
 /**
- *  Panel with content and view of Fiction Book.
+ *  This class represents node of tree of Fiction Book content.
  */
-public class ViewerPane extends JSplitPane implements FBDocumentHolder {
+public class ContentTreeNode {
 
-    public ViewerPane() {
-        super(JSplitPane.HORIZONTAL_SPLIT);
-        JTree tree = new JTree();
-        tree.setMinimumSize(new Dimension(50, 100));
-        add(tree);
-        JTextPane text = new JTextPane();
-        text.setMinimumSize(new Dimension(100, 100));
-        add(text);
+    protected Node node;
+
+    public ContentTreeNode(Node node) {
+        this.node = node;
     }
 
-    public void setFBDocument(FBDocument document) {
+    /**
+     *  Returns title of a Fiction Book section for which this node is
+     *  created.
+     *  Returns value of element &lt;title> nested to this section.
+     *  If &lt;title> is empty, value of @id attribute is returned.
+     */
+    public String toString() {
+        String result = node.valueOf("/*[name()='title']");
+        if (result == null || "".equals(result)) {
+            result = node.valueOf("@id");
+        }
+        return result;
     }
 
 }

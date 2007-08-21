@@ -49,6 +49,7 @@ public class ViewerFrame extends JFrame implements FBDocumentHolder {
         super();
         setTitle(msg.get("frame.title"));
         makeMenu();
+        setContentPane(new ViewerPane());
         addWindowListener(new ViewerWindowListener());
     }
 
@@ -57,9 +58,9 @@ public class ViewerFrame extends JFrame implements FBDocumentHolder {
      *  document is conveyed to ViewerPane.
      */
     public void setFBDocument(FBDocument document) {
-        //TODO convey document to ViewerPane
         if (document != null) {
             setTitle(msg.get("frame.title.document", new String[] { document.getBookTitle() }));
+            ((ViewerPane)getContentPane()).setFBDocument(document);
         }
     }
 

@@ -50,6 +50,7 @@ public class FBDocument {
             log.info("creating document from file " + file);
         }
         try {
+            //TODO implement reading from ZIP archives
             SAXReader xmlReader = new SAXReader();
             dom = xmlReader.read(file);
         } catch (Exception e) {
