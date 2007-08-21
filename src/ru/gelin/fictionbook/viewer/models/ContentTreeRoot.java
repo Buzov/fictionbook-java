@@ -20,31 +20,27 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer.ui;
+package ru.gelin.fictionbook.viewer.models;
 
-import java.awt.Dimension;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
-import javax.swing.JTextPane;
 import ru.gelin.fictionbook.common.FBDocument;
-import ru.gelin.fictionbook.common.FBDocumentHolder;
 
 /**
- *  Panel with content and view of Fiction Book.
+ *  This class represents root of tree of Fiction Book content.
  */
-public class ViewerPane extends JSplitPane implements FBDocumentHolder {
+public class ContentTreeRoot {
 
-    public ViewerPane() {
-        super(JSplitPane.HORIZONTAL_SPLIT);
-        JTree tree = new JTree();
-        tree.setMinimumSize(new Dimension(50, 100));
-        add(tree);
-        JTextPane text = new JTextPane();
-        text.setMinimumSize(new Dimension(100, 100));
-        add(text);
+    protected FBDocument document;
+
+    public ContentTreeRoot(FBDocument document) {
+        this.document = document;
     }
 
-    public void setFBDocument(FBDocument document) {
+    /**
+     *  Returns title of a Fiction Book for which this root is
+     *  created.
+     */
+    public String toString() {
+        return document.getBookTitle();
     }
 
 }
