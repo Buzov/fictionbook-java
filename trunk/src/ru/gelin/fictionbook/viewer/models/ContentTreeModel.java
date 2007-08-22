@@ -22,14 +22,22 @@
 
 package ru.gelin.fictionbook.viewer.models;
 
+import java.util.List;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.event.TreeModelListener;
+import org.dom4j.Node;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ru.gelin.fictionbook.common.FBDocument;
 
 /**
  *  Tree model for Fiction Book content.
  */
-public class ContentTreeModel {
+public class ContentTreeModel implements TreeModel {
+
+    /** commons logging instance */
+    protected Log log = LogFactory.getLog(this.getClass());
 
     protected FBDocument document;
     protected ContentTreeRoot root;
@@ -53,8 +61,22 @@ public class ContentTreeModel {
      *  object.
      */
     public Object getChild(Object parent, int index) {
-        //TODO implement it
-        return null;
+        Object result = null;
+        if (parent == root) {
+            Node node = document.getDocument();
+            log.debug(node.getPath());
+            //select sections from first body
+            List nodes = document.createXPath("//fb:body[1]/fb:section").
+                selectNodes(node);
+            result = new ContentTreeNode(document, (Node)nodes.get(index));
+        } else {
+            Node node = ((ContentTreeNode)parent).getNode();
+            log.debug(node.getPath());
+            //select nested sections
+            List nodes = document.createXPath("fb:section").selectNodes(node);
+            result = new ContentTreeNode(document, (Node)nodes.get(index));
+        }
+        return result;
     }
 
     public int getChildCount(Object parent) {

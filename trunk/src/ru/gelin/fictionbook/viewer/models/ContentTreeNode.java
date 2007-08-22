@@ -30,22 +30,29 @@ import ru.gelin.fictionbook.common.FBDocument;
  */
 public class ContentTreeNode {
 
+    protected FBDocument document;
     protected Node node;
 
-    public ContentTreeNode(Node node) {
+    public ContentTreeNode(FBDocument document, Node node) {
+        this.document = document;
         this.node = node;
+    }
+
+    public Node getNode() {
+        return node;
     }
 
     /**
      *  Returns title of a Fiction Book section for which this node is
      *  created.
      *  Returns value of element &lt;title> nested to this section.
-     *  If &lt;title> is empty, value of @id attribute is returned.
+     *  If &lt;title> is empty, value of @id attribute is returned,
+     *  enclosed to angle brackets (for example "&lt;notes>")
      */
     public String toString() {
-        String result = node.valueOf("/*[name()='title']");
-        if (result == null || "".equals(result)) {
-            result = node.valueOf("@id");
+        String result = document.createXPath("fb:title").valueOf(node).trim();
+        if ("".equals(result)) {
+            result = "<" + document.createXPath("@id").valueOf(node).trim() + ">";
         }
         return result;
     }

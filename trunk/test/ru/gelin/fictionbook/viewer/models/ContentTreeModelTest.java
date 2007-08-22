@@ -48,9 +48,33 @@ public class ContentTreeModelTest {
     }
 
     @Test public void testGetChildOfRoot() {
+        Object root = model.getRoot();
+        Object child = model.getChild(root, 0);
+        //"Часть I. Типа пролог"
+        assertEquals("\u0427\u0430\u0441\u0442\u044c I. " +
+            "\u0422\u0438\u043f\u0430 \u043f\u0440\u043e\u043b\u043e\u0433",
+            child.toString());
+        child = model.getChild(root, 1);
+        //"Часть II. Типа текст"
+        assertEquals("\u0427\u0430\u0441\u0442\u044c II. " +
+            "\u0422\u0438\u043f\u0430 \u0442\u0435\u043a\u0441\u0442",
+            child.toString());
     }
 
     @Test public void testGetChildOfNode() {
+        Object root = model.getRoot();
+        Object node = model.getChild(root, 0);
+        Object child = model.getChild(node, 0);
+        //"Глава I. Типа начало"
+        assertEquals("\u0413\u043b\u0430\u0432\u0430 I. " +
+            "\u0422\u0438\u043f\u0430 \u043d\u0430\u0447\u0430\u043b\u043e",
+            child.toString());
+        child = model.getChild(node, 1);
+        //"Глава II. Типа процесс пошел"
+        assertEquals("\u0413\u043b\u0430\u0432\u0430 II. " +
+            "\u0422\u0438\u043f\u0430 \u043f\u0440\u043e\u0446\u0435\u0441\u0441 " +
+            "\u043f\u043e\u0448\u0435\u043b",
+            child.toString());
     }
 
     @Test public void testGetChildCountOfRoot() {

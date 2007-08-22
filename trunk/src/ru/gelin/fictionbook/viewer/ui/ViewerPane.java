@@ -28,15 +28,19 @@ import javax.swing.JTree;
 import javax.swing.JTextPane;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBDocumentHolder;
+import ru.gelin.fictionbook.viewer.models.ContentTreeModel;
 
 /**
  *  Panel with content and view of Fiction Book.
  */
 public class ViewerPane extends JSplitPane implements FBDocumentHolder {
 
+    protected JTree tree;
+
     public ViewerPane() {
         super(JSplitPane.HORIZONTAL_SPLIT);
-        JTree tree = new JTree();
+        tree = new JTree(new Object[] {  });    //empty tree
+        tree.setEditable(false);    //read only
         tree.setMinimumSize(new Dimension(50, 100));
         add(tree);
         JTextPane text = new JTextPane();
@@ -45,6 +49,10 @@ public class ViewerPane extends JSplitPane implements FBDocumentHolder {
     }
 
     public void setFBDocument(FBDocument document) {
+        if (document != null) {
+            tree.setModel(new ContentTreeModel(document));
+            tree.setRootVisible(true);
+        }
     }
 
 }
