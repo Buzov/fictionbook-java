@@ -23,6 +23,7 @@
 package ru.gelin.fictionbook.viewer.models;
 
 import org.dom4j.Node;
+import org.dom4j.XPath;
 import ru.gelin.fictionbook.common.FBDocument;
 
 /**
@@ -32,10 +33,14 @@ public class ContentTreeNode {
 
     protected FBDocument document;
     protected Node node;
+    protected XPath titleXPath;
+    protected XPath idXPath;
 
     public ContentTreeNode(FBDocument document, Node node) {
         this.document = document;
         this.node = node;
+        this.titleXPath = document.createXPath("fb:title");
+        this.idXPath = document.createXPath("@id");
     }
 
     public Node getNode() {
@@ -50,9 +55,9 @@ public class ContentTreeNode {
      *  enclosed to angle brackets (for example "&lt;notes>")
      */
     public String toString() {
-        String result = document.createXPath("fb:title").valueOf(node).trim();
+        String result = titleXPath.valueOf(node).trim();
         if ("".equals(result)) {
-            result = "<" + document.createXPath("@id").valueOf(node).trim() + ">";
+            result = "<" + idXPath.valueOf(node).trim() + ">";
         }
         return result;
     }
