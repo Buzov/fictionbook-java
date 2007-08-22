@@ -22,8 +22,12 @@
 
 package ru.gelin.fictionbook.common;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collections;
 import java.io.File;
 import org.dom4j.Document;
+import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +42,15 @@ public class FBDocument {
 
     /** dom4j document instance */
     protected Document dom;
+
+    public static final Map NS_URIS;
+    static {
+        Map NSUris = new HashMap();
+        NSUris.put("fb", "http://www.gribuser.ru/xml/fictionbook/2.0");
+        NSUris.put("fbg", "http://www.gribuser.ru/xml/fictionbook/2.0/genres");
+        NSUris.put("l", "http://www.w3.org/1999/xlink");
+        NS_URIS = Collections.unmodifiableMap(NSUris);
+    }
 
     /**
      *  Constructor from file.
@@ -68,16 +81,28 @@ public class FBDocument {
     }
 
     /**
+     *  Creates new XPath expression with namespace prafixes set to
+     *  canonical values.
+     *  These prefixes should be used in created expression:<br/>
+     *  fb - http://www.gribuser.ru/xml/fictionbook/2.0<br/>
+     *  fbg - http://www.gribuser.ru/xml/fictionbook/2.0/genres<br/>
+     *  l - http://www.w3.org/1999/xlink<br/>
+     */
+    public XPath createXPath(String xpathExpression) {
+        XPath result = dom.createXPath(xpathExpression);
+        result.setNamespaceURIs(NS_URIS);
+        return result;
+    }
+
+    /**
      *  Returns value of /FictionBook/description/title-info/book-title
      *  element.
      */
     public String getBookTitle() {
         //log.debug(dom.selectSingleNode("/FictionBook").getPath());
         //log.debug(dom.selectSingleNode("/*[name()='FictionBook']/*[name()='description']").getPath());
-        return dom.valueOf("/*[name()='FictionBook']" +
-            "/*[name()='description']" +
-            "/*[name()='title-info']" +
-            "/*[name()='book-title']");
+        return createXPath("/fb:FictionBook/fb:description/fb:title-info/fb:book-title").
+            valueOf(dom);
     }
 
 }
