@@ -40,12 +40,12 @@ public class ViewerPane extends JSplitPane implements FBDocumentHolder {
 
     public ViewerPane() {
         super(JSplitPane.HORIZONTAL_SPLIT);
+        setPreferredSize(new Dimension(600, 400));
+        setDividerLocation(200);
         tree = new JTree(new Object[] {  });    //empty tree
         tree.setEditable(false);    //read only
-        tree.setPreferredSize(new Dimension(200, 400));
         add(new JScrollPane(tree));
         JTextPane text = new JTextPane();
-        text.setPreferredSize(new Dimension(400, 400));
         add(new JScrollPane(text));
     }
 
