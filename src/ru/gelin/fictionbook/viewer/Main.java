@@ -22,7 +22,12 @@
 
 package ru.gelin.fictionbook.viewer;
 
+import java.io.File;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ru.gelin.fictionbook.Version;
+import ru.gelin.fictionbook.common.FBDocument;
+import ru.gelin.fictionbook.viewer.actions.OpenAction;
 import ru.gelin.fictionbook.viewer.ui.ViewerFrame;
 
 /**
@@ -30,12 +35,20 @@ import ru.gelin.fictionbook.viewer.ui.ViewerFrame;
  */
 public class Main {
 
+    /** commons logging instance */
+    protected static Log log = LogFactory.getLog(Main.class);
+
     public static void main(String[] args) {
         System.out.println(Version.getCopyrightNotice("Fiction Book Viewer"));
         ViewerFrame frame = new ViewerFrame();
         frame.pack();
         frame.show();
-        //TODO open file from command line
+        if (args.length > 0) {
+            File file = new File(args[0]);
+            log.info("opening file " + file);
+            FBDocument doc = OpenAction.openDocument(file);
+            frame.setFBDocument(doc);
+        }
     }
 
 }
