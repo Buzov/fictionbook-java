@@ -43,6 +43,8 @@ public class FBDocument {
     /** dom4j document instance */
     protected Document dom;
 
+    protected XPath bookTitleXPath;
+
     public static final Map NS_URIS;
     static {
         Map NSUris = new HashMap();
@@ -66,6 +68,7 @@ public class FBDocument {
             //TODO implement reading from ZIP archives
             SAXReader xmlReader = new SAXReader();
             dom = xmlReader.read(file);
+            prepareXPaths();
         } catch (Exception e) {
             String err = "can't create document from file " + file;
             log.error(err, e);
@@ -99,10 +102,12 @@ public class FBDocument {
      *  element.
      */
     public String getBookTitle() {
-        //log.debug(dom.selectSingleNode("/FictionBook").getPath());
-        //log.debug(dom.selectSingleNode("/*[name()='FictionBook']/*[name()='description']").getPath());
-        return createXPath("/fb:FictionBook/fb:description/fb:title-info/fb:book-title").
-            valueOf(dom);
+        return bookTitleXPath.valueOf(dom);
+    }
+
+    protected void prepareXPaths() {
+        bookTitleXPath =
+            createXPath("/fb:FictionBook/fb:description/fb:title-info/fb:book-title");
     }
 
 }

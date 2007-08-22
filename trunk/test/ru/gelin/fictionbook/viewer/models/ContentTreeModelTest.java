@@ -78,12 +78,23 @@ public class ContentTreeModelTest {
     }
 
     @Test public void testGetChildCountOfRoot() {
+        Object root = model.getRoot();
+        assertEquals(3, model.getChildCount(root));
     }
 
     @Test public void testGetChildCountOfNode() {
+        Object root = model.getRoot();
+        Object node = model.getChild(root, 0);
+        assertEquals(4, model.getChildCount(node));
     }
 
     @Test public void testIsLeaf() {
+        Object root = model.getRoot();
+        assertEquals(false, model.isLeaf(root));
+        Object node = model.getChild(root, 0);
+        assertEquals(false, model.isLeaf(node));
+        Object leaf = model.getChild(node, 0);
+        assertEquals(true, model.isLeaf(leaf));
     }
 
     @Ignore("this model represents immutable tree, listeners are not used")
@@ -91,6 +102,7 @@ public class ContentTreeModelTest {
     }
 
     @Test public void testGetIndexOfChildOfRoot() {
+
     }
 
     @Test public void testGetIndexOfChildOfNode() {

@@ -27,6 +27,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.event.TreeModelListener;
 import org.dom4j.Node;
+import org.dom4j.XPath;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ru.gelin.fictionbook.common.FBDocument;
@@ -41,9 +42,13 @@ public class ContentTreeModel implements TreeModel {
 
     protected FBDocument document;
     protected ContentTreeRoot root;
+    protected XPath rootSectionXPath;
+    protected XPath sectionXPath;
 
     public ContentTreeModel(FBDocument document) {
         this.document = document;
+        this.rootSectionXPath = document.createXPath("//fb:body[1]/fb:section");
+        this.sectionXPath = document.createXPath("fb:section");
     }
 
     /**
@@ -64,29 +69,48 @@ public class ContentTreeModel implements TreeModel {
         Object result = null;
         if (parent == root) {
             Node node = document.getDocument();
-            log.debug(node.getPath());
             //select sections from first body
-            List nodes = document.createXPath("//fb:body[1]/fb:section").
-                selectNodes(node);
+            List nodes = rootSectionXPath.selectNodes(node);
             result = new ContentTreeNode(document, (Node)nodes.get(index));
         } else {
             Node node = ((ContentTreeNode)parent).getNode();
-            log.debug(node.getPath());
             //select nested sections
-            List nodes = document.createXPath("fb:section").selectNodes(node);
+            List nodes = sectionXPath.selectNodes(node);
             result = new ContentTreeNode(document, (Node)nodes.get(index));
         }
         return result;
     }
 
     public int getChildCount(Object parent) {
-        //TODO implement it
-        return 0;
+        int result = 0;
+        if (parent == root) {
+            Node node = document.getDocument();
+            //select sections from first body
+            List nodes = rootSectionXPath.selectNodes(node);
+            result = nodes.size();
+        } else {
+            Node node = ((ContentTreeNode)parent).getNode();
+            //select nested sections
+            List nodes = sectionXPath.selectNodes(node);
+            result = nodes.size();
+        }
+        return result;
     }
 
     public boolean isLeaf(Object node) {
-        //TODO implement it
-        return true;
+        boolean result = true;
+        if (node == root) {
+            Node domNode = document.getDocument();
+            //select sections from first body
+            List nodes = rootSectionXPath.selectNodes(domNode);
+            result = nodes.isEmpty();
+        } else {
+            Node domNode = ((ContentTreeNode)node).getNode();
+            //select nested sections
+            List nodes = sectionXPath.selectNodes(domNode);
+            result = nodes.isEmpty();
+        }
+        return result;
     }
 
     /**
