@@ -29,6 +29,7 @@ import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JComponent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ru.gelin.swing.utils.Messages;
@@ -51,6 +52,9 @@ public class OpenAction extends AbstractAction {
 
     /** document holder instance */
     FBDocumentHolder documentHolder;
+
+    /** current directory for file open dialog */
+    File currentDirectory;
 
     public OpenAction(FBDocumentHolder documentHolder) {
         super();
@@ -78,14 +82,18 @@ public class OpenAction extends AbstractAction {
     protected File chooseFile() {
         File result = null;
         JFileChooser chooser = new JFileChooser();
+        if (currentDirectory != null) {
+            chooser.setCurrentDirectory(currentDirectory);
+        }
         chooser.addChoosableFileFilter(new FBFileFilter());
-        int returnValue = chooser.showOpenDialog(null);
+        int returnValue = chooser.showOpenDialog(getParentComponent());
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             result = chooser.getSelectedFile();
             if (log.isInfoEnabled()) {
                 log.info(result + " file is selected");
             }
         }
+        currentDirectory = chooser.getCurrentDirectory();    //save current dialog directory
         return result;
     }
 
@@ -106,6 +114,20 @@ public class OpenAction extends AbstractAction {
                                    ErrorFormat.format(e.getCause().getMessage()) }),
                 msg.get("opendocument.error.title"),
                 JOptionPane.ERROR_MESSAGE);
+        }
+        return result;
+    }
+
+    /**
+     *  Returns documentHolder casted to JComponent or null.
+     *  Used for show dialog.
+     */
+    protected JComponent getParentComponent() {
+        JComponent result = null;
+        try {
+            result = (JComponent)documentHolder;
+        } catch (Exception e) {
+            log.debug("document holder is not JComponent", e);
         }
         return result;
     }
