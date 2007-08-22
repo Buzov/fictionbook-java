@@ -25,9 +25,16 @@ package ru.gelin.fictionbook.common;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
+import java.util.Enumeration;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipEntry;
+import java.util.zip.GZIPInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import org.dom4j.Document;
 import org.dom4j.XPath;
+import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,9 +72,14 @@ public class FBDocument {
             log.info("creating document from file " + file);
         }
         try {
-            //TODO implement reading from ZIP archives
-            SAXReader xmlReader = new SAXReader();
-            dom = xmlReader.read(file);
+            if (file.getName().endsWith(".zip")) {
+                dom = readZip(file);
+            } else if (file.getName().endsWith(".gz")) {
+                dom =  readGZip(file);
+            }
+            if (dom == null) {
+                dom = read(file);
+            }
             prepareXPaths();
         } catch (Exception e) {
             String err = "can't create document from file " + file;
@@ -108,6 +120,52 @@ public class FBDocument {
     protected void prepareXPaths() {
         bookTitleXPath =
             createXPath("/fb:FictionBook/fb:description/fb:title-info/fb:book-title");
+    }
+
+    /**
+     *  Read Fiction Book from zip archive.
+     */
+    protected Document readZip(File file) throws IOException, DocumentException {
+        Document result = null;
+        ZipFile zipFile = new ZipFile(file);
+        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        while (entries.hasMoreElements()) {
+            ZipEntry entry = entries.nextElement();
+            String name = entry.getName();
+            if (file.getName().startsWith(name) ||
+                name.endsWith(".fb2")) {
+                if (result != null) {
+                    log.warn("Zip file " + file +
+                        " contains multiple Fiction Book documents");
+                    break;
+                }
+                if (log.isInfoEnabled()) {
+                    log.info("unzipping " + name);
+                }
+                SAXReader xmlReader = new SAXReader();
+                result = xmlReader.read(zipFile.getInputStream(entry));
+            }
+        }
+        return result;
+    }
+
+    /**
+     *  Read GZipped Fiction Book.
+     */
+    protected Document readGZip(File file) throws IOException, DocumentException {
+        if (log.isInfoEnabled()) {
+            log.info("ungzipping " + file);
+        }
+        SAXReader xmlReader = new SAXReader();
+        return xmlReader.read(new GZIPInputStream(new FileInputStream(file)));
+    }
+
+    /**
+     *  Read not compressed Fiction Book.
+     */
+    protected Document read(File file) throws IOException, DocumentException {
+        SAXReader xmlReader = new SAXReader();
+        return xmlReader.read(file);
     }
 
 }
