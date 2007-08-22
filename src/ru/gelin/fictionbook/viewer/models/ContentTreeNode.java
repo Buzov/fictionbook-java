@@ -23,6 +23,7 @@
 package ru.gelin.fictionbook.viewer.models;
 
 import org.dom4j.Node;
+import org.dom4j.Element;
 import org.dom4j.XPath;
 import ru.gelin.fictionbook.common.FBDocument;
 
@@ -34,13 +35,11 @@ public class ContentTreeNode {
     protected FBDocument document;
     protected Node node;
     protected XPath titleXPath;
-    protected XPath idXPath;
 
     public ContentTreeNode(FBDocument document, Node node) {
         this.document = document;
         this.node = node;
         this.titleXPath = document.createXPath("fb:title");
-        this.idXPath = document.createXPath("@id");
     }
 
     public Node getNode() {
@@ -51,13 +50,23 @@ public class ContentTreeNode {
      *  Returns title of a Fiction Book section for which this node is
      *  created.
      *  Returns value of element &lt;title> nested to this section.
-     *  If &lt;title> is empty, value of @id attribute is returned,
-     *  enclosed to angle brackets (for example "&lt;notes>")
+     *  If &lt;title> is empty, value of @id or @name attribute is returned,
+     *  enclosed to square brackets (for example "[notes]").
+     *  If id is empty, name of this node is returned, enclosed
+     *  to angle brackets (for example &lt;body>).
      */
     public String toString() {
         String result = titleXPath.valueOf(node).trim();
         if ("".equals(result)) {
-            result = "<" + idXPath.valueOf(node).trim() + ">";
+            String id = ((Element)node).attributeValue("id");
+            if (id == null) {
+                id = ((Element)node).attributeValue("name");
+            }
+            if (id != null) {
+                result = "[" + id + "]";
+            } else {
+                result = "<" + node.getName() + ">";
+            }
         }
         return result;
     }

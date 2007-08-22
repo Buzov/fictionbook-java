@@ -42,12 +42,12 @@ public class ContentTreeModel implements TreeModel {
 
     protected FBDocument document;
     protected ContentTreeRoot root;
-    protected XPath rootSectionXPath;
+    protected XPath bodyXPath;
     protected XPath sectionXPath;
 
     public ContentTreeModel(FBDocument document) {
         this.document = document;
-        this.rootSectionXPath = document.createXPath("//fb:body[1]/fb:section");
+        this.bodyXPath = document.createXPath("//fb:body");
         this.sectionXPath = document.createXPath("fb:section");
     }
 
@@ -70,7 +70,7 @@ public class ContentTreeModel implements TreeModel {
         if (parent == root) {
             Node node = document.getDocument();
             //select sections from first body
-            List nodes = rootSectionXPath.selectNodes(node);
+            List nodes = bodyXPath.selectNodes(node);
             result = new ContentTreeNode(document, (Node)nodes.get(index));
         } else {
             Node node = ((ContentTreeNode)parent).getNode();
@@ -86,7 +86,7 @@ public class ContentTreeModel implements TreeModel {
         if (parent == root) {
             Node node = document.getDocument();
             //select sections from first body
-            List nodes = rootSectionXPath.selectNodes(node);
+            List nodes = bodyXPath.selectNodes(node);
             result = nodes.size();
         } else {
             Node node = ((ContentTreeNode)parent).getNode();
@@ -102,7 +102,7 @@ public class ContentTreeModel implements TreeModel {
         if (node == root) {
             Node domNode = document.getDocument();
             //select sections from first body
-            List nodes = rootSectionXPath.selectNodes(domNode);
+            List nodes = bodyXPath.selectNodes(domNode);
             result = nodes.isEmpty();
         } else {
             Node domNode = ((ContentTreeNode)node).getNode();
@@ -120,8 +120,28 @@ public class ContentTreeModel implements TreeModel {
     }
 
     public int getIndexOfChild(Object parent, Object child) {
-        //TODO implement it
-        return 0;
+        int result = -1;
+        if (parent != null && child != null) {
+            Node node = null;
+            List nodes = null;
+            if (parent == root) {
+                node = document.getDocument();
+                //select sections from first body
+                nodes = bodyXPath.selectNodes(node);
+            } else {
+                node = ((ContentTreeNode)parent).getNode();
+                //select nested sections
+                nodes = sectionXPath.selectNodes(node);
+            }
+            node = ((ContentTreeNode)child).getNode();
+            for (int i = 0; i < nodes.size(); i++) {
+                if (nodes.get(i) == node) {
+                    result = i;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     /**

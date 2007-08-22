@@ -50,48 +50,43 @@ public class ContentTreeModelTest {
     @Test public void testGetChildOfRoot() {
         Object root = model.getRoot();
         Object child = model.getChild(root, 0);
-        //"Часть I. Типа пролог"
-        assertEquals("\u0427\u0430\u0441\u0442\u044c I. " +
-            "\u0422\u0438\u043f\u0430 \u043f\u0440\u043e\u043b\u043e\u0433",
-            child.toString());
+        assertEquals("<body>", child.toString());
         child = model.getChild(root, 1);
-        //"Часть II. Типа текст"
-        assertEquals("\u0427\u0430\u0441\u0442\u044c II. " +
-            "\u0422\u0438\u043f\u0430 \u0442\u0435\u043a\u0441\u0442",
-            child.toString());
+        assertEquals("[notes]", child.toString());
     }
 
     @Test public void testGetChildOfNode() {
         Object root = model.getRoot();
         Object node = model.getChild(root, 0);
         Object child = model.getChild(node, 0);
-        //"Глава I. Типа начало"
-        assertEquals("\u0413\u043b\u0430\u0432\u0430 I. " +
-            "\u0422\u0438\u043f\u0430 \u043d\u0430\u0447\u0430\u043b\u043e",
+        //"Часть I. Типа пролог"
+        assertEquals("\u0427\u0430\u0441\u0442\u044c I. " +
+            "\u0422\u0438\u043f\u0430 \u043f\u0440\u043e\u043b\u043e\u0433",
             child.toString());
         child = model.getChild(node, 1);
-        //"Глава II. Типа процесс пошел"
-        assertEquals("\u0413\u043b\u0430\u0432\u0430 II. " +
-            "\u0422\u0438\u043f\u0430 \u043f\u0440\u043e\u0446\u0435\u0441\u0441 " +
-            "\u043f\u043e\u0448\u0435\u043b",
+        //"Часть II. Типа текст"
+        assertEquals("\u0427\u0430\u0441\u0442\u044c II. " +
+            "\u0422\u0438\u043f\u0430 \u0442\u0435\u043a\u0441\u0442",
             child.toString());
     }
 
     @Test public void testGetChildCountOfRoot() {
         Object root = model.getRoot();
-        assertEquals(3, model.getChildCount(root));
+        assertEquals(2, model.getChildCount(root));
     }
 
     @Test public void testGetChildCountOfNode() {
         Object root = model.getRoot();
         Object node = model.getChild(root, 0);
-        assertEquals(4, model.getChildCount(node));
+        assertEquals(3, model.getChildCount(node));
     }
 
     @Test public void testIsLeaf() {
         Object root = model.getRoot();
         assertEquals(false, model.isLeaf(root));
         Object node = model.getChild(root, 0);
+        assertEquals(false, model.isLeaf(node));
+        node = model.getChild(node, 0);
         assertEquals(false, model.isLeaf(node));
         Object leaf = model.getChild(node, 0);
         assertEquals(true, model.isLeaf(leaf));
@@ -101,11 +96,32 @@ public class ContentTreeModelTest {
     @Test public void testPathChanged() {
     }
 
-    @Test public void testGetIndexOfChildOfRoot() {
+    @Test public void testGetIndexOfChildForNulls() {
+        Object root = model.getRoot();
+        Object child = model.getChild(root, 0);
+        assertEquals(-1, model.getIndexOfChild(null, null));
+        assertEquals(-1, model.getIndexOfChild(null, child));
+        assertEquals(-1, model.getIndexOfChild(root, null));
+    }
 
+    @Test public void testGetIndexOfChildOfRoot() {
+        Object root = model.getRoot();
+        Object child = model.getChild(root, 0);
+        assertEquals(0, model.getIndexOfChild(root, child));
+        child = model.getChild(root, 1);
+        assertEquals(1, model.getIndexOfChild(root, child));
+        child = model.getChild(child, 0);
+        assertEquals(-1, model.getIndexOfChild(root, child));
     }
 
     @Test public void testGetIndexOfChildOfNode() {
+        Object root = model.getRoot();
+        Object node = model.getChild(root, 0);
+        Object child = model.getChild(node, 0);
+        assertEquals(0, model.getIndexOfChild(node, child));
+        child = model.getChild(node, 1);
+        assertEquals(1, model.getIndexOfChild(node, child));
+        assertEquals(-1, model.getIndexOfChild(root, child));
     }
 
     @Ignore("this model represents immutable tree, listeners are not used")
