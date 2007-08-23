@@ -46,6 +46,7 @@ public class ViewerPane extends JSplitPane implements FBDocumentHolder {
         tree.setEditable(false);    //read only
         add(new JScrollPane(tree));
         JTextPane text = new JTextPane();
+        text.setEditable(false);    //read only
         add(new JScrollPane(text));
     }
 

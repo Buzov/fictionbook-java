@@ -33,9 +33,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import org.dom4j.Document;
+import org.dom4j.DocumentFactory;
 import org.dom4j.XPath;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
+import org.dom4j.rule.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -49,6 +51,9 @@ public class FBDocument {
 
     /** dom4j document instance */
     protected Document dom;
+
+    /** document factory which is used to create dom4j document */
+    protected DocumentFactory factory;
 
     protected XPath bookTitleXPath;
 
@@ -68,6 +73,8 @@ public class FBDocument {
      *                      cause of error is wrapped.
      */
     public FBDocument(File file) throws FBException {
+        factory = new DocumentFactory();
+        factory.setXPathNamespaceURIs(NS_URIS); //for correct working of XPath for elements
         if (log.isInfoEnabled()) {
             log.info("creating document from file " + file);
         }
@@ -104,9 +111,16 @@ public class FBDocument {
      *  l - http://www.w3.org/1999/xlink<br/>
      */
     public XPath createXPath(String xpathExpression) {
-        XPath result = dom.createXPath(xpathExpression);
-        result.setNamespaceURIs(NS_URIS);
+        XPath result = factory.createXPath(xpathExpression);
+        //result.setNamespaceURIs(NS_URIS); //defined in factory
         return result;
+    }
+
+    /**
+     *  Creates new XPath pattern for rule processing.
+     */
+    public Pattern createPattern(String xpathPattern) {
+        return factory.createPattern(xpathPattern);
     }
 
     /**
@@ -120,6 +134,10 @@ public class FBDocument {
     protected void prepareXPaths() {
         bookTitleXPath =
             createXPath("/fb:FictionBook/fb:description/fb:title-info/fb:book-title");
+    }
+
+    protected SAXReader getSAXReader() {
+        return new SAXReader(factory);
     }
 
     /**
@@ -142,7 +160,7 @@ public class FBDocument {
                 if (log.isInfoEnabled()) {
                     log.info("unzipping " + name);
                 }
-                SAXReader xmlReader = new SAXReader();
+                SAXReader xmlReader = getSAXReader();
                 result = xmlReader.read(zipFile.getInputStream(entry));
             }
         }
@@ -156,7 +174,7 @@ public class FBDocument {
         if (log.isInfoEnabled()) {
             log.info("ungzipping " + file);
         }
-        SAXReader xmlReader = new SAXReader();
+        SAXReader xmlReader = getSAXReader();
         return xmlReader.read(new GZIPInputStream(new FileInputStream(file)));
     }
 
@@ -164,7 +182,7 @@ public class FBDocument {
      *  Read not compressed Fiction Book.
      */
     protected Document read(File file) throws IOException, DocumentException {
-        SAXReader xmlReader = new SAXReader();
+        SAXReader xmlReader = getSAXReader();
         return xmlReader.read(file);
     }
 
