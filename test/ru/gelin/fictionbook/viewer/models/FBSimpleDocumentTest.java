@@ -28,6 +28,8 @@ import static org.junit.Assert.*;
 import java.io.File;
 import javax.swing.text.Document;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Segment;
+import javax.swing.text.Position;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBException;
 
@@ -101,20 +103,37 @@ public class FBSimpleDocumentTest {
         document.getText(document.getLength() - 1, 5);
     }
 
-    @Ignore("not implemented yet")
-    @Test public void testWithSegment() {
+    @Test public void testGetTextWithSegment() throws BadLocationException {
+        Segment text = new Segment();
+        document.getText(0, 8, text);
+        //"Часть I."
+        assertEquals("\u0427\u0430\u0441\u0442\u044c I.", text.toString());
+        text = new Segment();
+        document.getText(document.getLength() - 6, 6, text);
+        //"части."
+        assertEquals("\u0447\u0430\u0441\u0442\u0438.", text.toString());
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetStartPosition() {
+        assertEquals(0, document.getStartPosition().getOffset());
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetEndPosition() {
+        assertEquals(document.getLength(), document.getEndPosition().getOffset());
     }
 
-    @Ignore("not implemented yet")
-    @Test public void testCreatePosition() {
+    @Test public void testCreatePosition() throws BadLocationException {
+        assertEquals(5, document.createPosition(5).getOffset());
+    }
+
+    @Test(expected = BadLocationException.class)
+    public void testCreatePositionBadLocation1() throws BadLocationException {
+        document.createPosition(-1);
+    }
+
+    @Test(expected = BadLocationException.class)
+    public void testCreatePositionBadLocation2() throws BadLocationException {
+        document.createPosition(document.getLength() + 1);
     }
 
     @Ignore("not implemented yet")
