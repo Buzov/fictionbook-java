@@ -27,6 +27,8 @@ import java.util.HashMap;
 import javax.swing.text.Document;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.Segment;
+import javax.swing.text.Position;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditListener;
 import org.dom4j.Node;
@@ -117,6 +119,40 @@ public class FBSimpleDocument /*extends DefaultStyledDocument*/ {
         }
     }
 
+    public void getText(int offset, int length, Segment txt)
+        throws BadLocationException {
+        try {
+            char[] array = new char[length];
+            content.getChars(offset, offset + length, array, 0);
+            txt.array = array;
+            txt.offset = 0;
+            txt.count = length;
+        } catch (IndexOutOfBoundsException e) {
+            throw new BadLocationException(e.getMessage(),
+                //try to guess erroneous offset
+                offset < 0 || offset >= getLength() ? offset : offset + length);
+        }
+    }
+
+    public Position getStartPosition() {
+        return new FBSimplePosition(0);
+    }
+
+    public Position getEndPosition() {
+        return new FBSimplePosition(getLength());
+    }
+
+    /**
+     *  Offset of created position is constant value because this
+     *  document is unmodifiable.
+     */
+    public Position createPosition(int offs) throws BadLocationException {
+        if (offs < 0 || offs > getLength()) {
+            throw new BadLocationException("invalid offset to create position" ,offs);
+        }
+        return new FBSimplePosition(offs);
+    }
+
     /**
      *  Traverses all DOM tree of Fiction Book document
      *  and fill some internal fields.
@@ -147,7 +183,7 @@ public class FBSimpleDocument /*extends DefaultStyledDocument*/ {
         }
 
         content = contentBuilder.toString();
-        log.debug(content);
+        //log.debug(content);
         contentBuilder = null;
     }
 
