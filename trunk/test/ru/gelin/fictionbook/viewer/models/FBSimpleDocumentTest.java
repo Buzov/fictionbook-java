@@ -30,6 +30,8 @@ import javax.swing.text.Document;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Segment;
 import javax.swing.text.Position;
+import javax.swing.text.Element;
+import org.dom4j.Node;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBException;
 
@@ -136,15 +138,24 @@ public class FBSimpleDocumentTest {
         document.createPosition(document.getLength() + 1);
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetRootElements() {
+        Element[] roots = document.getRootElements();
+        assertEquals(2, roots.length);
+        Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        Element body = document.getElement(node);
+        assertEquals(body, roots[0]);
+        node = fb.getDocument().selectSingleNode("//fb:body[2]");
+        body = document.getElement(node);
+        assertEquals(body, roots[1]);
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetDefaultRootElement() {
+        Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        Element body = document.getElement(node);
+        assertEquals(body, document.getDefaultRootElement());
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("this is unmodifiable document")
     @Test public void testRender() {
     }
 

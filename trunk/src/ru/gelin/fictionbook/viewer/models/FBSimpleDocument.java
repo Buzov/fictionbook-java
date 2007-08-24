@@ -24,11 +24,15 @@ package ru.gelin.fictionbook.viewer.models;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import javax.swing.text.Document;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Segment;
 import javax.swing.text.Position;
+import javax.swing.text.Element;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.StyleContext;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditListener;
 import org.dom4j.Node;
@@ -43,15 +47,20 @@ import ru.gelin.fictionbook.common.FBDocument;
 /**
  *  Simple read-only styled document, which represents Fiction Book.
  */
-public class FBSimpleDocument /*extends DefaultStyledDocument*/ {
+public class FBSimpleDocument /*implements StyledDocument*/ implements Document {
 
     /** commons logging instance */
     protected Log log = LogFactory.getLog(this.getClass());
 
     protected FBDocument fb;
     protected StringBuilder contentBuilder;
+    protected Stylesheet style;
     protected String content;
     protected Map properties = new HashMap();
+    protected Map<Node, Element> nodeToElement = new HashMap<Node, Element>();
+
+    protected StyleContext styles = new StyleContext();
+    protected AttributeSet defaultAttributeSet = styles.getEmptySet();
 
     public FBSimpleDocument(FBDocument fb) {
         super();
@@ -153,17 +162,40 @@ public class FBSimpleDocument /*extends DefaultStyledDocument*/ {
         return new FBSimplePosition(offs);
     }
 
+    public Element[] getRootElements() {
+        List rootNodes = fb.getDocument().selectNodes("//fb:body");
+        Element[] result = new Element[rootNodes.size()];
+        for (int i = 0; i < rootNodes.size(); i++) {
+            result[i] = getElement((Node)rootNodes.get(i));
+        }
+        return result;
+    }
+
+    public Element getDefaultRootElement() {
+        Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        return getElement(node);
+    }
+
+    /**
+     *  This implementation is void, read-only document.
+     */
+    public void render(Runnable r) {
+    }
+
     /**
      *  Traverses all DOM tree of Fiction Book document
      *  and fill some internal fields.
      */
     protected void traverseDocument() {
         contentBuilder = new StringBuilder();
-        Stylesheet style = new Stylesheet();
+        style = new Stylesheet();
 
         Rule textRule = new Rule(fb.createPattern("//fb:body//fb:p/text()"));
         textRule.setAction(
             new Action() {
+                /**
+                 *  Saves value of all text nodes to single String.
+                 */
                 public void run(Node node) {
                     //log.debug("visiting " + node.getPath());
                     contentBuilder.append(node.getText());
@@ -176,6 +208,27 @@ public class FBSimpleDocument /*extends DefaultStyledDocument*/ {
         style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td/text()")));
         style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td//text()")));
 
+        Rule elementRule = new Rule(fb.createPattern("//fb:body"));
+        elementRule.setAction(
+            new Action() {
+                /**
+                 *  Creates Element for every Node of Fiction Book and
+                 *  puts it to map.
+                 */
+                public void run(Node node) throws Exception {
+                    //log.debug("visiting " + node.getPath());
+                    FBSimpleElement element = new FBSimpleElement(
+                        FBSimpleDocument.this, node);
+                    element.startOffset = contentBuilder.length();
+                    nodeToElement.put(node, element);
+                    style.applyTemplates(node);
+                    element.endOffset = contentBuilder.length();
+                }
+            });
+        style.addRule(elementRule);
+        style.addRule(new Rule(elementRule, fb.createPattern("//fb:body/element()")));
+        style.addRule(new Rule(elementRule, fb.createPattern("//fb:body//element()")));
+
         try {
             style.run(fb.getDocument());
         } catch (Exception e) {
@@ -184,7 +237,12 @@ public class FBSimpleDocument /*extends DefaultStyledDocument*/ {
 
         content = contentBuilder.toString();
         //log.debug(content);
+        style = null;
         contentBuilder = null;
+    }
+
+    protected Element getElement(Node node) {
+        return nodeToElement.get(node);
     }
 
     /*
