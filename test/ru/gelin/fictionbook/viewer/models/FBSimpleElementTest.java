@@ -26,6 +26,8 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import javax.swing.text.Element;
+import org.dom4j.Node;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBException;
 
@@ -33,49 +35,94 @@ public class FBSimpleElementTest {
 
     protected FBDocument fb;
     protected FBSimpleDocument document;
+    protected FBSimpleElement element;
 
     @Before public void setUp() throws FBException {
         fb = new FBDocument(new File("docs/test2.1.fb2"));
+        document = new FBSimpleDocument(fb);
+        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']/fb:title/fb:p");
+        element = (FBSimpleElement)document.getElement(node);
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetDocument() {
+        assertSame(document, element.getDocument());
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetParentElement() {
+        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']/fb:title");
+        Element parent = document.getElement(node);
+        assertSame(parent, element.getParentElement());
     }
 
-    @Ignore("not implemented yet")
+    @Test public void testGetParentElementNull() {
+        Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        Element root = document.getElement(node);
+        assertNull(root.getParentElement());
+    }
+
     @Test public void testGetName() {
+        assertEquals("p", element.getName());
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetAttributes() {
+        //TODO more complex test
+        assertEquals(document.defaultAttributeSet, element.getAttributes());
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetStartOffset() {
+        assertEquals(0, element.getStartOffset());  //test element is first in document
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetEndOffset() {
+        //"Часть I. Типа пролог"
+        assertEquals(20, element.getEndOffset());
     }
 
-    @Ignore("not implemented yet")
+    @Test public void testGetElementIndexLeaf() {
+        assertEquals(-1, element.getElementIndex(10));  //test element is leaf
+    }
+
+    @Test public void testGetElementIndexLess() {
+        Node node = fb.getDocument().selectSingleNode("//fb:body[2]");
+        Element body = document.getElement(node);
+        assertEquals(0, body.getElementIndex(10));
+    }
+
+    @Test public void testGetElementIndexMore() {
+        Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        Element body = document.getElement(node);
+        assertEquals(1, body.getElementIndex(document.getLength()));
+    }
+
     @Test public void testGetElementIndex() {
+        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']");
+        Element section = document.getElement(node);
+        //index of <epigraph> after <title> in <section>
+        assertEquals(1, section.getElementIndex(21));
     }
 
-    @Ignore("not implemented yet")
+    @Test public void testGetElementCountLeaf() {
+        assertEquals(0, element.getElementCount());
+    }
+
     @Test public void testGetElementCount() {
+        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']");
+        Element section = document.getElement(node);
+        //this section contains <title>, <epigraph> and four sub<section>
+        assertEquals(4, section.getElementCount());
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetElement() {
+        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']/fb:title");
+        Element parent = document.getElement(node);
+        assertSame(element, parent.getElement(0));
     }
 
-    @Ignore("not implemented yet")
     @Test public void testIsLeaf() {
+        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']/fb:title");
+        Element parent = document.getElement(node);
+        assertFalse(parent.isLeaf());
+        assertTrue(element.isLeaf());
     }
 
 }
