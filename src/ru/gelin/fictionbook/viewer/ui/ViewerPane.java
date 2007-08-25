@@ -25,11 +25,13 @@ package ru.gelin.fictionbook.viewer.ui;
 import java.awt.Dimension;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
-import javax.swing.JTextPane;
+//import javax.swing.JTextPane;
+import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBDocumentHolder;
 import ru.gelin.fictionbook.viewer.models.ContentTreeModel;
+import ru.gelin.fictionbook.viewer.models.FBSimpleDocument;
 
 /**
  *  Panel with content and view of Fiction Book.
@@ -37,6 +39,8 @@ import ru.gelin.fictionbook.viewer.models.ContentTreeModel;
 public class ViewerPane extends JSplitPane implements FBDocumentHolder {
 
     protected JTree tree;
+    //protected JTextPane text;
+    protected JTextArea text;
 
     public ViewerPane() {
         super(JSplitPane.HORIZONTAL_SPLIT);
@@ -45,7 +49,8 @@ public class ViewerPane extends JSplitPane implements FBDocumentHolder {
         tree = new JTree(new Object[] {  });    //empty tree
         tree.setEditable(false);    //read only
         add(new JScrollPane(tree));
-        JTextPane text = new JTextPane();
+        //text = new JTextPane();
+        text = new JTextArea();
         text.setEditable(false);    //read only
         add(new JScrollPane(text));
     }
@@ -54,6 +59,7 @@ public class ViewerPane extends JSplitPane implements FBDocumentHolder {
         if (document != null) {
             tree.setModel(new ContentTreeModel(document));
             tree.setRootVisible(true);
+            text.setDocument(new FBSimpleDocument(document));
         }
     }
 
