@@ -55,7 +55,7 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
     protected FBDocument fb;
     protected StringBuilder contentBuilder;
     protected Stylesheet style;
-    protected String content;
+    protected char[] content;
     protected Map properties = new HashMap();
     protected Map<Node, Element> nodeToElement = new HashMap<Node, Element>();
 
@@ -70,7 +70,7 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
     }
 
     public int getLength() {
-        return content.length();
+        return content.length;
     }
 
     /**
@@ -120,7 +120,7 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
 
     public String getText(int offset, int length) throws BadLocationException {
         try {
-            return content.substring(offset, offset + length);
+            return new String(content, offset, length);
         } catch (IndexOutOfBoundsException e) {
             throw new BadLocationException(e.getMessage(),
                 //try to guess erroneous offset
@@ -130,16 +130,14 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
 
     public void getText(int offset, int length, Segment txt)
         throws BadLocationException {
-        try {
-            char[] array = new char[length];
-            content.getChars(offset, offset + length, array, 0);
-            txt.array = array;
-            txt.offset = 0;
+        if (offset < 0) {
+            throw new BadLocationException("invalid offset", offset);
+        } else if (offset + length > content.length) {
+            throw new BadLocationException("invalid offset", offset + length);
+        } else {
+            txt.array = content;
+            txt.offset = offset;
             txt.count = length;
-        } catch (IndexOutOfBoundsException e) {
-            throw new BadLocationException(e.getMessage(),
-                //try to guess erroneous offset
-                offset < 0 || offset >= getLength() ? offset : offset + length);
         }
     }
 
@@ -226,8 +224,8 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
                 }
             });
         style.addRule(elementRule);
-        style.addRule(new Rule(elementRule, fb.createPattern("//fb:body/element()")));
-        style.addRule(new Rule(elementRule, fb.createPattern("//fb:body//element()")));
+        style.addRule(new Rule(elementRule, fb.createPattern("//fb:body/node()")));
+        style.addRule(new Rule(elementRule, fb.createPattern("//fb:body//node()")));
 
         try {
             style.run(fb.getDocument());
@@ -235,7 +233,8 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
             log.warn("can't traverse document", e);
         }
 
-        content = contentBuilder.toString();
+        content = new char[contentBuilder.length()];
+        contentBuilder.getChars(0, contentBuilder.length(), content, 0);
         //log.debug(content);
         style = null;
         contentBuilder = null;
