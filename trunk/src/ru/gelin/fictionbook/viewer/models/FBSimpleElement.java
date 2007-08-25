@@ -44,8 +44,8 @@ public class FBSimpleElement implements Element {
      *  to DOM Node which represents part of Fiction Book.
      */
     public FBSimpleElement(Document document, Node node) {
-        this.startOffset = startOffset;
-        this.endOffset = endOffset;
+        this.document = (FBSimpleDocument)document;
+        this.node = node;
     }
 
     public Document getDocument() {
@@ -89,9 +89,8 @@ public class FBSimpleElement implements Element {
         for (int i = 0; i < children.size(); i ++) {
             Element child = document.getElement((Node)children.get(i));
             int start = child.getStartOffset();
-            if (start >= offset) {
+            if (offset >= start) {
                 result = i;
-                break;
             }
         }
         return result;
@@ -109,6 +108,17 @@ public class FBSimpleElement implements Element {
     public boolean isLeaf() {
         List children = ((org.dom4j.Element)node).elements();
         return children.isEmpty();
+    }
+
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("path: ");
+        result.append(node != null ? node.getPath() : "null");
+        result.append(", start: ");
+        result.append(startOffset);
+        result.append(", end: ");
+        result.append(endOffset);
+        return result.toString();
     }
 
 }

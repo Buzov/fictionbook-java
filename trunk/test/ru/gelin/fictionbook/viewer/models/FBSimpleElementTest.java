@@ -28,10 +28,14 @@ import static org.junit.Assert.*;
 import java.io.File;
 import javax.swing.text.Element;
 import org.dom4j.Node;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBException;
 
 public class FBSimpleElementTest {
+
+    protected Log log = LogFactory.getLog(this.getClass());
 
     protected FBDocument fb;
     protected FBSimpleDocument document;
@@ -42,6 +46,7 @@ public class FBSimpleElementTest {
         document = new FBSimpleDocument(fb);
         Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']/fb:title/fb:p");
         element = (FBSimpleElement)document.getElement(node);
+        log.debug(element);
     }
 
     @Test public void testGetDocument() {
@@ -91,7 +96,9 @@ public class FBSimpleElementTest {
     @Test public void testGetElementIndexMore() {
         Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
         Element body = document.getElement(node);
-        assertEquals(1, body.getElementIndex(document.getLength()));
+        //index of last subelement of this <body>
+        //this <body> contains one <image> and three <section>
+        assertEquals(3, body.getElementIndex(document.getLength()));
     }
 
     @Test public void testGetElementIndex() {
@@ -108,8 +115,8 @@ public class FBSimpleElementTest {
     @Test public void testGetElementCount() {
         Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']");
         Element section = document.getElement(node);
-        //this section contains <title>, <epigraph> and four sub<section>
-        assertEquals(4, section.getElementCount());
+        //this section contains <title>,4 <epigraph> and four sub<section>
+        assertEquals(6, section.getElementCount());
     }
 
     @Test public void testGetElement() {
