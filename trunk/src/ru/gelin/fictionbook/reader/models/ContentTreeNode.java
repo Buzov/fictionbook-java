@@ -20,7 +20,7 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer.models;
+package ru.gelin.fictionbook.reader.models;
 
 import org.dom4j.Node;
 import org.dom4j.Element;

@@ -20,7 +20,7 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer.actions;
+package ru.gelin.fictionbook.reader.actions;
 
 import java.io.File;
 import java.awt.event.ActionEvent;
@@ -40,7 +40,7 @@ import ru.gelin.fictionbook.common.FBFileFilter;
 import ru.gelin.fictionbook.common.FBException;
 
 /**
- *  Action which is performed for opening new document in Viewer.
+ *  Action which is performed for opening new document in the Reader.
  */
 public class OpenAction extends AbstractAction {
 
@@ -48,7 +48,7 @@ public class OpenAction extends AbstractAction {
     protected Log log = LogFactory.getLog(this.getClass());
 
     /** localized messages instance */
-    protected static Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
+    protected static Messages msg = Messages.getInstance("ru/gelin/fictionbook/reader/resources/messages");
 
     /** document holder instance */
     FBDocumentHolder documentHolder;

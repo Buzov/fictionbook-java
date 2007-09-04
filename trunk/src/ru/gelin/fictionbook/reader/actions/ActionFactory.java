@@ -20,7 +20,7 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer.actions;
+package ru.gelin.fictionbook.reader.actions;
 
 import java.util.Map;
 import java.util.EnumMap;

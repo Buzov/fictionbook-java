@@ -2,4 +2,4 @@
 
 . `dirname $0`/setenv
 
-$JAVA_HOME/bin/java $OPTIONS ru.gelin.fictionbook.viewer.Main $*
+$JAVA_HOME/bin/java $OPTIONS ru.gelin.fictionbook.reader.Main $*

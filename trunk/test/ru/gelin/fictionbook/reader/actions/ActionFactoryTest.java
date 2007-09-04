@@ -20,7 +20,7 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer.actions;
+package ru.gelin.fictionbook.reader.actions;
 
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -47,7 +47,7 @@ public class ActionFactoryTest {
     @Test public void testGetExitAction() {
         ActionFactory factory = ActionFactory.getInstance(documentHolder);
         AbstractAction action = factory.getAction(ActionFactory.Type.EXIT);
-        assertEquals("ru.gelin.fictionbook.viewer.actions.ExitAction",
+        assertEquals("ru.gelin.fictionbook.reader.actions.ExitAction",
             action.getClass().getName());
         AbstractAction action2 = factory.getAction(ActionFactory.Type.EXIT);
         assertSame(action, action2);
@@ -56,7 +56,7 @@ public class ActionFactoryTest {
     @Test public void testGetOpenAction() {
         ActionFactory factory = ActionFactory.getInstance(documentHolder);
         OpenAction action = (OpenAction)factory.getAction(ActionFactory.Type.OPEN);
-        assertEquals("ru.gelin.fictionbook.viewer.actions.OpenAction",
+        assertEquals("ru.gelin.fictionbook.reader.actions.OpenAction",
             action.getClass().getName());
         assertSame(documentHolder, action.documentHolder);
         AbstractAction action2 = factory.getAction(ActionFactory.Type.OPEN);
