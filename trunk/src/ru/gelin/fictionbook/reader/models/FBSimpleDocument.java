@@ -33,6 +33,7 @@ import javax.swing.text.Position;
 import javax.swing.text.Element;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyleContext;
+import javax.swing.text.Style;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditListener;
 import org.dom4j.Node;
@@ -161,16 +162,14 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
     }
 
     public Element[] getRootElements() {
-        List rootNodes = fb.getDocument().selectNodes("//fb:body");
-        Element[] result = new Element[rootNodes.size()];
-        for (int i = 0; i < rootNodes.size(); i++) {
-            result[i] = getElement((Node)rootNodes.get(i));
-        }
+        Node node = fb.getDocument().getRootElement();
+        Element[] result = new Element[1];
+        result[0] = getElement(node);
         return result;
     }
 
     public Element getDefaultRootElement() {
-        Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        Node node = fb.getDocument().getRootElement();
         return getElement(node);
     }
 
@@ -179,6 +178,47 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
      */
     public void render(Runnable r) {
     }
+
+    public Style addStyle(String nm, Style parent) {
+        return styles.addStyle(nm, parent);
+    }
+
+    public void removeStyle(String nm) {
+        styles.removeStyle(nm);
+    }
+
+    public Style getStyle(String nm) {
+        return styles.getStyle(nm);
+    }
+
+    /**
+     *  This implementation is void, read-only document.
+     */
+    public void setCharacterAttributes(int offset,
+                            int length,
+                            AttributeSet s,
+                            boolean replace) {
+    }
+
+    /**
+     *  This implementation is void, read-only document.
+     */
+    public void setParagraphAttributes(int offset,
+                            int length,
+                            AttributeSet s,
+                            boolean replace) {
+    }
+
+    /**
+     *  This implementation is void, read-only document.
+     */
+    public void setLogicalStyle(int pos, Style s) {
+    }
+
+    /*
+    public Style getLogicalStyle(int p) {
+    }
+    */
 
     /**
      *  Traverses all DOM tree of Fiction Book document
@@ -205,8 +245,9 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
         style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:v//text()")));
         style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td/text()")));
         style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td//text()")));
+        style.addRule(new Rule(textRule, fb.createPattern("//fb:book-title/text()")));
 
-        Rule elementRule = new Rule(fb.createPattern("//fb:body"));
+        Rule elementRule = new Rule(fb.createPattern("//node()"));
         elementRule.setAction(
             new Action() {
                 /**
@@ -224,8 +265,8 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
                 }
             });
         style.addRule(elementRule);
-        style.addRule(new Rule(elementRule, fb.createPattern("//fb:body/node()")));
-        style.addRule(new Rule(elementRule, fb.createPattern("//fb:body//node()")));
+        style.addRule(new Rule(elementRule, fb.createPattern("/")));
+        style.addRule(new Rule(elementRule, fb.createPattern("/node()")));
 
         try {
             style.run(fb.getDocument());

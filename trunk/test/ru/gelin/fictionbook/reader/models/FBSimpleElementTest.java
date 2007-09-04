@@ -60,7 +60,7 @@ public class FBSimpleElementTest {
     }
 
     @Test public void testGetParentElementNull() {
-        Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        Node node = fb.getDocument().getRootElement();
         Element root = document.getElement(node);
         assertNull(root.getParentElement());
     }
@@ -75,12 +75,15 @@ public class FBSimpleElementTest {
     }
 
     @Test public void testGetStartOffset() {
-        assertEquals(0, element.getStartOffset());  //test element is first in document
+        assertEquals(49, element.getStartOffset());
+        //test element is first in document after book title
+        //"Тестовый ознакомительный документ FictionBook 2.1" (49 chars)
     }
 
     @Test public void testGetEndOffset() {
-        //"Часть I. Типа пролог"
-        assertEquals(20, element.getEndOffset());
+        //after "Тестовый ознакомительный документ FictionBook 2.1" (49 chars)
+        //"Часть I. Типа пролог" (20 chars)
+        assertEquals(69, element.getEndOffset());
     }
 
     @Test public void testGetElementIndexLeaf() {
@@ -105,7 +108,7 @@ public class FBSimpleElementTest {
         Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']");
         Element section = document.getElement(node);
         //index of <epigraph> after <title> in <section>
-        assertEquals(1, section.getElementIndex(21));
+        assertEquals(1, section.getElementIndex(70));
     }
 
     @Test public void testGetElementCountLeaf() {

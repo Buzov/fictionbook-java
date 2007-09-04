@@ -89,7 +89,7 @@ public class FBSimpleDocumentTest {
     @Test public void testGetText() throws BadLocationException  {
         //"Часть I."
         assertEquals("\u0427\u0430\u0441\u0442\u044c I.",
-            document.getText(0, 8));
+            document.getText(49, 8));
         //"части."
         assertEquals("\u0447\u0430\u0441\u0442\u0438.",
             document.getText(document.getLength() - 6, 6));
@@ -107,7 +107,7 @@ public class FBSimpleDocumentTest {
 
     @Test public void testGetTextWithSegment() throws BadLocationException {
         Segment text = new Segment();
-        document.getText(0, 8, text);
+        document.getText(49, 8, text);
         //"Часть I."
         assertEquals("\u0427\u0430\u0441\u0442\u044c I.", text.toString());
         text = new Segment();
@@ -140,18 +140,17 @@ public class FBSimpleDocumentTest {
 
     @Test public void testGetRootElements() {
         Element[] roots = document.getRootElements();
-        assertEquals(2, roots.length);
-        Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        assertEquals(1, roots.length);
+        Node node = fb.getDocument().getRootElement();
         Element body = document.getElement(node);
+        assertNotNull(body);
         assertEquals(body, roots[0]);
-        node = fb.getDocument().selectSingleNode("//fb:body[2]");
-        body = document.getElement(node);
-        assertEquals(body, roots[1]);
     }
 
     @Test public void testGetDefaultRootElement() {
-        Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        Node node = fb.getDocument().getRootElement();
         Element body = document.getElement(node);
+        assertNotNull(body);
         assertEquals(body, document.getDefaultRootElement());
     }
 
@@ -159,27 +158,27 @@ public class FBSimpleDocumentTest {
     @Test public void testRender() {
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("implemented by StyleContext")
     @Test public void testAddStyle() {
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("implemented by StyleContext")
     @Test public void testRemoveStyle() {
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("implemented by StyleContext")
     @Test public void testGetStyle() {
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("this is unmodifiable document")
     @Test public void testSetCharacterAttributes() {
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("this is unmodifiable document")
     @Test public void testSetParagraphAttributes() {
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("this is unmodifiable document")
     @Test public void testSetLogicalStyle() {
     }
 
