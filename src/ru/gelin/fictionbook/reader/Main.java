@@ -20,18 +20,18 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer;
+package ru.gelin.fictionbook.reader;
 
 import java.io.File;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ru.gelin.fictionbook.Version;
 import ru.gelin.fictionbook.common.FBDocument;
-import ru.gelin.fictionbook.viewer.actions.OpenAction;
-import ru.gelin.fictionbook.viewer.ui.ViewerFrame;
+import ru.gelin.fictionbook.reader.actions.OpenAction;
+import ru.gelin.fictionbook.reader.ui.ReaderFrame;
 
 /**
- *  This class runs Fiction Book Viewer as stanalone application.
+ *  This class runs Fiction Book Reader as stanalone application.
  */
 public class Main {
 
@@ -39,8 +39,8 @@ public class Main {
     protected static Log log = LogFactory.getLog(Main.class);
 
     public static void main(String[] args) {
-        System.out.println(Version.getCopyrightNotice("Fiction Book Viewer"));
-        ViewerFrame frame = new ViewerFrame();
+        System.out.println(Version.getCopyrightNotice("Fiction Book Reader"));
+        ReaderFrame frame = new ReaderFrame();
         frame.pack();
         frame.show();
         if (args.length > 0) {

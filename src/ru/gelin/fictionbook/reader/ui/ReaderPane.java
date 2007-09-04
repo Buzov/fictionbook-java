@@ -20,7 +20,7 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer.ui;
+package ru.gelin.fictionbook.reader.ui;
 
 import java.awt.Dimension;
 import javax.swing.JSplitPane;
@@ -30,19 +30,19 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBDocumentHolder;
-import ru.gelin.fictionbook.viewer.models.ContentTreeModel;
-import ru.gelin.fictionbook.viewer.models.FBSimpleDocument;
+import ru.gelin.fictionbook.reader.models.ContentTreeModel;
+import ru.gelin.fictionbook.reader.models.FBSimpleDocument;
 
 /**
  *  Panel with content and view of Fiction Book.
  */
-public class ViewerPane extends JSplitPane implements FBDocumentHolder {
+public class ReaderPane extends JSplitPane implements FBDocumentHolder {
 
     protected JTree tree;
     //protected JTextPane text;
     protected JTextArea text;
 
-    public ViewerPane() {
+    public ReaderPane() {
         super(JSplitPane.HORIZONTAL_SPLIT);
         setPreferredSize(new Dimension(600, 400));
         setDividerLocation(200);

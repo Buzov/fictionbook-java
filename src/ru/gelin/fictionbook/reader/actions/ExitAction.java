@@ -20,19 +20,19 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer.actions;
+package ru.gelin.fictionbook.reader.actions;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import ru.gelin.swing.utils.Messages;
 
 /**
- *  Action which is performed when exiting from Viewer.
+ *  Action which is performed when exiting from the Reader.
  */
 public class ExitAction extends AbstractAction {
 
     /** localized messages instance */
-    Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
+    Messages msg = Messages.getInstance("ru/gelin/fictionbook/reader/resources/messages");
 
     public ExitAction() {
         super();
@@ -41,7 +41,7 @@ public class ExitAction extends AbstractAction {
     }
 
     /**
-     *  This method is called when it's need to exit from Viewer.
+     *  This method is called when it's need to exit from the Reader.
      */
     public void actionPerformed(ActionEvent aoEvent) {
         //TODO save all what requires saving

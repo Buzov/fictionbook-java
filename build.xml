@@ -3,7 +3,7 @@
 
     <import file="tools/targets/swing.xml"/>
     <import file="tools/targets/common.xml"/>
-    <import file="tools/targets/viewer.xml"/>
+    <import file="tools/targets/reader.xml"/>
 
     <!-- version definition -->
     <property file="src/ru/gelin/fictionbook/resources/version.properties"/>
@@ -67,7 +67,7 @@
     <target name="compile"
             depends="swing.compile,
                      common.compile,
-                     viewer.compile"
+                     reader.compile"
             description="compile projects"/>
 
     <target name="test.resources">
@@ -81,7 +81,7 @@
             depends="test.resources,
                      swing.test,
                      common.test,
-                     viewer.test"
+                     reader.test"
             description="run projects' tests">
         <mkdir dir="${test.doc}/report"/>
         <mkdir dir="${test.doc}/report/html"/>
@@ -97,7 +97,7 @@
             depends="compile, resources,
                      swing.jar,
                      common.jar,
-                     viewer.jar"
+                     reader.jar"
             description="make projects' jar archives"/>
 
     <target name="build" depends="compile, test, jar"

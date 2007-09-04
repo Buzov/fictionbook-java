@@ -1,34 +1,34 @@
 <?xml version="1.0"?>
-<project name="fbviewer">
+<project name="fbreader">
 
-    <property name="viewer.name" value="fbviewer"/>
-    <patternset id="viewer.files">
-        <include name="ru/gelin/fictionbook/viewer/**"/>
+    <property name="reader.name" value="fbreader"/>
+    <patternset id="reader.files">
+        <include name="ru/gelin/fictionbook/reader/**"/>
         <include name="ru/gelin/fictionbook/*"/>
         <include name="ru/gelin/fictionbook/resources/*"/>
     </patternset>
 
-    <target name="viewer.compile" description="compile viewer">
+    <target name="reader.compile" description="compile reader">
         <mkdir dir="${classes}"/>
         <javac srcdir="${src}" destdir="${classes}"
                 debug="true" debuglevel="source,lines,vars">
             <classpath refid="compile.path"/>
-            <patternset refid="viewer.files"/>
+            <patternset refid="reader.files"/>
             <exclude name="**/resources/**"/>
         </javac>
     </target>
 
-    <target name="viewer.compile-test">
+    <target name="reader.compile-test">
         <mkdir dir="${test.classes}"/>
         <javac srcdir="${test.src}" destdir="${test.classes}"
                 debug="true" debuglevel="source,lines,vars">
             <classpath refid="test.path"/>
-            <patternset refid="viewer.files"/>
+            <patternset refid="reader.files"/>
             <exclude name="**/resources/**"/>
         </javac>
     </target>
 
-    <target name="viewer.test" depends="viewer.compile-test">
+    <target name="reader.test" depends="reader.compile-test">
         <mkdir dir="${test.doc}"/>
         <junit printsummary="yes">
             <classpath refid="test.path"/>
@@ -36,24 +36,24 @@
             <syspropertyset refid="test.properties"/>
             <batchtest todir="${test.doc}">
                 <fileset dir="${test.src}">
-                    <patternset refid="viewer.files"/>
+                    <patternset refid="reader.files"/>
                 </fileset>
             </batchtest>
         </junit>
     </target>
 
-    <target name="viewer.jar" depends="viewer.compile, resources"
-            description="makes fbviewer.jar archive">
+    <target name="reader.jar" depends="reader.compile, resources"
+            description="makes fbreader.jar archive">
         <mkdir dir="${lib}"/>
-        <jar destfile="${lib}/${viewer.name}.jar" basedir="${classes}">
+        <jar destfile="${lib}/${reader.name}.jar" basedir="${classes}">
             <manifest>
                 <attribute name="Implementation-URL" value="http://gelin.ru/project/fictionbook"/>
                 <attribute name="Implementation-Vendor" value="Gelin"/>
                 <attribute name="Implementation-Version" value="${version}"/>
-                <attribute name="Main-Class" value="ru.gelin.fictionbook.viewer.Main"/>
+                <attribute name="Main-Class" value="ru.gelin.fictionbook.reader.Main"/>
                 <attribute name="Date" value="${TSTAMP}"/>
             </manifest>
-            <patternset refid="viewer.files"/>
+            <patternset refid="reader.files"/>
             <zipfileset refid="licenses" prefix=""/>
         </jar>
     </target>

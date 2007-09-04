@@ -20,7 +20,7 @@
  *  mailto:den@gelin.ru
  */
 
-package ru.gelin.fictionbook.viewer.ui;
+package ru.gelin.fictionbook.reader.ui;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -32,35 +32,35 @@ import javax.swing.JMenuItem;
 import ru.gelin.swing.utils.Messages;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBDocumentHolder;
-import ru.gelin.fictionbook.viewer.actions.ActionFactory;
+import ru.gelin.fictionbook.reader.actions.ActionFactory;
 
 /**
- *  Main window if Fiction Book Viewer.
+ *  Main window if Fiction Book Reader.
  */
-public class ViewerFrame extends JFrame implements FBDocumentHolder {
+public class ReaderFrame extends JFrame implements FBDocumentHolder {
 
     /** localized messages instance */
-    protected Messages msg = Messages.getInstance("ru/gelin/fictionbook/viewer/resources/messages");
+    protected Messages msg = Messages.getInstance("ru/gelin/fictionbook/reader/resources/messages");
 
     /** actions */
     protected ActionFactory actions = ActionFactory.getInstance(this);
 
-    public ViewerFrame() {
+    public ReaderFrame() {
         super();
         setTitle(msg.get("frame.title"));
         makeMenu();
-        setContentPane(new ViewerPane());
-        addWindowListener(new ViewerWindowListener());
+        setContentPane(new ReaderPane());
+        addWindowListener(new ReaderWindowListener());
     }
 
     /**
      *  When Fiction Book document is set, title of a frame is changed and
-     *  document is conveyed to ViewerPane.
+     *  document is conveyed to ReaderPane.
      */
     public void setFBDocument(FBDocument document) {
         if (document != null) {
             setTitle(msg.get("frame.title.document", new String[] { document.getBookTitle() }));
-            ((ViewerPane)getContentPane()).setFBDocument(document);
+            ((ReaderPane)getContentPane()).setFBDocument(document);
         }
     }
 
@@ -77,7 +77,7 @@ public class ViewerFrame extends JFrame implements FBDocumentHolder {
         menu.add(menuItem);
     }
 
-    protected class ViewerWindowListener extends WindowAdapter {
+    protected class ReaderWindowListener extends WindowAdapter {
         /**
          *  Saves some options and exits the application when window is closed.
          */
