@@ -235,6 +235,15 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
         //TODO: add more smart styles hierarchy
     }
 
+    public Element getParagraphElement(int pos) {
+        FBSimpleElement element = positionToElement[pos];
+        Node node = element.getNode();
+        while (fb.isInline(node)) { //find first not inline parent
+            node = node.getParent();
+        }
+        return getElement(node);
+    }
+
     /**
      *  Traverses all DOM tree of Fiction Book document
      *  and fill some internal fields.
@@ -279,7 +288,7 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
                     style.applyTemplates(node);
                     element.endOffset = contentBuilder.length();
                     //create position to element map
-                    while(positionToElementBuilder.size() <
+                    while (positionToElementBuilder.size() <
                             contentBuilder.length()) {
                         positionToElementBuilder.add(element);
                     }

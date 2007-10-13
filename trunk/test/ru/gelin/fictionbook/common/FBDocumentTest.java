@@ -65,10 +65,8 @@ public class FBDocumentTest {
         FBDocument doc = new FBDocument(file);
         Document dom = doc.getDocument();
         Node node = dom.selectSingleNode("//fb:p");
-        System.out.println(node.getPath());
         assertEquals(false, doc.isInline(node));
         node = dom.selectSingleNode("//fb:a");
-        System.out.println(node.getPath());
         assertEquals(true, doc.isInline(node));
     }
 
