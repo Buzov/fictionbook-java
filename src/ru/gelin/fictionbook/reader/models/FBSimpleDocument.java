@@ -25,6 +25,7 @@ package ru.gelin.fictionbook.reader.models;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import javax.swing.text.Document;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.AttributeSet;
@@ -53,15 +54,29 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
     /** commons logging instance */
     protected Log log = LogFactory.getLog(this.getClass());
 
+    /** Fiction Book document (with DOM tree) */
     protected FBDocument fb;
-    protected StringBuilder contentBuilder;
-    protected Stylesheet style;
+    /** Document content */
     protected char[] content;
+    /** Document properties */
     protected Map properties = new HashMap();
+    /** DOM node to document Element map */
     protected Map<Node, Element> nodeToElement = new HashMap<Node, Element>();
-
+    /** Document styles */
     protected StyleContext styles = new StyleContext();
+    /** Default set of attributes */
     protected AttributeSet defaultAttributeSet = styles.getEmptySet();
+    /** Default style */
+    protected Style defaultStyle = addStyle("default", null);
+    /** Array "maps" document position to closest Element */
+    protected FBSimpleElement[] positionToElement;
+
+    /** StringBuilder to build the content. Temporaly used in constructor. */
+    private StringBuilder contentBuilder;
+    /** Transformer to walk through DOM tree in constructor */
+    private Stylesheet style;
+    /** List to map document position to Elements. Temporaly used in constructor */
+    private List<FBSimpleElement> positionToElementBuilder;
 
     public FBSimpleDocument(FBDocument fb) {
         super();
@@ -215,10 +230,10 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
     public void setLogicalStyle(int pos, Style s) {
     }
 
-    /*
     public Style getLogicalStyle(int p) {
+        return defaultStyle;
+        //TODO: add more smart styles hierarchy
     }
-    */
 
     /**
      *  Traverses all DOM tree of Fiction Book document
@@ -226,6 +241,7 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
      */
     protected void traverseDocument() {
         contentBuilder = new StringBuilder();
+        positionToElementBuilder = new ArrayList<FBSimpleElement>();
         style = new Stylesheet();
 
         Rule textRule = new Rule(fb.createPattern("//fb:body//fb:p/text()"));
@@ -262,6 +278,11 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
                     nodeToElement.put(node, element);
                     style.applyTemplates(node);
                     element.endOffset = contentBuilder.length();
+                    //create position to element map
+                    while(positionToElementBuilder.size() <
+                            contentBuilder.length()) {
+                        positionToElementBuilder.add(element);
+                    }
                 }
             });
         style.addRule(elementRule);
@@ -277,8 +298,11 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
         content = new char[contentBuilder.length()];
         contentBuilder.getChars(0, contentBuilder.length(), content, 0);
         //log.debug(content);
+        positionToElement = new FBSimpleElement[positionToElementBuilder.size()];
+        positionToElement = positionToElementBuilder.toArray(positionToElement);
         style = null;
         contentBuilder = null;
+        positionToElementBuilder = null;
     }
 
     protected Element getElement(Node node) {

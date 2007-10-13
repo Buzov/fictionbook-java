@@ -35,6 +35,7 @@ import java.io.IOException;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.XPath;
+import org.dom4j.Node;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.dom4j.rule.Pattern;
@@ -57,6 +58,9 @@ public class FBDocument {
 
     protected XPath bookTitleXPath;
 
+    /** XPath expression to detect inline elements */
+    protected XPath inlinesXPath;
+
     public static final Map NS_URIS;
     static {
         Map NSUris = new HashMap();
@@ -65,6 +69,8 @@ public class FBDocument {
         NSUris.put("l", "http://www.w3.org/1999/xlink");
         NS_URIS = Collections.unmodifiableMap(NSUris);
     }
+
+
 
     /**
      *  Constructor from file.
@@ -131,9 +137,24 @@ public class FBDocument {
         return bookTitleXPath.valueOf(dom);
     }
 
+    /**
+     *  Returns <code>true</code> if specified DOM Node is "inline" node
+     *  (i.e. not forms new paragraph).
+     */
+    public boolean isInline(Node node) {
+        return inlinesXPath.matches(node);
+    }
+
     protected void prepareXPaths() {
         bookTitleXPath =
             createXPath("/fb:FictionBook/fb:description/fb:title-info/fb:book-title");
+        inlinesXPath = createXPath(
+            "//fb:empty-line|" +
+            "//fb:strong|//fb:emphasis|" +
+            "//fb:sub|//fb:sup|" +
+            "//fb:strikethrough|" +
+            "//fb:code|" +
+            "//fb:a");
     }
 
     protected SAXReader getSAXReader() {

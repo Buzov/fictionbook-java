@@ -22,6 +22,7 @@
         <mkdir dir="${test.classes}"/>
         <javac srcdir="${test.src}" destdir="${test.classes}"
                 debug="true" debuglevel="source,lines,vars">
+            <!--compilerarg value="-Xlint:unchecked"/-->
             <classpath refid="test.path"/>
             <patternset refid="reader.files"/>
             <exclude name="**/resources/**"/>

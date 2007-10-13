@@ -28,6 +28,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.dom4j.Node;
 
 public class FBDocumentTest {
 
@@ -58,6 +59,17 @@ public class FBDocumentTest {
             "\u043e\u0437\u043d\u0430\u043a\u043e\u043c\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 " +
             "\u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442 FictionBook 2.1",
             doc.getBookTitle());
+    }
+
+    @Test public void testIsInline() throws FBException {
+        FBDocument doc = new FBDocument(file);
+        Document dom = doc.getDocument();
+        Node node = dom.selectSingleNode("//fb:p");
+        System.out.println(node.getPath());
+        assertEquals(false, doc.isInline(node));
+        node = dom.selectSingleNode("//fb:a");
+        System.out.println(node.getPath());
+        assertEquals(true, doc.isInline(node));
     }
 
 }
