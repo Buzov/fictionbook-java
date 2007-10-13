@@ -45,6 +45,16 @@ public class FBSimpleDocumentTest {
         document = new FBSimpleDocument(fb);
     }
 
+    @Test public void testConstructorPositionToElement() {
+        assertNotNull(document.content);
+        assertNotNull(document.positionToElement);
+        assertEquals(document.content.length,
+            document.positionToElement.length);
+        assertNotNull(document.positionToElement[0]);
+        assertNotNull(document.positionToElement
+            [document.positionToElement.length - 1]);
+    }
+
     @Test public void testGetLength() {
         assertTrue(document.getLength() > 0);
     }
@@ -182,12 +192,14 @@ public class FBSimpleDocumentTest {
     @Test public void testSetLogicalStyle() {
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetLogicalStyle() {
+        assertEquals(document.defaultStyle, document.getLogicalStyle(0));
+        //TODO: make more smart test for more smart style hierarchy
     }
 
     @Ignore("not implemented yet")
     @Test public void testGetParagraphElement() {
+
     }
 
     @Ignore("not implemented yet")
