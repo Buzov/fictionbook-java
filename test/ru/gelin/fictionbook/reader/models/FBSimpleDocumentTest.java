@@ -197,9 +197,12 @@ public class FBSimpleDocumentTest {
         //TODO: make more smart test for more smart style hierarchy
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetParagraphElement() {
-
+        //"Часть I." at offset 49
+        Node pNode = fb.getDocument().selectSingleNode(
+            "//fb:section[@id=\"half0\"]/fb:title/fb:p");
+        Element pElement = document.getParagraphElement(49);
+        assertEquals(document.getElement(pNode), pElement);
     }
 
     @Ignore("not implemented yet")

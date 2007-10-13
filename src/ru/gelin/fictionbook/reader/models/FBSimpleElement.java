@@ -110,6 +110,13 @@ public class FBSimpleElement implements Element {
         return children.isEmpty();
     }
 
+    /**
+     *  Returns DOM Node for this Element.
+     */
+    public Node getNode() {
+        return node;
+    }
+
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("path: ");
