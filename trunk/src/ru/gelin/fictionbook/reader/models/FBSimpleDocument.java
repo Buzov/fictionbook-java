@@ -26,7 +26,10 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Font;
 import javax.swing.text.Document;
+import javax.swing.text.StyledDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Segment;
@@ -49,7 +52,7 @@ import ru.gelin.fictionbook.common.FBDocument;
 /**
  *  Simple read-only styled document, which represents Fiction Book.
  */
-public class FBSimpleDocument /*implements StyledDocument*/ implements Document {
+public class FBSimpleDocument implements StyledDocument {
 
     /** commons logging instance */
     protected Log log = LogFactory.getLog(this.getClass());
@@ -242,6 +245,22 @@ public class FBSimpleDocument /*implements StyledDocument*/ implements Document 
             node = node.getParent();
         }
         return getElement(node);
+    }
+
+    public Element getCharacterElement(int pos) {
+        return positionToElement[pos];
+    }
+
+    public Color getForeground(AttributeSet attr) {
+        return styles.getForeground(attr);
+    }
+
+    public Color getBackground(AttributeSet attr) {
+        return styles.getBackground(attr);
+    }
+
+    public Font getFont(AttributeSet attr) {
+        return styles.getFont(attr);
     }
 
     /**

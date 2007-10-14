@@ -25,8 +25,8 @@ package ru.gelin.fictionbook.reader.ui;
 import java.awt.Dimension;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
-//import javax.swing.JTextPane;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+//import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBDocumentHolder;
@@ -39,8 +39,8 @@ import ru.gelin.fictionbook.reader.models.FBSimpleDocument;
 public class ReaderPane extends JSplitPane implements FBDocumentHolder {
 
     protected JTree tree;
-    //protected JTextPane text;
-    protected JTextArea text;
+    protected JTextPane text;
+    //protected JTextArea text;
 
     public ReaderPane() {
         super(JSplitPane.HORIZONTAL_SPLIT);
@@ -49,8 +49,8 @@ public class ReaderPane extends JSplitPane implements FBDocumentHolder {
         tree = new JTree(new Object[] {  });    //empty tree
         tree.setEditable(false);    //read only
         add(new JScrollPane(tree));
-        //text = new JTextPane();
-        text = new JTextArea();
+        text = new JTextPane();
+        //text = new JTextArea();
         text.setEditable(false);    //read only
         add(new JScrollPane(text));
     }
