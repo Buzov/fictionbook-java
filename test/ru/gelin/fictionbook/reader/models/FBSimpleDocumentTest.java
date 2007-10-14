@@ -205,19 +205,23 @@ public class FBSimpleDocumentTest {
         assertEquals(document.getElement(pNode), pElement);
     }
 
-    @Ignore("not implemented yet")
     @Test public void testGetCharacterElement() {
+        //"сноска 1" first <a> element
+        Node aNode = fb.getDocument().selectSingleNode("//fb:a");
+        Element aElement = document.getElement(aNode);
+        assertEquals(aElement,
+            document.getCharacterElement(aElement.getStartOffset()));
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("implemented by StyleContext")
     @Test public void testGetForeground() {
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("implemented by StyleContext")
     @Test public void testGetBackground() {
     }
 
-    @Ignore("not implemented yet")
+    @Ignore("implemented by StyleContext")
     @Test public void testGetFont() {
     }
 
