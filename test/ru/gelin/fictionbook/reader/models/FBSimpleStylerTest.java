@@ -62,4 +62,11 @@ public class FBSimpleStylerTest {
         assertEquals("value=", spv[2]);
     }
 
+    @Test public void testAddXPath() {
+        styler.styles.addStyle("test", null);
+        styler.addXPath("test", "//fb:p");
+        assertEquals(styler.styles.getStyle("test"),
+            styler.xpathToStyle.get("//fb:p"));
+    }
+
 }
