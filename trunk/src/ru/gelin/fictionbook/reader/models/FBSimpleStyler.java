@@ -24,9 +24,14 @@ package ru.gelin.fictionbook.reader.models;
 
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import javax.swing.text.StyleContext;
+import javax.swing.text.Style;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *  Reads configuration file and initializes internal StyleContext with
@@ -35,10 +40,19 @@ import javax.swing.text.StyleContext;
  */
 public class FBSimpleStyler {
 
-    protected StyleContext styles;
+    /** commons logging instance */
+    protected Log log = LogFactory.getLog(this.getClass());
+
+    protected StyleContext styles = new StyleContext();
+
+    /** number of current reading line in the file */
+    protected int line;
+
+    protected Map<String, Style> xpathToStyle =
+        new LinkedHashMap<String, Style>();   //to preserve order
 
     protected static final String STYLES_PROPERTIES =
-        "../resources/styles.properties";
+        "/ru/gelin/fictionbook/reader/resources/styles.properties";
     protected static final Pattern LINE_PATTERN = Pattern.compile(
         "([\\w\\.]+)\\.(\\w+?)\\s*=\\s*(.+)\\s*");  //style.property = value
 
@@ -46,7 +60,6 @@ public class FBSimpleStyler {
      *  Creates Styler. Reads configuration.
      */
     public FBSimpleStyler() {
-        styles = new StyleContext();
         loadConfiguration();
     }
 
@@ -70,7 +83,24 @@ public class FBSimpleStyler {
             while ((line = reader.readLine()) != null) {
                 String[] spv = parseLine(line); //[style, property, value]
                 if (spv != null) {
-                    //System.out.println(spv[0] + "." + spv[1]);     //style.property
+                    String style = spv[0];
+                    String property = spv[1];
+                    String value = spv[2];
+                    if (styles.getStyle(style) == null) {   //no such style
+                        if (log.isDebugEnabled()) {
+                            log.debug("adding style " + style);
+                        }
+                        Style parent = null;
+                        if ("parent".equals(property)) {
+                            parent = styles.getStyle(value);
+                            if (parent == null) {
+                                log.warn("line " + line + ": parent style " +
+                                    value + " is not defined before");
+                            }
+                        }
+                        styles.addStyle(style, parent);
+                    }
+                    processProperty(style, property, value);
                 }
             }
         } catch (Exception e) { //it's fatal
@@ -93,6 +123,17 @@ public class FBSimpleStyler {
             result[2] = matcher.group(3);
         }
         return result;
+    }
+
+    protected void processProperty(String style, String property,
+            String value) {
+        if ("xpath".equals(property)) {
+            addXPath(style, value);
+        }
+    }
+
+    protected void addXPath(String style, String xpath) {
+        xpathToStyle.put(xpath, styles.getStyle(style));
     }
 
 }
