@@ -41,14 +41,25 @@ public class FBSimpleStylerTest {
         assertNotNull(styles.getStyle("default"));
     }
 
-    @Test public void testGetStyleName() {
-        assertEquals("style", styler.getStyleName("style.property"));
-        assertEquals("long.style", styler.getStyleName("long.style.property"));
-    }
-
-    @Test public void testGetPropertyName() {
-        assertEquals("property", styler.getPropertyName("style.property"));
-        assertEquals("property", styler.getPropertyName("long.style.property"));
+    @Test public void testParseLine() {
+        String[] spv = styler.parseLine("style.property = value");
+        assertEquals("style", spv[0]);
+        assertEquals("property", spv[1]);
+        assertEquals("value", spv[2]);
+        spv = styler.parseLine("long.style.property = value");
+        assertEquals("long.style", spv[0]);
+        assertEquals("property", spv[1]);
+        assertEquals("value", spv[2]);
+        spv = styler.parseLine("style.property=value");
+        assertEquals("style", spv[0]);
+        assertEquals("property", spv[1]);
+        assertEquals("value", spv[2]);
+        spv = styler.parseLine("#style.property = value");
+        assertNull(spv);
+        spv = styler.parseLine("style.property = value=");
+        assertEquals("style", spv[0]);
+        assertEquals("property", spv[1]);
+        assertEquals("value=", spv[2]);
     }
 
 }

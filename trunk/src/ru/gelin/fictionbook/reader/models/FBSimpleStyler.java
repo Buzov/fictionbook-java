@@ -22,8 +22,10 @@
 
 package ru.gelin.fictionbook.reader.models;
 
-import java.util.Properties;
-import java.util.Enumeration;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import javax.swing.text.StyleContext;
 
 /**
@@ -35,15 +37,23 @@ public class FBSimpleStyler {
 
     protected StyleContext styles;
 
+    protected static final String STYLES_PROPERTIES =
+        "../resources/styles.properties";
+    protected static final Pattern LINE_PATTERN = Pattern.compile(
+        "([\\w\\.]+)\\.(\\w+?)\\s*=\\s*(.+)\\s*");  //style.property = value
+
+    /**
+     *  Creates Styler. Reads configuration.
+     */
+    public FBSimpleStyler() {
+        styles = new StyleContext();
+        loadConfiguration();
+    }
+
     /**
      *  Returns StyleContext filled with styles read from configuration.
      */
     public StyleContext getStyleContext() {
-        if (styles == null) {
-            styles = new StyleContext();
-            styles.addStyle("default", null);
-            loadConfiguration();
-        }
         return styles;
     }
 
@@ -51,44 +61,38 @@ public class FBSimpleStyler {
      *  Loads configuration .properties file.
      */
     protected void loadConfiguration() {
-        Properties props = new Properties();
         try {
-        props.load(FBSimpleStyler.class.getResourceAsStream(
-                "../resources/styles.properties"));
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(
+                    FBSimpleStyler.class.getResourceAsStream(STYLES_PROPERTIES),
+                    "ISO-8859-1"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] spv = parseLine(line); //[style, property, value]
+                if (spv != null) {
+                    //System.out.println(spv[0] + "." + spv[1]);     //style.property
+                }
+            }
         } catch (Exception e) { //it's fatal
             throw new RuntimeException(e);
         }
-        Enumeration keys = props.keys();
-
-        while (keys.hasMoreElements()) {
-            String key = (String)keys.nextElement();
-            String name =
-        }
-
     }
 
     /**
-     *  Gets style name from property key name.
+     *  Parses line of the configuration file. Returns <code>null</code> if
+     *  line is comment or not in key = value format.
+     *  @return array of three elements: style name, property name and value.
      */
-    protected String getStyleName(String key) {
-        int pos = key.lastIndexOf('.');
-        if (pos >= 0) {
-            return key.substring(0, pos);
-        } else {
-            return key;
+    protected String[] parseLine(String line) {
+        String[] result = null;
+        Matcher matcher = LINE_PATTERN.matcher(line);
+        if (matcher.matches()) {
+            result = new String[3];
+            result[0] = matcher.group(1);
+            result[1] = matcher.group(2);
+            result[2] = matcher.group(3);
         }
-    }
-
-    /**
-     *  Gets property name from property key name.
-     */
-    protected String getPropertyName(String key) {
-        int pos = key.lastIndexOf('.');
-        if (pos >= 0) {
-            return key.substring(pos + 1, key.length());
-        } else {
-            return "";
-        }
+        return result;
     }
 
 }
