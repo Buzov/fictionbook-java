@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import javax.swing.text.StyleContext;
 import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -88,14 +89,14 @@ public class FBSimpleStyler {
                     String value = spv[2];
                     if (styles.getStyle(style) == null) {   //no such style
                         if (log.isDebugEnabled()) {
-                            log.debug("adding style " + style);
+                            log.debug("adding style '" + style + "'");
                         }
                         Style parent = null;
                         if ("parent".equals(property)) {
                             parent = styles.getStyle(value);
                             if (parent == null) {
-                                log.warn("line " + line + ": parent style " +
-                                    value + " is not defined before");
+                                log.warn("line " + line + ": parent style '" +
+                                    value + "' is not defined before");
                             }
                         }
                         styles.addStyle(style, parent);
@@ -127,13 +128,37 @@ public class FBSimpleStyler {
 
     protected void processProperty(String style, String property,
             String value) {
-        if ("xpath".equals(property)) {
-            addXPath(style, value);
+        if ("parent".equals(property)) {
+            //nothing to do, already used in style creation
+        } else if ("xpath".equals(property)) {
+            setXPath(style, value);
+        } else if ("alignment".equals(property)) {
+            setAlignment(style, value);
+        } else {
+            log.warn("line " + line + ": unknown property '" + property + "'");
         }
     }
 
-    protected void addXPath(String style, String xpath) {
+    protected void setXPath(String style, String xpath) {
         xpathToStyle.put(xpath, styles.getStyle(style));
+    }
+
+    protected void setAlignment(String style, String align) {
+        int alignment = -1;
+        if ("left".equals(align)) {
+            alignment = StyleConstants.ALIGN_LEFT;
+        } else if ("right".equals(align)) {
+            alignment = StyleConstants.ALIGN_RIGHT;
+        } else if ("center".equals(align)) {
+            alignment = StyleConstants.ALIGN_CENTER;
+        } else if ("justified".equals(align)) {
+            alignment = StyleConstants.ALIGN_JUSTIFIED;
+        } else {
+            log.warn("line " + line + ": unknown alignment '" + align + "'");
+        }
+        if (alignment != -1) {
+            StyleConstants.setAlignment(styles.getStyle(style), alignment);
+        }
     }
 
 }
