@@ -26,6 +26,8 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import javax.swing.text.StyleContext;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 
 public class FBSimpleStylerTest {
 
@@ -62,11 +64,26 @@ public class FBSimpleStylerTest {
         assertEquals("value=", spv[2]);
     }
 
-    @Test public void testAddXPath() {
-        styler.styles.addStyle("test", null);
-        styler.addXPath("test", "//fb:p");
-        assertEquals(styler.styles.getStyle("test"),
-            styler.xpathToStyle.get("//fb:p"));
+    @Test public void testSetXPath() {
+        Style style = styler.styles.addStyle("test", null);
+        styler.setXPath("test", "//fb:p");
+        assertEquals(style, styler.xpathToStyle.get("//fb:p"));
+    }
+
+    @Test public void testSetAlignment() {
+        Style style = styler.styles.addStyle("test", null);
+        styler.setAlignment("test", "left");
+        assertEquals(StyleConstants.ALIGN_LEFT,
+            StyleConstants.getAlignment(style));
+        styler.setAlignment("test", "right");
+        assertEquals(StyleConstants.ALIGN_RIGHT,
+            StyleConstants.getAlignment(style));
+        styler.setAlignment("test", "center");
+        assertEquals(StyleConstants.ALIGN_CENTER,
+            StyleConstants.getAlignment(style));
+        styler.setAlignment("test", "justified");
+        assertEquals(StyleConstants.ALIGN_JUSTIFIED,
+            StyleConstants.getAlignment(style));
     }
 
 }
