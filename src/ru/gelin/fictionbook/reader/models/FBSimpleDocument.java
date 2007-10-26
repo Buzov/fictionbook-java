@@ -65,12 +65,15 @@ public class FBSimpleDocument implements StyledDocument {
     protected Map properties = new HashMap();
     /** DOM node to document Element map */
     protected Map<Node, Element> nodeToElement = new HashMap<Node, Element>();
+    /** Styler for the document */
+    protected static FBSimpleStyler styler = new FBSimpleStyler();
     /** Document styles */
-    protected StyleContext styles = new StyleContext();
-    /** Default set of attributes */
-    protected AttributeSet defaultAttributeSet = styles.getEmptySet();
+    protected StyleContext styles = styler.getStyleContext();
     /** Default style */
-    protected Style defaultStyle = addStyle("default", null);
+    protected Style defaultStyle = getStyle(StyleContext.DEFAULT_STYLE);
+    /** Default set of attributes */
+    protected AttributeSet defaultAttributeSet = (AttributeSet)defaultStyle;
+
     /** Array "maps" document position to closest Element */
     protected FBSimpleElement[] positionToElement;
 
@@ -234,8 +237,8 @@ public class FBSimpleDocument implements StyledDocument {
     }
 
     public Style getLogicalStyle(int p) {
-        return defaultStyle;
-        //TODO: add more smart styles hierarchy
+        //return defaultStyle;
+        return (Style)getCharacterElement(p).getAttributes(); //???
     }
 
     public Element getParagraphElement(int pos) {
@@ -306,6 +309,8 @@ public class FBSimpleDocument implements StyledDocument {
                     nodeToElement.put(node, element);
                     style.applyTemplates(node);
                     element.endOffset = contentBuilder.length();
+                    //apply style to element
+                    styler.applyStyle(element);
                     //create position to element map
                     while (positionToElementBuilder.size() <
                             contentBuilder.length()) {

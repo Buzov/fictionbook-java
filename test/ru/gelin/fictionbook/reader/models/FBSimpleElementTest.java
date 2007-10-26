@@ -70,8 +70,7 @@ public class FBSimpleElementTest {
     }
 
     @Test public void testGetAttributes() {
-        //TODO more complex test
-        assertEquals(document.defaultAttributeSet, element.getAttributes());
+        assertEquals(document.styles.getStyle("p"), element.getAttributes());
     }
 
     @Test public void testGetStartOffset() {

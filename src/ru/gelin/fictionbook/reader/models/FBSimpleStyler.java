@@ -31,6 +31,7 @@ import java.util.regex.Matcher;
 import javax.swing.text.StyleContext;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import org.dom4j.Node;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -69,6 +70,19 @@ public class FBSimpleStyler {
      */
     public StyleContext getStyleContext() {
         return styles;
+    }
+
+    /**
+     *  Sets style for the Element. Uses XPath expressions ("xpath" style
+     *  property) and XML Node corresponding to the Element.
+     */
+    public void applyStyle(FBSimpleElement element) {
+        Node node = element.getNode();
+        for (String xpath : xpathToStyle.keySet()) {
+            if (node.matches(xpath)) {
+                element.setAttributeSet(xpathToStyle.get(xpath));
+            }
+        }
     }
 
     /**

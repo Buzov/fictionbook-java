@@ -25,9 +25,14 @@ package ru.gelin.fictionbook.reader.models;
 import org.junit.*;
 import static org.junit.Assert.*;
 
+import java.io.File;
 import javax.swing.text.StyleContext;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.Element;
+import org.dom4j.Node;
+import ru.gelin.fictionbook.common.FBDocument;
+import ru.gelin.fictionbook.common.FBException;
 
 public class FBSimpleStylerTest {
 
@@ -41,6 +46,16 @@ public class FBSimpleStylerTest {
         StyleContext styles = styler.getStyleContext();
         assertNotNull(styles);
         assertNotNull(styles.getStyle("default"));
+    }
+
+    @Test public void testApplyStyle() throws FBException {
+        FBDocument fb = new FBDocument(new File("docs/test2.1.fb2"));
+        FBSimpleDocument document = new FBSimpleDocument(fb);
+        Node pNode = fb.getDocument().selectSingleNode("//fb:p");
+        FBSimpleElement pElement = (FBSimpleElement)document.getElement(pNode);
+        styler.applyStyle(pElement);
+        Style style = styler.styles.getStyle("p");
+        assertEquals(style, pElement.getAttributes());
     }
 
     @Test public void testParseLine() {
