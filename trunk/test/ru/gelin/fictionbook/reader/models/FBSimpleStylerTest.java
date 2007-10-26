@@ -101,4 +101,12 @@ public class FBSimpleStylerTest {
             StyleConstants.getAlignment(style));
     }
 
+    @Test public void testSetBold() {
+        Style style = styler.styles.addStyle("test", null);
+        styler.setBold("test", "false");
+        assertEquals(false, StyleConstants.isBold(style));
+        styler.setBold("test", "true");
+        assertEquals(true, StyleConstants.isBold(style));
+    }
+
 }
