@@ -38,6 +38,7 @@ public class FBSimpleElement implements Element {
     protected Node node;
     protected int startOffset;
     protected int endOffset;
+    protected AttributeSet attributeSet;
 
     /**
      *  Element creates for specified document and takes reference
@@ -68,8 +69,17 @@ public class FBSimpleElement implements Element {
     }
 
     public AttributeSet getAttributes() {
-        //TODO more complex implementation
+        if (attributeSet != null) {
+            return attributeSet;
+        }
         return document.defaultAttributeSet;
+    }
+
+    /**
+     *  Sets AttributeSet (Style) for this element.
+     */
+    public void setAttributeSet(AttributeSet attributeSet) {
+        this.attributeSet = attributeSet;
     }
 
     public int getStartOffset() {
