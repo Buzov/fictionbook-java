@@ -148,6 +148,8 @@ public class FBSimpleStyler {
             setXPath(style, value);
         } else if ("alignment".equals(property)) {
             setAlignment(style, value);
+        } else if ("bold".equals(property)) {
+            setBold(style, value);
         } else {
             log.warn("line " + line + ": unknown property '" + property + "'");
         }
@@ -173,6 +175,11 @@ public class FBSimpleStyler {
         if (alignment != -1) {
             StyleConstants.setAlignment(styles.getStyle(style), alignment);
         }
+    }
+
+    protected void setBold(String style, String bold) {
+        StyleConstants.setBold(styles.getStyle(style),
+            Boolean.parseBoolean(bold));
     }
 
 }

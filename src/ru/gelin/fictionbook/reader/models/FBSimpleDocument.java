@@ -72,7 +72,7 @@ public class FBSimpleDocument implements StyledDocument {
     /** Default style */
     protected Style defaultStyle = getStyle(StyleContext.DEFAULT_STYLE);
     /** Default set of attributes */
-    protected AttributeSet defaultAttributeSet = (AttributeSet)defaultStyle;
+    protected AttributeSet defaultAttributeSet = defaultStyle;
 
     /** Array "maps" document position to closest Element */
     protected FBSimpleElement[] positionToElement;
@@ -238,7 +238,8 @@ public class FBSimpleDocument implements StyledDocument {
 
     public Style getLogicalStyle(int p) {
         //return defaultStyle;
-        return (Style)getCharacterElement(p).getAttributes(); //???
+        //return (Style)getCharacterElement(p).getAttributes(); //???
+        return null;
     }
 
     public Element getParagraphElement(int pos) {

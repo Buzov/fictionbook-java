@@ -193,7 +193,8 @@ public class FBSimpleDocumentTest {
     }
 
     @Test public void testGetLogicalStyle() {
-        assertEquals(document.defaultStyle, document.getLogicalStyle(0));
+        //assertEquals(document.defaultStyle, document.getLogicalStyle(0));
+        assertNull(document.getLogicalStyle(0));
         //TODO: make more smart test for more smart style hierarchy
     }
 
