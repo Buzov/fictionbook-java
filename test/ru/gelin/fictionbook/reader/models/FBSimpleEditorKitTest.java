@@ -29,6 +29,7 @@ import java.io.File;
 import javax.swing.text.ViewFactory;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.Element;
+import javax.swing.text.MutableAttributeSet;
 import org.dom4j.Node;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBException;
@@ -52,6 +53,18 @@ public class FBSimpleEditorKitTest {
         Element element = (FBSimpleElement)document.getElement(node);
         assertNotNull(element);
         assertEquals("javax.swing.text.ParagraphView",
+            factory.create(element).getClass().getName());
+    }
+
+    @Test public void testViewFactory2() {
+        Element element = document.getDefaultRootElement();
+        MutableAttributeSet attributes =
+                (MutableAttributeSet)element.getAttributes();
+        attributes.addAttribute(FBSimpleStyler.ViewAttribute, "paragraph");
+        assertEquals("javax.swing.text.ParagraphView",
+            factory.create(element).getClass().getName());
+        attributes.addAttribute(FBSimpleStyler.ViewAttribute, "box");
+        assertEquals("javax.swing.text.BoxView",
             factory.create(element).getClass().getName());
     }
 
