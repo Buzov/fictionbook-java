@@ -29,6 +29,7 @@ import javax.swing.text.View;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.ParagraphView;
 import javax.swing.text.LabelView;
+import javax.swing.text.BoxView;
 
 /**
  *  Extends StyledEditorKit to support read-only Fiction Book document.
@@ -50,7 +51,9 @@ public class FBSimpleEditorKit extends StyledEditorKit {
         public View create(Element elem) {
             String view = String.valueOf(
                 elem.getAttributes().getAttribute(FBSimpleStyler.ViewAttribute));
-            if ("paragraph".equals(view)) {
+            if ("box".equals(view)) {
+                return new BoxView(elem, View.Y_AXIS);
+            } else if ("paragraph".equals(view)) {
                 return new ParagraphView(elem);
             }
             return new LabelView(elem);
