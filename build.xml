@@ -5,6 +5,10 @@
     <import file="tools/targets/common.xml"/>
     <import file="tools/targets/reader.xml"/>
 
+    <!-- compiler version -->
+    <property name="ant.build.javac.source" value="1.5"/>
+    <property name="ant.build.javac.target" value="1.5"/>
+
     <!-- version definition -->
     <property file="src/ru/gelin/fictionbook/resources/version.properties"/>
 
