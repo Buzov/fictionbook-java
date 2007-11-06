@@ -42,6 +42,8 @@ import org.apache.commons.logging.LogFactory;
  */
 public class FBSimpleStyler {
 
+    public static final Object ViewAttribute = "view";
+
     /** commons logging instance */
     protected Log log = LogFactory.getLog(this.getClass());
 
@@ -146,6 +148,8 @@ public class FBSimpleStyler {
             //nothing to do, already used in style creation
         } else if ("xpath".equals(property)) {
             setXPath(style, value);
+        } else if ("view".equals(property)) {
+            setView(style, value);
         } else if ("alignment".equals(property)) {
             setAlignment(style, value);
         } else if ("bold".equals(property)) {
@@ -180,6 +184,11 @@ public class FBSimpleStyler {
     protected void setBold(String style, String bold) {
         StyleConstants.setBold(styles.getStyle(style),
             Boolean.parseBoolean(bold));
+    }
+
+    protected void setView(String style, String view) {
+        styles.getStyle(style).addAttribute(
+            ViewAttribute, view);
     }
 
 }

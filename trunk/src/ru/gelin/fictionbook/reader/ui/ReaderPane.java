@@ -32,6 +32,7 @@ import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBDocumentHolder;
 import ru.gelin.fictionbook.reader.models.ContentTreeModel;
 import ru.gelin.fictionbook.reader.models.FBSimpleDocument;
+import ru.gelin.fictionbook.reader.models.FBSimpleEditorKit;
 
 /**
  *  Panel with content and view of Fiction Book.
@@ -59,7 +60,8 @@ public class ReaderPane extends JSplitPane implements FBDocumentHolder {
         if (document != null) {
             tree.setModel(new ContentTreeModel(document));
             tree.setRootVisible(true);
-            text.setDocument(new FBSimpleDocument(document));
+            text.setEditorKit(new FBSimpleEditorKit());
+            text.setStyledDocument(new FBSimpleDocument(document));
         }
     }
 

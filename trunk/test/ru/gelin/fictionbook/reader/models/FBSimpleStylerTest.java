@@ -109,4 +109,11 @@ public class FBSimpleStylerTest {
         assertEquals(true, StyleConstants.isBold(style));
     }
 
+    @Test public void testSetView() {
+        Style style = styler.styles.addStyle("test", null);
+        styler.setView("test", "view");
+        assertEquals("view", style.getAttribute(
+                FBSimpleStyler.ViewAttribute));
+    }
+
 }
