@@ -25,7 +25,10 @@ package ru.gelin.fictionbook.reader.models;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.util.Map;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import javax.swing.text.StyleContext;
@@ -53,7 +56,8 @@ public class FBSimpleStyler {
     protected int line;
 
     protected Map<String, Style> xpathToStyle =
-        new LinkedHashMap<String, Style>();   //to preserve order
+        new HashMap<String, Style>();
+    protected List<String> xpathList = new ArrayList<String>();
 
     protected static final String STYLES_PROPERTIES =
         "/ru/gelin/fictionbook/reader/resources/styles.properties";
@@ -65,6 +69,7 @@ public class FBSimpleStyler {
      */
     public FBSimpleStyler() {
         loadConfiguration();
+        Collections.reverse(xpathList);
     }
 
     /**
@@ -80,9 +85,10 @@ public class FBSimpleStyler {
      */
     public void applyStyle(FBSimpleElement element) {
         Node node = element.getNode();
-        for (String xpath : xpathToStyle.keySet()) {
+        for (String xpath : xpathList) {
             if (node.matches(xpath)) {
                 element.setAttributeSet(xpathToStyle.get(xpath));
+                break;
             }
         }
     }
@@ -161,6 +167,7 @@ public class FBSimpleStyler {
 
     protected void setXPath(String style, String xpath) {
         xpathToStyle.put(xpath, styles.getStyle(style));
+        xpathList.add(xpath);
     }
 
     protected void setAlignment(String style, String align) {

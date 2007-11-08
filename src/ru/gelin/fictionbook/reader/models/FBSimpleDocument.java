@@ -307,12 +307,10 @@ public class FBSimpleDocument implements StyledDocument {
                     FBSimpleElement element = new FBSimpleElement(
                         FBSimpleDocument.this, node);
                     element.startOffset = contentBuilder.length();
-                    nodeToElement.put(node, element);
                     style.applyTemplates(node);
                     element.endOffset = contentBuilder.length();
-                    //apply style to element
+                    nodeToElement.put(node, element);
                     styler.applyStyle(element);
-                    //create position to element map
                     while (positionToElementBuilder.size() <
                             contentBuilder.length()) {
                         positionToElementBuilder.add(element);
