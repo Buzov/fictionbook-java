@@ -59,7 +59,7 @@ public class FBSimpleStyler {
     static final String STYLES_PROPERTIES =
         "/ru/gelin/fictionbook/reader/resources/styles.properties";
     static final Pattern LINE_PATTERN = Pattern.compile(
-        "([\\w\\.]+)\\.(\\w+?)\\s*=\\s*(.+)\\s*");  //style.property = value
+        "([\\w\\.\\-\\_]+)\\.(\\w+?)\\s*=\\s*(.+)\\s*");  //style.property = value
 
     /**
      *  Creates Styler. Reads configuration.
@@ -85,6 +85,10 @@ public class FBSimpleStyler {
         for (String xpath : xpathList) {
             if (node.matches(xpath)) {
                 element.setAttributeSet(xpathToStyle.get(xpath));
+                if (log.isDebugEnabled()) {
+                    log.debug(node.getPath() + " <- " +
+                        xpathToStyle.get(xpath).getName());
+                }
                 break;
             }
         }
