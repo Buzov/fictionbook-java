@@ -32,9 +32,9 @@ import ru.gelin.fictionbook.common.FBDocument;
  */
 public class ContentTreeNode {
 
-    protected FBDocument document;
-    protected Node node;
-    protected XPath titleXPath;
+    FBDocument document;
+    Node node;
+    XPath titleXPath;
 
     public ContentTreeNode(FBDocument document, Node node) {
         this.document = document;

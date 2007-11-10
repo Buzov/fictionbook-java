@@ -40,10 +40,10 @@ import ru.gelin.fictionbook.reader.actions.ActionFactory;
 public class ReaderFrame extends JFrame implements FBDocumentHolder {
 
     /** localized messages instance */
-    protected Messages msg = Messages.getInstance("ru/gelin/fictionbook/reader/resources/messages");
+    Messages msg = Messages.getInstance("ru/gelin/fictionbook/reader/resources/messages");
 
     /** actions */
-    protected ActionFactory actions = ActionFactory.getInstance(this);
+    ActionFactory actions = ActionFactory.getInstance(this);
 
     public ReaderFrame() {
         super();
@@ -64,7 +64,7 @@ public class ReaderFrame extends JFrame implements FBDocumentHolder {
         }
     }
 
-    protected void makeMenu() {
+    void makeMenu() {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         JMenu menu = new JMenu(msg.get("menu.file"));
@@ -77,7 +77,7 @@ public class ReaderFrame extends JFrame implements FBDocumentHolder {
         menu.add(menuItem);
     }
 
-    protected class ReaderWindowListener extends WindowAdapter {
+    class ReaderWindowListener extends WindowAdapter {
         /**
          *  Saves some options and exits the application when window is closed.
          */

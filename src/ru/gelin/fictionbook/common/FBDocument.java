@@ -51,15 +51,15 @@ public class FBDocument {
     protected Log log = LogFactory.getLog(this.getClass());
 
     /** dom4j document instance */
-    protected Document dom;
+    Document dom;
 
     /** document factory which is used to create dom4j document */
-    protected DocumentFactory factory;
+    DocumentFactory factory;
 
-    protected XPath bookTitleXPath;
+    XPath bookTitleXPath;
 
     /** XPath expression to detect inline elements */
-    protected XPath inlinesXPath;
+    XPath inlinesXPath;
 
     public static final Map NS_URIS;
     static {
@@ -145,7 +145,7 @@ public class FBDocument {
         return inlinesXPath.matches(node);
     }
 
-    protected void prepareXPaths() {
+    void prepareXPaths() {
         bookTitleXPath =
             createXPath("/fb:FictionBook/fb:description/fb:title-info/fb:book-title");
         inlinesXPath = createXPath(
@@ -157,14 +157,14 @@ public class FBDocument {
             "//fb:a");
     }
 
-    protected SAXReader getSAXReader() {
+    SAXReader getSAXReader() {
         return new SAXReader(factory);
     }
 
     /**
      *  Read Fiction Book from zip archive.
      */
-    protected Document readZip(File file) throws IOException, DocumentException {
+    Document readZip(File file) throws IOException, DocumentException {
         Document result = null;
         ZipFile zipFile = new ZipFile(file);
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -191,7 +191,7 @@ public class FBDocument {
     /**
      *  Read GZipped Fiction Book.
      */
-    protected Document readGZip(File file) throws IOException, DocumentException {
+    Document readGZip(File file) throws IOException, DocumentException {
         if (log.isInfoEnabled()) {
             log.info("ungzipping " + file);
         }
@@ -202,7 +202,7 @@ public class FBDocument {
     /**
      *  Read not compressed Fiction Book.
      */
-    protected Document read(File file) throws IOException, DocumentException {
+    Document read(File file) throws IOException, DocumentException {
         SAXReader xmlReader = getSAXReader();
         return xmlReader.read(file);
     }

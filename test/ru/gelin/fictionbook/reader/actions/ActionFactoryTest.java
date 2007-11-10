@@ -31,7 +31,7 @@ import ru.gelin.fictionbook.common.FBDocumentHolder;
 
 public class ActionFactoryTest {
 
-    protected FBDocumentHolder documentHolder = new DocumentHolder();
+    FBDocumentHolder documentHolder = new DocumentHolder();
 
     @Before public void setUp() {
     }
@@ -70,7 +70,7 @@ public class ActionFactoryTest {
         assertNotSame(action, action2);
     }
 
-    protected class DocumentHolder implements FBDocumentHolder {
+    class DocumentHolder implements FBDocumentHolder {
         public FBDocument document;
         public void setFBDocument(FBDocument document) {
             this.document = document;

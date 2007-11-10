@@ -35,7 +35,7 @@ public class ErrorFormat {
     /** commons logging instance */
     protected static Log log = LogFactory.getLog(ErrorFormat.class);
 
-    protected static Pattern nlPattern = Pattern.compile("(:|\\.)\\s+");
+    static Pattern nlPattern = Pattern.compile("(:|\\.)\\s+");
 
     public static String format(String message) {
         String result = nlPattern.matcher(message).replaceAll("$1\n");

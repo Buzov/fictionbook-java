@@ -46,7 +46,7 @@ public class FBSimpleEditorKit extends StyledEditorKit {
      *  {@link StyleConstants.NameAttribute} of the attribute set of
      *  the element.
      */
-    protected class FBViewFactory implements ViewFactory {
+    class FBViewFactory implements ViewFactory {
 
         public View create(Element elem) {
             String view = String.valueOf(

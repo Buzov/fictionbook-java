@@ -34,11 +34,11 @@ import org.dom4j.Node;
  */
 public class FBSimpleElement implements Element {
 
-    protected FBSimpleDocument document;
-    protected Node node;
-    protected int startOffset;
-    protected int endOffset;
-    protected AttributeSet attributeSet;
+    FBSimpleDocument document;
+    Node node;
+    int startOffset;
+    int endOffset;
+    AttributeSet attributeSet;
 
     /**
      *  Element creates for specified document and takes reference

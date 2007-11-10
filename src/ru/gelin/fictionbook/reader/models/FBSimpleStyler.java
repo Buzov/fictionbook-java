@@ -50,25 +50,22 @@ public class FBSimpleStyler {
     /** commons logging instance */
     protected Log log = LogFactory.getLog(this.getClass());
 
-    protected StyleContext styles = new StyleContext();
+    StyleContext styles = new StyleContext();
 
-    /** number of current reading line in the file */
-    protected int line;
-
-    protected Map<String, Style> xpathToStyle =
+    Map<String, Style> xpathToStyle =
         new HashMap<String, Style>();
-    protected List<String> xpathList = new ArrayList<String>();
+    List<String> xpathList = new ArrayList<String>();
 
-    protected static final String STYLES_PROPERTIES =
+    static final String STYLES_PROPERTIES =
         "/ru/gelin/fictionbook/reader/resources/styles.properties";
-    protected static final Pattern LINE_PATTERN = Pattern.compile(
+    static final Pattern LINE_PATTERN = Pattern.compile(
         "([\\w\\.]+)\\.(\\w+?)\\s*=\\s*(.+)\\s*");  //style.property = value
 
     /**
      *  Creates Styler. Reads configuration.
      */
     public FBSimpleStyler() {
-        loadConfiguration();
+        new Configuration().load();
         Collections.reverse(xpathList);
     }
 
@@ -93,109 +90,116 @@ public class FBSimpleStyler {
         }
     }
 
-    /**
-     *  Loads configuration .properties file.
-     */
-    protected void loadConfiguration() {
-        try {
-            BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                    FBSimpleStyler.class.getResourceAsStream(STYLES_PROPERTIES),
-                    "ISO-8859-1"));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] spv = parseLine(line); //[style, property, value]
-                if (spv != null) {
-                    String style = spv[0];
-                    String property = spv[1];
-                    String value = spv[2];
-                    if (styles.getStyle(style) == null) {   //no such style
-                        if (log.isDebugEnabled()) {
-                            log.debug("adding style '" + style + "'");
-                        }
-                        Style parent = null;
-                        if ("parent".equals(property)) {
-                            parent = styles.getStyle(value);
-                            if (parent == null) {
-                                log.warn("line " + line + ": parent style '" +
-                                    value + "' is not defined before");
+    class Configuration {
+
+        /** number of current reading line in the file */
+        int line;
+
+        /**
+         *  Loads configuration .properties file.
+         */
+        public void load() {
+            try {
+                BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(
+                        FBSimpleStyler.class.getResourceAsStream(STYLES_PROPERTIES),
+                        "ISO-8859-1"));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] spv = parseLine(line); //[style, property, value]
+                    if (spv != null) {
+                        String style = spv[0];
+                        String property = spv[1];
+                        String value = spv[2];
+                        if (styles.getStyle(style) == null) {   //no such style
+                            if (log.isDebugEnabled()) {
+                                log.debug("adding style '" + style + "'");
                             }
+                            Style parent = null;
+                            if ("parent".equals(property)) {
+                                parent = styles.getStyle(value);
+                                if (parent == null) {
+                                    log.warn("line " + line + ": parent style '" +
+                                        value + "' is not defined before");
+                                }
+                            }
+                            styles.addStyle(style, parent);
                         }
-                        styles.addStyle(style, parent);
+                        processProperty(style, property, value);
                     }
-                    processProperty(style, property, value);
                 }
+            } catch (Exception e) { //it's fatal
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) { //it's fatal
-            throw new RuntimeException(e);
         }
-    }
 
-    /**
-     *  Parses line of the configuration file. Returns <code>null</code> if
-     *  line is comment or not in key = value format.
-     *  @return array of three elements: style name, property name and value.
-     */
-    protected String[] parseLine(String line) {
-        String[] result = null;
-        Matcher matcher = LINE_PATTERN.matcher(line);
-        if (matcher.matches()) {
-            result = new String[3];
-            result[0] = matcher.group(1);
-            result[1] = matcher.group(2);
-            result[2] = matcher.group(3);
+        /**
+         *  Parses line of the configuration file. Returns <code>null</code> if
+         *  line is comment or not in key = value format.
+         *  @return array of three elements: style name, property name and value.
+         */
+        String[] parseLine(String line) {
+            String[] result = null;
+            Matcher matcher = LINE_PATTERN.matcher(line);
+            if (matcher.matches()) {
+                result = new String[3];
+                result[0] = matcher.group(1);
+                result[1] = matcher.group(2);
+                result[2] = matcher.group(3);
+            }
+            return result;
         }
-        return result;
-    }
 
-    protected void processProperty(String style, String property,
-            String value) {
-        if ("parent".equals(property)) {
-            //nothing to do, already used in style creation
-        } else if ("xpath".equals(property)) {
-            setXPath(style, value);
-        } else if ("view".equals(property)) {
-            setView(style, value);
-        } else if ("alignment".equals(property)) {
-            setAlignment(style, value);
-        } else if ("bold".equals(property)) {
-            setBold(style, value);
-        } else {
-            log.warn("line " + line + ": unknown property '" + property + "'");
+        void processProperty(String style, String property,
+                String value) {
+            if ("parent".equals(property)) {
+                //nothing to do, already used in style creation
+            } else if ("xpath".equals(property)) {
+                setXPath(style, value);
+            } else if ("view".equals(property)) {
+                setView(style, value);
+            } else if ("alignment".equals(property)) {
+                setAlignment(style, value);
+            } else if ("bold".equals(property)) {
+                setBold(style, value);
+            } else {
+                log.warn("line " + line + ": unknown property '" + property + "'");
+            }
         }
-    }
 
-    protected void setXPath(String style, String xpath) {
-        xpathToStyle.put(xpath, styles.getStyle(style));
-        xpathList.add(xpath);
-    }
-
-    protected void setAlignment(String style, String align) {
-        int alignment = -1;
-        if ("left".equals(align)) {
-            alignment = StyleConstants.ALIGN_LEFT;
-        } else if ("right".equals(align)) {
-            alignment = StyleConstants.ALIGN_RIGHT;
-        } else if ("center".equals(align)) {
-            alignment = StyleConstants.ALIGN_CENTER;
-        } else if ("justified".equals(align)) {
-            alignment = StyleConstants.ALIGN_JUSTIFIED;
-        } else {
-            log.warn("line " + line + ": unknown alignment '" + align + "'");
+        void setXPath(String style, String xpath) {
+            xpathToStyle.put(xpath, styles.getStyle(style));
+            xpathList.add(xpath);
         }
-        if (alignment != -1) {
-            StyleConstants.setAlignment(styles.getStyle(style), alignment);
+
+        void setAlignment(String style, String align) {
+            int alignment = -1;
+            if ("left".equals(align)) {
+                alignment = StyleConstants.ALIGN_LEFT;
+            } else if ("right".equals(align)) {
+                alignment = StyleConstants.ALIGN_RIGHT;
+            } else if ("center".equals(align)) {
+                alignment = StyleConstants.ALIGN_CENTER;
+            } else if ("justified".equals(align)) {
+                alignment = StyleConstants.ALIGN_JUSTIFIED;
+            } else {
+                log.warn("line " + line + ": unknown alignment '" + align + "'");
+            }
+            if (alignment != -1) {
+                StyleConstants.setAlignment(styles.getStyle(style), alignment);
+            }
         }
-    }
 
-    protected void setBold(String style, String bold) {
-        StyleConstants.setBold(styles.getStyle(style),
-            Boolean.parseBoolean(bold));
-    }
+        void setBold(String style, String bold) {
+            StyleConstants.setBold(styles.getStyle(style),
+                Boolean.parseBoolean(bold));
+        }
 
-    protected void setView(String style, String view) {
-        styles.getStyle(style).addAttribute(
-            ViewAttribute, view);
+        void setView(String style, String view) {
+            styles.getStyle(style).addAttribute(
+                ViewAttribute, view);
+        }
+
     }
 
 }

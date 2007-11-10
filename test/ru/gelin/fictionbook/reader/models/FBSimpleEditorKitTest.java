@@ -37,8 +37,8 @@ import ru.gelin.fictionbook.common.FBException;
 public class FBSimpleEditorKitTest {
 
     ViewFactory factory;
-    protected FBDocument fb;
-    protected FBSimpleDocument document;
+    FBDocument fb;
+    FBSimpleDocument document;
 
     @Before public void setUp() throws FBException {
         StyledEditorKit kit = new FBSimpleEditorKit();

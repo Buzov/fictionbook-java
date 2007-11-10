@@ -41,17 +41,17 @@ public class ActionFactory {
 
     /** factory instances */
     //WeakHashMap to avoid potential memory leaks (?)
-    protected static Map<FBDocumentHolder, ActionFactory> factories =
+    static Map<FBDocumentHolder, ActionFactory> factories =
         new WeakHashMap<FBDocumentHolder, ActionFactory>();
 
     /** map of actions */
-    protected Map<Type, AbstractAction> actions =
+    Map<Type, AbstractAction> actions =
         new EnumMap<Type, AbstractAction>(Type.class);
 
     /** document holder reference */
-    protected FBDocumentHolder documentHolder;
+    FBDocumentHolder documentHolder;
 
-    protected ActionFactory() {
+    ActionFactory() {
         //not public default constructor
     }
 
@@ -60,7 +60,7 @@ public class ActionFactory {
      *  @param  documentHolder  document holder reference which will convey to
      *                          actions created by this factory
      */
-    protected ActionFactory(FBDocumentHolder documentHolder) {
+    ActionFactory(FBDocumentHolder documentHolder) {
         this.documentHolder = documentHolder;
     }
 
