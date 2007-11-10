@@ -37,17 +37,17 @@ public class FBFileFilterTest {
     }
 
     @Test public void testAcceptDirectory() {
-        File file = new File("docs");
+        File file = new File("test");
         assertTrue(filter.accept(file));
     }
 
     @Test public void testAcceptFB() {
-        File file = new File("docs/test2.1.fb2");
+        File file = new File("test/test.fb2");
         assertTrue(filter.accept(file));
     }
 
     @Test public void testAcceptFBZip() {
-        File file = new File("docs/test2.1.fb2.zip");
+        File file = new File("test/test.fb2.zip");
         assertTrue(filter.accept(file));
     }
 

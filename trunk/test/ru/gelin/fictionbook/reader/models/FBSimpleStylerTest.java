@@ -51,9 +51,9 @@ public class FBSimpleStylerTest {
     }
 
     @Test public void testApplyStyle() throws FBException {
-        FBDocument fb = new FBDocument(new File("docs/test2.1.fb2"));
+        FBDocument fb = new FBDocument(new File("test/test.fb2"));
         FBSimpleDocument document = new FBSimpleDocument(fb);
-        Node pNode = fb.getDocument().selectSingleNode("//fb:p");
+        Node pNode = fb.getDocument().selectSingleNode("//fb:section/fb:p");
         FBSimpleElement pElement = (FBSimpleElement)document.getElement(pNode);
         styler.applyStyle(pElement);
         Style style = styler.styles.getStyle("p");

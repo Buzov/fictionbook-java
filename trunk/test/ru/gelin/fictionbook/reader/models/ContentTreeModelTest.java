@@ -35,16 +35,12 @@ public class ContentTreeModelTest {
     ContentTreeModel model;
 
     @Before public void setUp() throws FBException {
-        document = new FBDocument(new File("docs/test2.1.fb2"));
+        document = new FBDocument(new File("test/test.fb2"));
         model = new ContentTreeModel(document);
     }
 
     @Test public void testGetRoot() {
-        //"Тестовый ознакомительный документ FictionBook 2.1"
-        assertEquals("\u0422\u0435\u0441\u0442\u043e\u0432\u044b\u0439 " +
-            "\u043e\u0437\u043d\u0430\u043a\u043e\u043c\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 " +
-            "\u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442 FictionBook 2.1",
-            model.getRoot().toString());
+        assertEquals("Test FictionBook", model.getRoot().toString());
     }
 
     @Test public void testGetChildOfRoot() {
@@ -59,37 +55,32 @@ public class ContentTreeModelTest {
         Object root = model.getRoot();
         Object node = model.getChild(root, 0);
         Object child = model.getChild(node, 0);
-        //"Часть I. Типа пролог"
-        assertEquals("\u0427\u0430\u0441\u0442\u044c I. " +
-            "\u0422\u0438\u043f\u0430 \u043f\u0440\u043e\u043b\u043e\u0433",
-            child.toString());
+        assertEquals("Section 1. Title.", child.toString());
         child = model.getChild(node, 1);
         //"Часть II. Типа текст"
-        assertEquals("\u0427\u0430\u0441\u0442\u044c II. " +
-            "\u0422\u0438\u043f\u0430 \u0442\u0435\u043a\u0441\u0442",
-            child.toString());
+        assertEquals("Section 2. Title.", child.toString());
     }
 
     @Test public void testGetChildCountOfRoot() {
         Object root = model.getRoot();
-        assertEquals(2, model.getChildCount(root));
+        int children = document.getDocument().selectNodes("//fb:body").size();
+        assertEquals(children, model.getChildCount(root));
     }
 
     @Test public void testGetChildCountOfNode() {
         Object root = model.getRoot();
         Object node = model.getChild(root, 0);
-        assertEquals(3, model.getChildCount(node));
+        int children = document.getDocument().selectNodes("//fb:body[1]/fb:section").size();
+        assertEquals(children, model.getChildCount(node));
     }
 
     @Test public void testIsLeaf() {
-        Object root = model.getRoot();
+        Object root = model.getRoot();  //book-title
         assertEquals(false, model.isLeaf(root));
-        Object node = model.getChild(root, 0);
+        Object node = model.getChild(root, 0);  //body[0]
         assertEquals(false, model.isLeaf(node));
-        node = model.getChild(node, 0);
-        assertEquals(false, model.isLeaf(node));
-        Object leaf = model.getChild(node, 0);
-        assertEquals(true, model.isLeaf(leaf));
+        node = model.getChild(node, 0); //body[0]/section[0]
+        assertEquals(true, model.isLeaf(node));
     }
 
     @Ignore("this model represents immutable tree, listeners are not used")

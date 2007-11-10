@@ -41,7 +41,7 @@ public class FBSimpleDocumentTest {
     FBSimpleDocument document;
 
     @Before public void setUp() throws FBException {
-        fb = new FBDocument(new File("docs/test2.1.fb2"));
+        fb = new FBDocument(new File("test/test.fb2"));
         document = new FBSimpleDocument(fb);
     }
 
@@ -76,10 +76,7 @@ public class FBSimpleDocumentTest {
     }
 
     @Test public void testGetProperty() {
-        //"Тестовый ознакомительный документ FictionBook 2.1"
-        assertEquals("\u0422\u0435\u0441\u0442\u043e\u0432\u044b\u0439 " +
-            "\u043e\u0437\u043d\u0430\u043a\u043e\u043c\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 " +
-            "\u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442 FictionBook 2.1",
+        assertEquals("Test FictionBook",
             document.getProperty(Document.TitleProperty));
     }
 
@@ -97,12 +94,15 @@ public class FBSimpleDocumentTest {
     }
 
     @Test public void testGetText() throws BadLocationException  {
-        //"Часть I."
-        assertEquals("\u0427\u0430\u0441\u0442\u044c I.",
-            document.getText(49, 8));
-        //"части."
-        assertEquals("\u0447\u0430\u0441\u0442\u0438.",
-            document.getText(document.getLength() - 6, 6));
+        //first section name after book title "Text FictionBook"
+        assertEquals("Section 1. Title.",
+            document.getText("Test FictionBook".length(),
+                "Section 1. Title.".length()));
+        //last section content
+        assertEquals("Last Section. Content.",
+            document.getText(document.getLength() -
+                "Last Section. Content.".length(),
+                "Last Section. Content.".length()));
     }
 
     @Test(expected = BadLocationException.class)
@@ -117,13 +117,14 @@ public class FBSimpleDocumentTest {
 
     @Test public void testGetTextWithSegment() throws BadLocationException {
         Segment text = new Segment();
-        document.getText(49, 8, text);
-        //"Часть I."
-        assertEquals("\u0427\u0430\u0441\u0442\u044c I.", text.toString());
+        document.getText("Test FictionBook".length(),
+            "Section 1. Title.".length(), text);
+        assertEquals("Section 1. Title.", text.toString());
         text = new Segment();
-        document.getText(document.getLength() - 6, 6, text);
-        //"части."
-        assertEquals("\u0447\u0430\u0441\u0442\u0438.", text.toString());
+        document.getText(document.getLength() -
+            "Last Section. Content.".length(),
+            "Last Section. Content.".length(), text);
+        assertEquals("Last Section. Content.", text.toString());
     }
 
     @Test public void testGetStartPosition() {
@@ -199,15 +200,16 @@ public class FBSimpleDocumentTest {
     }
 
     @Test public void testGetParagraphElement() {
-        //"Часть I." at offset 49
+        //"Section 1. Title." after "Test FictionBook"
         Node pNode = fb.getDocument().selectSingleNode(
-            "//fb:section[@id=\"half0\"]/fb:title/fb:p");
-        Element pElement = document.getParagraphElement(49);
+            "//fb:section[@id=\"section1\"]/fb:title/fb:p");
+        Element pElement = document.getParagraphElement(
+            "Test FictionBook".length());
         assertEquals(document.getElement(pNode), pElement);
     }
 
     @Test public void testGetCharacterElement() {
-        //"сноска 1" first <a> element
+        //"Link" first <a> element
         Node aNode = fb.getDocument().selectSingleNode("//fb:a");
         Element aElement = document.getElement(aNode);
         assertEquals(aElement,
