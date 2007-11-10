@@ -42,9 +42,10 @@ public class FBSimpleElementTest {
     FBSimpleElement element;
 
     @Before public void setUp() throws FBException {
-        fb = new FBDocument(new File("docs/test2.1.fb2"));
+        fb = new FBDocument(new File("test/test.fb2"));
         document = new FBSimpleDocument(fb);
-        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']/fb:title/fb:p");
+        Node node = fb.getDocument().
+            selectSingleNode("//fb:section[@id='section1']/fb:title/fb:p");
         element = (FBSimpleElement)document.getElement(node);
         log.debug(element);
     }
@@ -54,7 +55,8 @@ public class FBSimpleElementTest {
     }
 
     @Test public void testGetParentElement() {
-        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']/fb:title");
+        Node node = fb.getDocument().
+            selectSingleNode("//fb:section[@id='section1']/fb:title");
         Element parent = document.getElement(node);
         assertSame(parent, element.getParentElement());
     }
@@ -74,40 +76,44 @@ public class FBSimpleElementTest {
     }
 
     @Test public void testGetStartOffset() {
-        assertEquals(49, element.getStartOffset());
+        assertEquals("Test FictionBook".length(),
+            element.getStartOffset());
         //test element is first in document after book title
-        //"Тестовый ознакомительный документ FictionBook 2.1" (49 chars)
+        //"Test FictionBook"
     }
 
     @Test public void testGetEndOffset() {
-        //after "Тестовый ознакомительный документ FictionBook 2.1" (49 chars)
-        //"Часть I. Типа пролог" (20 chars)
-        assertEquals(69, element.getEndOffset());
+        //length of book title + length of the element
+        assertEquals("Test FictionBook".length() +
+            "Section 1. Title.".length(), element.getEndOffset());
     }
 
     @Test public void testGetElementIndexLeaf() {
-        assertEquals(-1, element.getElementIndex(10));  //test element is leaf
+        assertEquals(-1, element.getElementIndex(1));  //no children
     }
 
     @Test public void testGetElementIndexLess() {
         Node node = fb.getDocument().selectSingleNode("//fb:body[2]");
         Element body = document.getElement(node);
-        assertEquals(0, body.getElementIndex(10));
+        //index of the first child
+        assertEquals(0, body.getElementIndex(1));
     }
 
     @Test public void testGetElementIndexMore() {
         Node node = fb.getDocument().selectSingleNode("//fb:body[1]");
+        int children = node.selectNodes("*[node()]").size();
         Element body = document.getElement(node);
         //index of last subelement of this <body>
-        //this <body> contains one <image> and three <section>
-        assertEquals(3, body.getElementIndex(document.getLength()));
+        assertEquals(children - 1, body.getElementIndex(document.getLength()));
     }
 
     @Test public void testGetElementIndex() {
-        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']");
+        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='section1']");
         Element section = document.getElement(node);
-        //index of <epigraph> after <title> in <section>
-        assertEquals(1, section.getElementIndex(70));
+        node = node.selectSingleNode("fb:p");
+        Element p = document.getElement(node);
+        //index of <p> after <title> in <section>
+        assertEquals(1, section.getElementIndex(p.getStartOffset() + 1));
     }
 
     @Test public void testGetElementCountLeaf() {
@@ -115,20 +121,22 @@ public class FBSimpleElementTest {
     }
 
     @Test public void testGetElementCount() {
-        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']");
+        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='section1']");
+        int children = node.selectNodes("*[node()]").size();
         Element section = document.getElement(node);
-        //this section contains <title>,4 <epigraph> and four sub<section>
-        assertEquals(6, section.getElementCount());
+        assertEquals(children, section.getElementCount());
     }
 
     @Test public void testGetElement() {
-        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']/fb:title");
+        Node node = fb.getDocument().
+            selectSingleNode("//fb:section[@id='section1']/fb:title");
         Element parent = document.getElement(node);
         assertSame(element, parent.getElement(0));
     }
 
     @Test public void testIsLeaf() {
-        Node node = fb.getDocument().selectSingleNode("//fb:section[@id='half0']/fb:title");
+        Node node = fb.getDocument().
+            selectSingleNode("//fb:section[@id='section1']/fb:title");
         Element parent = document.getElement(node);
         assertFalse(parent.isLeaf());
         assertTrue(element.isLeaf());

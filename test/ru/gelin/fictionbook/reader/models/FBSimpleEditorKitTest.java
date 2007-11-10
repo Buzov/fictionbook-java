@@ -43,13 +43,13 @@ public class FBSimpleEditorKitTest {
     @Before public void setUp() throws FBException {
         StyledEditorKit kit = new FBSimpleEditorKit();
         factory = kit.getViewFactory();
-        fb = new FBDocument(new File("docs/test2.1.fb2"));
+        fb = new FBDocument(new File("test/test.fb2"));
         document = new FBSimpleDocument(fb);
     }
 
     @Test public void testViewFactory() {
         Node node = fb.getDocument().selectSingleNode(
-            "//fb:section[@id=\"half0_2\"]/fb:p");
+            "//fb:section[@id=\"section1\"]/fb:p");
         Element element = (FBSimpleElement)document.getElement(node);
         assertNotNull(element);
         assertEquals("javax.swing.text.ParagraphView",
