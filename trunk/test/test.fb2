@@ -42,18 +42,18 @@
         </title>
     </section>
     <section id="header-test">
-        <title><p>Header 1</p></title>
+        <title><p>Header 1.</p></title>
         <section>
-            <title><p>Header 2</p></title>
+            <title><p>Header 2.</p></title>
             <section>
-                <title><p>Header 3</p></title>
+                <title><p>Header 3.</p></title>
             </section>
         </section>
     </section>
     <section id="paragraph-test">
         <title>
-            <p>Paragraphs</p>
-            <p>In title too</p>
+            <p>Paragraphs.</p>
+            <p>In title too.</p>
         </title>
         <p>Sed ut perspiciatis, unde omnis iste natus error sit voluptatem
 accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo
@@ -83,6 +83,7 @@ voluptas nulla pariatur?</p>
 </body>
 
 <body name="notes">
+    <title><p>Notes.</p></title>
     <section id="last-section">
         <p>Last Section. Content.</p>
     </section>

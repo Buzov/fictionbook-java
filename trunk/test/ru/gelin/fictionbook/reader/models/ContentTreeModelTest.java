@@ -48,7 +48,7 @@ public class ContentTreeModelTest {
         Object child = model.getChild(root, 0);
         assertEquals("<body>", child.toString());
         child = model.getChild(root, 1);
-        assertEquals("[notes]", child.toString());
+        assertEquals("Notes.", child.toString());
     }
 
     @Test public void testGetChildOfNode() {
