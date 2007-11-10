@@ -58,31 +58,25 @@ public class FBSimpleDocument implements StyledDocument {
     protected Log log = LogFactory.getLog(this.getClass());
 
     /** Fiction Book document (with DOM tree) */
-    protected FBDocument fb;
+    FBDocument fb;
     /** Document content */
-    protected char[] content;
+    char[] content;
     /** Document properties */
-    protected Map properties = new HashMap();
-    /** DOM node to document Element map */
-    protected Map<Node, Element> nodeToElement = new HashMap<Node, Element>();
+    Map properties = new HashMap();
+
     /** Styler for the document */
-    protected static FBSimpleStyler styler = new FBSimpleStyler();
+    static FBSimpleStyler styler = new FBSimpleStyler();
     /** Document styles */
-    protected StyleContext styles = styler.getStyleContext();
+    StyleContext styles = styler.getStyleContext();
     /** Default style */
-    protected Style defaultStyle = getStyle(StyleContext.DEFAULT_STYLE);
+    Style defaultStyle = getStyle(StyleContext.DEFAULT_STYLE);
     /** Default set of attributes */
-    protected AttributeSet defaultAttributeSet = defaultStyle;
+    AttributeSet defaultAttributeSet = defaultStyle;
 
+    /** DOM node to document Element map */
+    Map<Node, Element> nodeToElement = new HashMap<Node, Element>();
     /** Array "maps" document position to closest Element */
-    protected FBSimpleElement[] positionToElement;
-
-    /** StringBuilder to build the content. Temporaly used in constructor. */
-    private StringBuilder contentBuilder;
-    /** Transformer to walk through DOM tree in constructor */
-    private Stylesheet style;
-    /** List to map document position to Elements. Temporaly used in constructor */
-    private List<FBSimpleElement> positionToElementBuilder;
+    FBSimpleElement[] positionToElement;
 
     public FBSimpleDocument(FBDocument fb) {
         super();
@@ -271,96 +265,93 @@ public class FBSimpleDocument implements StyledDocument {
      *  Traverses all DOM tree of Fiction Book document
      *  and fill some internal fields.
      */
-    protected void traverseDocument() {
-        contentBuilder = new StringBuilder();
-        positionToElementBuilder = new ArrayList<FBSimpleElement>();
-        style = new Stylesheet();
-
-        Rule textRule = new Rule(fb.createPattern("//fb:body//fb:p/text()"));
-        textRule.setAction(
-            new Action() {
-                /**
-                 *  Saves value of all text nodes to single String.
-                 */
-                public void run(Node node) {
-                    //log.debug("visiting " + node.getPath());
-                    contentBuilder.append(node.getText());
-                }
-            });
-        style.addRule(textRule);
-        style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:p//text()")));
-        style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:v/text()")));
-        style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:v//text()")));
-        style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td/text()")));
-        style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td//text()")));
-        style.addRule(new Rule(textRule, fb.createPattern("//fb:book-title/text()")));
-
-        Rule elementRule = new Rule(fb.createPattern("//node()"));
-        elementRule.setAction(
-            new Action() {
-                /**
-                 *  Creates Element for every Node of Fiction Book and
-                 *  puts it to map.
-                 */
-                public void run(Node node) throws Exception {
-                    //log.debug("visiting " + node.getPath());
-                    FBSimpleElement element = new FBSimpleElement(
-                        FBSimpleDocument.this, node);
-                    element.startOffset = contentBuilder.length();
-                    style.applyTemplates(node);
-                    element.endOffset = contentBuilder.length();
-                    nodeToElement.put(node, element);
-                    styler.applyStyle(element);
-                    while (positionToElementBuilder.size() <
-                            contentBuilder.length()) {
-                        positionToElementBuilder.add(element);
-                    }
-                }
-            });
-        style.addRule(elementRule);
-        style.addRule(new Rule(elementRule, fb.createPattern("/")));
-        style.addRule(new Rule(elementRule, fb.createPattern("/node()")));
-
-        try {
-            style.run(fb.getDocument());
-        } catch (Exception e) {
-            log.warn("can't traverse document", e);
-        }
-
-        content = new char[contentBuilder.length()];
-        contentBuilder.getChars(0, contentBuilder.length(), content, 0);
-        //log.debug(content);
-        positionToElement = new FBSimpleElement[positionToElementBuilder.size()];
-        positionToElement = positionToElementBuilder.toArray(positionToElement);
-        style = null;
-        contentBuilder = null;
-        positionToElementBuilder = null;
+    void traverseDocument() {
+        new Traverser().traverse();
     }
 
-    protected Element getElement(Node node) {
+    Element getElement(Node node) {
         return nodeToElement.get(node);
     }
 
-    /*
-    protected class FBVisitor extends VisitorSupport {
+    private class Traverser {
 
-        public StringBuilder contentBuilder = new StringBuilder();
-        protected XPath bodyXPath = fb.createXPath("//fb:body//*");
-        protected XPath textXPath = fb.createXPath("//fb:p//*|//fb:v//*|//fb:td//*");
+        /** StringBuilder to build the content. */
+        private StringBuilder contentBuilder = new StringBuilder();
 
-        public void visit(Element node) {
-            //log.debug("visiting " + node.getPath());
+        /** Transformer to walk through DOM tree. */
+        private Stylesheet style = new Stylesheet();
+
+        /** List to map document position to Elements. */
+        private List<FBSimpleElement> positionToElementBuilder =
+                new ArrayList<FBSimpleElement>();;
+
+        public void traverse() {
+            addTextRule();
+            addElementRule();
+            try {
+                style.run(fb.getDocument());
+            } catch (Exception e) {
+                log.warn("can't traverse document", e);
+            }
+            save();
         }
 
-        public void visit(Text node) {
-            if (bodyXPath.matches(node) && bodyXPath.matches(node)) {
-                //only formatted text inside body
-                log.debug("visiting " + node.getPath());
-                contentBuilder.append(node.getText());
-            }
+        private void addTextRule() {
+            Rule textRule = new Rule(fb.createPattern("//fb:body//fb:p/text()"));
+            textRule.setAction(
+                new Action() {
+                    /**
+                     *  Saves value of all text nodes to single String.
+                     */
+                    public void run(Node node) {
+                        //log.debug("visiting " + node.getPath());
+                        contentBuilder.append(node.getText());
+                    }
+                });
+            style.addRule(textRule);
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:p//text()")));
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:v/text()")));
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:v//text()")));
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td/text()")));
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td//text()")));
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:book-title/text()")));
+        }
+
+        private void addElementRule() {
+            Rule elementRule = new Rule(fb.createPattern("//node()"));
+            elementRule.setAction(
+                new Action() {
+                    /**
+                     *  Creates Element for every Node of Fiction Book and
+                     *  puts it to map.
+                     */
+                    public void run(Node node) throws Exception {
+                        //log.debug("visiting " + node.getPath());
+                        FBSimpleElement element = new FBSimpleElement(
+                            FBSimpleDocument.this, node);
+                        element.startOffset = contentBuilder.length();
+                        style.applyTemplates(node);
+                        element.endOffset = contentBuilder.length();
+                        nodeToElement.put(node, element);
+                        styler.applyStyle(element);
+                        while (positionToElementBuilder.size() <
+                                contentBuilder.length()) {
+                            positionToElementBuilder.add(element);
+                        }
+                    }
+                });
+            style.addRule(elementRule);
+            style.addRule(new Rule(elementRule, fb.createPattern("/")));
+            style.addRule(new Rule(elementRule, fb.createPattern("/node()")));
+        }
+
+        private void save() {
+            content = new char[contentBuilder.length()];
+            contentBuilder.getChars(0, contentBuilder.length(), content, 0);
+            positionToElement = new FBSimpleElement[positionToElementBuilder.size()];
+            positionToElement = positionToElementBuilder.toArray(positionToElement);
         }
 
     }
-    */
 
 }
