@@ -138,4 +138,16 @@ public class FBSimpleStylerTest {
         assertEquals("Serif", StyleConstants.getFontFamily(style));
     }
 
+    @Test public void testSetSpaceAbove() {
+        Style style = styler.styles.addStyle("test", null);
+        config.processProperty("test", "space-above", "5.5");
+        assertEquals(5.5f, StyleConstants.getSpaceAbove(style));
+    }
+
+    @Test public void testSetSpaceBelow() {
+        Style style = styler.styles.addStyle("test", null);
+        config.processProperty("test", "space-below", "5.5");
+        assertEquals(5.5f, StyleConstants.getSpaceBelow(style));
+    }
+
 }

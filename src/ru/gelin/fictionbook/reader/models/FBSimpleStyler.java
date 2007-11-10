@@ -170,6 +170,10 @@ public class FBSimpleStyler {
                 setFontFamily(style, value);
             } else if ("bold".equals(property)) {
                 setBold(style, value);
+            } else if ("space-above".equals(property)) {
+                setSpaceAbove(style, value);
+            } else if ("space-below".equals(property)) {
+                setSpaceBelow(style, value);
             } else {
                 log.warn("line " + line + ": unknown property '" + property + "'");
             }
@@ -214,6 +218,24 @@ public class FBSimpleStyler {
         void setBold(String style, String bold) {
             StyleConstants.setBold(styles.getStyle(style),
                 Boolean.parseBoolean(bold));
+        }
+
+        void setSpaceAbove(String style, String value) {
+            try {
+                float space = Float.parseFloat(value);
+                StyleConstants.setSpaceAbove(styles.getStyle(style), space);
+            } catch (Exception e) {
+                log.warn("line " + line + ": not a float '" + value + "'");
+            }
+        }
+
+        void setSpaceBelow(String style, String value) {
+            try {
+                float space = Float.parseFloat(value);
+                StyleConstants.setSpaceBelow(styles.getStyle(style), space);
+            } catch (Exception e) {
+                log.warn("line " + line + ": not a float '" + value + "'");
+            }
         }
 
         void setView(String style, String view) {
