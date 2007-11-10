@@ -69,6 +69,10 @@ public class FBSimpleStylerTest {
         assertEquals("long.style", spv[0]);
         assertEquals("property", spv[1]);
         assertEquals("value", spv[2]);
+        spv = config.parseLine("long-style.property = value");
+        assertEquals("long-style", spv[0]);
+        assertEquals("property", spv[1]);
+        assertEquals("value", spv[2]);
         spv = config.parseLine("style.property=value");
         assertEquals("style", spv[0]);
         assertEquals("property", spv[1]);
