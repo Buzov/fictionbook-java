@@ -77,6 +77,10 @@ public class FBSimpleStylerTest {
         assertEquals("style", spv[0]);
         assertEquals("property", spv[1]);
         assertEquals("value", spv[2]);
+        spv = config.parseLine("style.long-property=value");
+        assertEquals("style", spv[0]);
+        assertEquals("long-property", spv[1]);
+        assertEquals("value", spv[2]);
         spv = config.parseLine("#style.property = value");
         assertNull(spv);
         spv = config.parseLine("style.property = value=");
@@ -87,39 +91,51 @@ public class FBSimpleStylerTest {
 
     @Test public void testSetXPath() {
         Style style = styler.styles.addStyle("test", null);
-        config.setXPath("test", "//fb:p");
+        config.processProperty("test", "xpath", "//fb:p");
         assertEquals(style, styler.xpathToStyle.get("//fb:p"));
     }
 
     @Test public void testSetAlignment() {
         Style style = styler.styles.addStyle("test", null);
-        config.setAlignment("test", "left");
+        config.processProperty("test", "alignment", "left");
         assertEquals(StyleConstants.ALIGN_LEFT,
             StyleConstants.getAlignment(style));
-        config.setAlignment("test", "right");
+        config.processProperty("test", "alignment", "right");
         assertEquals(StyleConstants.ALIGN_RIGHT,
             StyleConstants.getAlignment(style));
-        config.setAlignment("test", "center");
+        config.processProperty("test", "alignment", "center");
         assertEquals(StyleConstants.ALIGN_CENTER,
             StyleConstants.getAlignment(style));
-        config.setAlignment("test", "justified");
+        config.processProperty("test", "alignment", "justified");
         assertEquals(StyleConstants.ALIGN_JUSTIFIED,
             StyleConstants.getAlignment(style));
     }
 
     @Test public void testSetBold() {
         Style style = styler.styles.addStyle("test", null);
-        config.setBold("test", "false");
+        config.processProperty("test", "bold", "false");
         assertEquals(false, StyleConstants.isBold(style));
-        config.setBold("test", "true");
+        config.processProperty("test", "bold", "true");
         assertEquals(true, StyleConstants.isBold(style));
     }
 
     @Test public void testSetView() {
         Style style = styler.styles.addStyle("test", null);
-        config.setView("test", "view");
+        config.processProperty("test", "view", "view");
         assertEquals("view", style.getAttribute(
                 FBSimpleStyler.ViewAttribute));
+    }
+
+    @Test public void testSetFontSize() {
+        Style style = styler.styles.addStyle("test", null);
+        config.processProperty("test", "font-size", "12");
+        assertEquals(12, StyleConstants.getFontSize(style));
+    }
+
+    @Test public void testSetFontFamily() {
+        Style style = styler.styles.addStyle("test", null);
+        config.processProperty("test", "font-family", "Serif");
+        assertEquals("Serif", StyleConstants.getFontFamily(style));
     }
 
 }
