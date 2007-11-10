@@ -41,24 +41,24 @@ public class Messages {
     protected static Log log = LogFactory.getLog(Messages.class);
 
     /** Produced instances map. Keys - locales, values - instances. */
-    static protected Map<String, Messages> instances = new HashMap<String, Messages>();
+    static Map<String, Messages> instances = new HashMap<String, Messages>();
 
     /** ResourceBundle for this instance */
-    protected ResourceBundle bundle = null;
+    ResourceBundle bundle = null;
 
     /**
-     *  Default protected constructor, empty.
+     *  Default private constructor, empty.
      *  @see    #getInstance
      */
-    protected Messages() {
+    Messages() {
         //we don't like default constructor
     }
 
     /**
-     *  Protected constructor for internal use.
+     *  Private constructor for internal use.
      *  @see    #getInstance
      */
-    protected Messages(String baseName, Locale locale) {
+    Messages(String baseName, Locale locale) {
         try {
             bundle = ResourceBundle.getBundle(baseName, locale);
             if (log.isDebugEnabled()) {
@@ -138,7 +138,7 @@ public class Messages {
      *  This key is used in internal map to returns the same instance
      *  of Messages for the same base name and locale.
      */
-    protected static String getKey(String baseName, Locale locale) {
+    static String getKey(String baseName, Locale locale) {
         return baseName + locale.toString();
     }
 

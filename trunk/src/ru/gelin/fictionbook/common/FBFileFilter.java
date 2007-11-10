@@ -32,10 +32,10 @@ import ru.gelin.swing.utils.Messages;
  */
 public class FBFileFilter extends FileFilter {
 
-    protected static Pattern FBPattern = Pattern.compile(".*\\.fb2(\\.[^\\.]+)?");
+    static Pattern FBPattern = Pattern.compile(".*\\.fb2(\\.[^\\.]+)?");
 
     /** localized messages instance */
-    protected static Messages msg =
+    static Messages msg =
         Messages.getInstance("ru/gelin/fictionbook/common/resources/messages");
 
     public boolean accept(File file) {

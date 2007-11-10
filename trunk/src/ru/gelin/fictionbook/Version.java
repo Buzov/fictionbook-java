@@ -35,7 +35,7 @@ public class Version {
     //static Log log = LogFactory.getLog(Version.class);
 
     /** version value */
-    protected static String version;
+    static String version;
 
     /**
      *  Returns Fiction Book Tools version.

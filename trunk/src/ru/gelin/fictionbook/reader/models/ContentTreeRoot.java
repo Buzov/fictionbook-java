@@ -29,7 +29,7 @@ import ru.gelin.fictionbook.common.FBDocument;
  */
 public class ContentTreeRoot {
 
-    protected FBDocument document;
+    FBDocument document;
 
     public ContentTreeRoot(FBDocument document) {
         this.document = document;

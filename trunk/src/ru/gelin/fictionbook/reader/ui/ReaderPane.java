@@ -39,9 +39,9 @@ import ru.gelin.fictionbook.reader.models.FBSimpleEditorKit;
  */
 public class ReaderPane extends JSplitPane implements FBDocumentHolder {
 
-    protected JTree tree;
-    protected JTextPane text;
-    //protected JTextArea text;
+    JTree tree;
+    JTextPane text;
+    //JTextArea text;
 
     public ReaderPane() {
         super(JSplitPane.HORIZONTAL_SPLIT);

@@ -37,9 +37,9 @@ public class FBSimpleElementTest {
 
     protected Log log = LogFactory.getLog(this.getClass());
 
-    protected FBDocument fb;
-    protected FBSimpleDocument document;
-    protected FBSimpleElement element;
+    FBDocument fb;
+    FBSimpleDocument document;
+    FBSimpleElement element;
 
     @Before public void setUp() throws FBException {
         fb = new FBDocument(new File("docs/test2.1.fb2"));

@@ -40,10 +40,10 @@ public class ContentTreeModel implements TreeModel {
     /** commons logging instance */
     protected Log log = LogFactory.getLog(this.getClass());
 
-    protected FBDocument document;
-    protected ContentTreeRoot root;
-    protected XPath bodyXPath;
-    protected XPath sectionXPath;
+    FBDocument document;
+    ContentTreeRoot root;
+    XPath bodyXPath;
+    XPath sectionXPath;
 
     public ContentTreeModel(FBDocument document) {
         this.document = document;

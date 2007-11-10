@@ -48,7 +48,7 @@ public class OpenAction extends AbstractAction {
     protected Log log = LogFactory.getLog(this.getClass());
 
     /** localized messages instance */
-    protected static Messages msg = Messages.getInstance("ru/gelin/fictionbook/reader/resources/messages");
+    static Messages msg = Messages.getInstance("ru/gelin/fictionbook/reader/resources/messages");
 
     /** document holder instance */
     FBDocumentHolder documentHolder;
@@ -79,7 +79,7 @@ public class OpenAction extends AbstractAction {
      *  Shows file chosing dialog and returns choosed file or null if
      *  file was not selected.
      */
-    protected File chooseFile() {
+    File chooseFile() {
         File result = null;
         JFileChooser chooser = new JFileChooser();
         if (currentDirectory != null) {
@@ -122,7 +122,7 @@ public class OpenAction extends AbstractAction {
      *  Returns documentHolder casted to JComponent or null.
      *  Used for show dialog.
      */
-    protected JComponent getParentComponent() {
+    JComponent getParentComponent() {
         JComponent result = null;
         try {
             result = (JComponent)documentHolder;

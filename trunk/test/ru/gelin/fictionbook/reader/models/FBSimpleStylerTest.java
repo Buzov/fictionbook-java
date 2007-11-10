@@ -37,9 +37,11 @@ import ru.gelin.fictionbook.common.FBException;
 public class FBSimpleStylerTest {
 
     FBSimpleStyler styler;
+    FBSimpleStyler.Configuration config;
 
     @Before public void setUp() {
         styler = new FBSimpleStyler();
+        config = styler.new Configuration();
     }
 
     @Test public void testGetStyleContext() {
@@ -59,21 +61,21 @@ public class FBSimpleStylerTest {
     }
 
     @Test public void testParseLine() {
-        String[] spv = styler.parseLine("style.property = value");
+        String[] spv = config.parseLine("style.property = value");
         assertEquals("style", spv[0]);
         assertEquals("property", spv[1]);
         assertEquals("value", spv[2]);
-        spv = styler.parseLine("long.style.property = value");
+        spv = config.parseLine("long.style.property = value");
         assertEquals("long.style", spv[0]);
         assertEquals("property", spv[1]);
         assertEquals("value", spv[2]);
-        spv = styler.parseLine("style.property=value");
+        spv = config.parseLine("style.property=value");
         assertEquals("style", spv[0]);
         assertEquals("property", spv[1]);
         assertEquals("value", spv[2]);
-        spv = styler.parseLine("#style.property = value");
+        spv = config.parseLine("#style.property = value");
         assertNull(spv);
-        spv = styler.parseLine("style.property = value=");
+        spv = config.parseLine("style.property = value=");
         assertEquals("style", spv[0]);
         assertEquals("property", spv[1]);
         assertEquals("value=", spv[2]);
@@ -81,37 +83,37 @@ public class FBSimpleStylerTest {
 
     @Test public void testSetXPath() {
         Style style = styler.styles.addStyle("test", null);
-        styler.setXPath("test", "//fb:p");
+        config.setXPath("test", "//fb:p");
         assertEquals(style, styler.xpathToStyle.get("//fb:p"));
     }
 
     @Test public void testSetAlignment() {
         Style style = styler.styles.addStyle("test", null);
-        styler.setAlignment("test", "left");
+        config.setAlignment("test", "left");
         assertEquals(StyleConstants.ALIGN_LEFT,
             StyleConstants.getAlignment(style));
-        styler.setAlignment("test", "right");
+        config.setAlignment("test", "right");
         assertEquals(StyleConstants.ALIGN_RIGHT,
             StyleConstants.getAlignment(style));
-        styler.setAlignment("test", "center");
+        config.setAlignment("test", "center");
         assertEquals(StyleConstants.ALIGN_CENTER,
             StyleConstants.getAlignment(style));
-        styler.setAlignment("test", "justified");
+        config.setAlignment("test", "justified");
         assertEquals(StyleConstants.ALIGN_JUSTIFIED,
             StyleConstants.getAlignment(style));
     }
 
     @Test public void testSetBold() {
         Style style = styler.styles.addStyle("test", null);
-        styler.setBold("test", "false");
+        config.setBold("test", "false");
         assertEquals(false, StyleConstants.isBold(style));
-        styler.setBold("test", "true");
+        config.setBold("test", "true");
         assertEquals(true, StyleConstants.isBold(style));
     }
 
     @Test public void testSetView() {
         Style style = styler.styles.addStyle("test", null);
-        styler.setView("test", "view");
+        config.setView("test", "view");
         assertEquals("view", style.getAttribute(
                 FBSimpleStyler.ViewAttribute));
     }

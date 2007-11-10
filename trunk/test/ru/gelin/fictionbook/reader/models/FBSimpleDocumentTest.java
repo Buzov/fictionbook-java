@@ -37,8 +37,8 @@ import ru.gelin.fictionbook.common.FBException;
 
 public class FBSimpleDocumentTest {
 
-    protected FBDocument fb;
-    protected FBSimpleDocument document;
+    FBDocument fb;
+    FBSimpleDocument document;
 
     @Before public void setUp() throws FBException {
         fb = new FBDocument(new File("docs/test2.1.fb2"));

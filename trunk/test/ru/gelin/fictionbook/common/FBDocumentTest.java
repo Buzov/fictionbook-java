@@ -32,8 +32,8 @@ import org.dom4j.Node;
 
 public class FBDocumentTest {
 
-    protected File file = new File("docs/test2.1.fb2");
-    protected File nonExistedFile = new File("somethere/non-existed");
+    File file = new File("docs/test2.1.fb2");
+    File nonExistedFile = new File("somethere/non-existed");
 
     @Before public void setUp() {
     }

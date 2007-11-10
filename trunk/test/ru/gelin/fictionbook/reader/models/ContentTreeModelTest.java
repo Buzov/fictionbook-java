@@ -31,8 +31,8 @@ import ru.gelin.fictionbook.common.FBException;
 
 public class ContentTreeModelTest {
 
-    protected FBDocument document;
-    protected ContentTreeModel model;
+    FBDocument document;
+    ContentTreeModel model;
 
     @Before public void setUp() throws FBException {
         document = new FBDocument(new File("docs/test2.1.fb2"));

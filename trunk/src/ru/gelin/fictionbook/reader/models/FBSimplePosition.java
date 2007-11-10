@@ -29,7 +29,7 @@ import javax.swing.text.Position;
  */
 public class FBSimplePosition implements Position {
 
-    protected int offset;
+    int offset;
 
     public FBSimplePosition(int offset) {
         this.offset = offset;
