@@ -41,6 +41,15 @@
             <p>Section 2. Title.</p>
         </title>
     </section>
+    <section id="header-test">
+        <title><p>Header 1</p></title>
+        <section>
+            <title><p>Header 2</p></title>
+            <section>
+                <title><p>Header 3</p></title>
+            </section>
+        </section>
+    </section>
 </body>
 
 <body name="notes">

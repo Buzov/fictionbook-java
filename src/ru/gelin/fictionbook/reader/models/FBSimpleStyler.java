@@ -59,7 +59,7 @@ public class FBSimpleStyler {
     static final String STYLES_PROPERTIES =
         "/ru/gelin/fictionbook/reader/resources/styles.properties";
     static final Pattern LINE_PATTERN = Pattern.compile(
-        "([\\w\\.\\-\\_]+)\\.(\\w+?)\\s*=\\s*(.+)\\s*");  //style.property = value
+        "([\\w\\._\\-]+)\\.([\\w_\\-]+?)\\s*=\\s*(.+)\\s*");  //style.property = value
 
     /**
      *  Creates Styler. Reads configuration.
@@ -164,6 +164,10 @@ public class FBSimpleStyler {
                 setView(style, value);
             } else if ("alignment".equals(property)) {
                 setAlignment(style, value);
+            } else if ("font-size".equals(property)) {
+                setFontSize(style, value);
+            } else if ("font-family".equals(property)) {
+                setFontFamily(style, value);
             } else if ("bold".equals(property)) {
                 setBold(style, value);
             } else {
@@ -192,6 +196,19 @@ public class FBSimpleStyler {
             if (alignment != -1) {
                 StyleConstants.setAlignment(styles.getStyle(style), alignment);
             }
+        }
+
+        void setFontSize(String style, String value) {
+            try {
+                int fontSize = Integer.parseInt(value);
+                StyleConstants.setFontSize(styles.getStyle(style), fontSize);
+            } catch (Exception e) {
+                log.warn("line " + line + ": not an integer '" + value + "'");
+            }
+        }
+
+        void setFontFamily(String style, String family) {
+            StyleConstants.setFontFamily(styles.getStyle(style), family);
         }
 
         void setBold(String style, String bold) {
