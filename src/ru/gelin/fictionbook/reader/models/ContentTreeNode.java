@@ -22,6 +22,8 @@
 
 package ru.gelin.fictionbook.reader.models;
 
+import java.util.List;
+import java.util.Iterator;
 import org.dom4j.Node;
 import org.dom4j.Element;
 import org.dom4j.XPath;
@@ -39,7 +41,7 @@ public class ContentTreeNode {
     public ContentTreeNode(FBDocument document, Node node) {
         this.document = document;
         this.node = node;
-        this.titleXPath = document.createXPath("fb:title");
+        this.titleXPath = document.createXPath("fb:title/fb:p");
     }
 
     public Node getNode() {
@@ -56,7 +58,7 @@ public class ContentTreeNode {
      *  to angle brackets (for example &lt;body>).
      */
     public String toString() {
-        String result = titleXPath.valueOf(node).trim();
+        String result = getTitle();
         if ("".equals(result)) {
             String id = ((Element)node).attributeValue("id");
             if (id == null) {
@@ -69,6 +71,20 @@ public class ContentTreeNode {
             }
         }
         return result;
+    }
+
+    String getTitle() {
+        List nodes = titleXPath.selectNodes(node);
+        StringBuilder result = new StringBuilder();
+        Iterator i = nodes.iterator();
+        while (i.hasNext()) {
+            Node p = (Node)i.next();
+            result.append(p.getText().trim());
+            if (i.hasNext()) {
+                result.append(" ");
+            }
+        }
+        return result.toString();
     }
 
 }
