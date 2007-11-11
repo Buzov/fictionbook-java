@@ -51,13 +51,12 @@ public class FBSimpleEditorKit extends StyledEditorKit {
         public View create(Element elem) {
             String view = String.valueOf(
                 elem.getAttributes().getAttribute(FBSimpleStyler.ViewAttribute));
-            if ("box".equals(view)) {
+            if ("box".equals(view))
                 return new BoxView(elem, View.Y_AXIS);
-            } else if ("paragraph".equals(view)) {
+            if ("paragraph".equals(view))
                 return new ParagraphView(elem);
-            } else if ("label".equals(view)) {
+            if ("label".equals(view))
                 return new LabelView(elem);
-            }
             return new LabelView(elem);
         }
 

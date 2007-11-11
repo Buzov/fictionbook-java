@@ -72,7 +72,7 @@ public class FBSimpleElementTest {
     }
 
     @Test public void testGetAttributes() {
-        assertEquals(document.styles.getStyle("title1"), element.getAttributes());
+        assertEquals(document.styles.getStyle("title1.p"), element.getAttributes());
     }
 
     @Test public void testGetStartOffset() {
