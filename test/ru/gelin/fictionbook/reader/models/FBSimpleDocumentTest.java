@@ -228,4 +228,12 @@ public class FBSimpleDocumentTest {
     @Test public void testGetFont() {
     }
 
+    @Test public void testEmptyElement() throws BadLocationException {
+        Node node = fb.getDocument().selectSingleNode("//fb:empty-line");
+        Element element = document.getElement(node);
+        assertEquals(1, element.getEndOffset() - element.getStartOffset());
+        assertEquals(" ", document.getText(element.getStartOffset(),
+                element.getEndOffset() - element.getStartOffset()));
+    }
+
 }

@@ -66,6 +66,9 @@ public class FBSimpleEditorKitTest {
         attributes.addAttribute(FBSimpleStyler.ViewAttribute, "box");
         assertEquals("javax.swing.text.BoxView",
             factory.create(element).getClass().getName());
+        attributes.addAttribute(FBSimpleStyler.ViewAttribute, "label");
+        assertEquals("javax.swing.text.LabelView",
+            factory.create(element).getClass().getName());
     }
 
 }

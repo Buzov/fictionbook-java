@@ -41,6 +41,7 @@ import javax.swing.text.Style;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditListener;
 import org.dom4j.Node;
+import org.dom4j.XPath;
 import org.dom4j.rule.Stylesheet;
 import org.dom4j.rule.Rule;
 import org.dom4j.rule.Pattern;
@@ -276,14 +277,16 @@ public class FBSimpleDocument implements StyledDocument {
     private class Traverser {
 
         /** StringBuilder to build the content. */
-        private StringBuilder contentBuilder = new StringBuilder();
+        StringBuilder contentBuilder = new StringBuilder();
 
         /** Transformer to walk through DOM tree. */
-        private Stylesheet style = new Stylesheet();
+        Stylesheet style = new Stylesheet();
 
         /** List to map document position to Elements. */
-        private List<FBSimpleElement> positionToElementBuilder =
-                new ArrayList<FBSimpleElement>();;
+        List<FBSimpleElement> positionToElementBuilder =
+                new ArrayList<FBSimpleElement>();
+
+        XPath inBody = fb.createXPath("//fb:body//*");
 
         public void traverse() {
             addTextRule();
@@ -296,7 +299,7 @@ public class FBSimpleDocument implements StyledDocument {
             save();
         }
 
-        private void addTextRule() {
+        void addTextRule() {
             Rule textRule = new Rule(fb.createPattern("//fb:body//fb:p/text()"));
             textRule.setAction(
                 new Action() {
@@ -317,7 +320,7 @@ public class FBSimpleDocument implements StyledDocument {
             style.addRule(new Rule(textRule, fb.createPattern("//fb:book-title/text()")));
         }
 
-        private void addElementRule() {
+        void addElementRule() {
             Rule elementRule = new Rule(fb.createPattern("//node()"));
             elementRule.setAction(
                 new Action() {
@@ -332,6 +335,7 @@ public class FBSimpleDocument implements StyledDocument {
                         element.startOffset = contentBuilder.length();
                         style.applyTemplates(node);
                         element.endOffset = contentBuilder.length();
+                        processEmptyElement(element);
                         nodeToElement.put(node, element);
                         styler.applyStyle(element);
                         while (positionToElementBuilder.size() <
@@ -345,7 +349,18 @@ public class FBSimpleDocument implements StyledDocument {
             style.addRule(new Rule(elementRule, fb.createPattern("/node()")));
         }
 
-        private void save() {
+        void processEmptyElement(FBSimpleElement element) {
+            if (element.endOffset > element.startOffset)
+                return;
+            if (!element.isLeaf())
+                return;
+            if (!inBody.matches(element.getNode()))
+                return;
+            contentBuilder.append(" ");
+            element.endOffset = contentBuilder.length();
+        }
+
+        void save() {
             content = new char[contentBuilder.length()];
             contentBuilder.getChars(0, contentBuilder.length(), content, 0);
             positionToElement = new FBSimpleElement[positionToElementBuilder.size()];
