@@ -55,6 +55,8 @@ public class FBSimpleEditorKit extends StyledEditorKit {
                 return new BoxView(elem, View.Y_AXIS);
             } else if ("paragraph".equals(view)) {
                 return new ParagraphView(elem);
+            } else if ("label".equals(view)) {
+                return new LabelView(elem);
             }
             return new LabelView(elem);
         }
