@@ -64,7 +64,7 @@ public class ContentTreeNodeTest {
             selectSingleNode("//fb:section[@id='paragraph-test']");
         ContentTreeNode treeNode = new ContentTreeNode(document, node);
         //not meaninfull spaces must be removed.
-        assertEquals("Paragraphs. In title too.", treeNode.toString());
+        assertEquals("Paragraph test. In title too.", treeNode.toString());
     }
 
 }

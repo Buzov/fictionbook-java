@@ -52,7 +52,7 @@
     </section>
     <section id="paragraph-test">
         <title>
-            <p>Paragraphs.</p>
+            <p>Paragraph test.</p>
             <p>In title too.</p>
         </title>
         <p>Sed ut perspiciatis, unde omnis iste natus error sit voluptatem
@@ -81,9 +81,19 @@ esse, quam nihil molestiae consequatur, vel illum, qui dolorem eum fugiat, quo
 voluptas nulla pariatur?</p>
     </section>
     <section id="empty-line-test">
+        <title><p>Empty line test.</p></title>
         <p>Line 1</p>
         <empty-line/>
         <p>Line 2</p>
+    </section>
+    <section id="epigraph-test">
+        <title><p>Epigraph test.</p></title>
+        <epigraph>
+            <p>Sed ut perspiciatis, unde omnis iste natus error sit voluptatem
+accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo
+inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.</p>
+
+        </epigraph>
     </section>
 </body>
 
