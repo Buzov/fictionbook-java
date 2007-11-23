@@ -93,10 +93,10 @@ public class FBSimpleStylerTest {
         assertEquals("epigraph", spv[2]);
     }
 
-    @Test public void testSetXPath() {
+    @Test public void testSetPattern() {
         Style style = styler.styles.addStyle("test", null);
-        config.processProperty("test", "xpath", "//fb:p");
-        assertEquals(style, styler.xpathToStyle.get("//fb:p"));
+        config.processProperty("test", "pattern", "//fb:p");
+        assertEquals(style, styler.patternToStyle.get("//fb:p"));
     }
 
     @Test public void testSetAlignment() {

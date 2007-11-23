@@ -52,9 +52,9 @@ public class FBSimpleStyler {
 
     StyleContext styles = new StyleContext();
 
-    Map<String, Style> xpathToStyle =
+    Map<String, Style> patternToStyle =
         new HashMap<String, Style>();
-    List<String> xpathList = new ArrayList<String>();
+    List<String> patternList = new ArrayList<String>();
 
     static final String STYLES_PROPERTIES =
         "/ru/gelin/fictionbook/reader/resources/styles.properties";
@@ -66,7 +66,7 @@ public class FBSimpleStyler {
      */
     public FBSimpleStyler() {
         new Configuration().load();
-        Collections.reverse(xpathList);
+        Collections.reverse(patternList);
     }
 
     /**
@@ -77,17 +77,17 @@ public class FBSimpleStyler {
     }
 
     /**
-     *  Sets style for the Element. Uses XPath expressions ("xpath" style
+     *  Sets style for the Element. Uses XPath expressions ("pattern" style
      *  property) and XML Node corresponding to the Element.
      */
     public void applyStyle(FBSimpleElement element) {
         Node node = element.getNode();
-        for (String xpath : xpathList) {
-            if (node.matches(xpath)) {
-                element.setAttributeSet(xpathToStyle.get(xpath));
+        for (String pattern : patternList) {
+            if (node.matches(pattern)) {
+                element.setAttributeSet(patternToStyle.get(pattern));
                 if (log.isDebugEnabled()) {
                     log.debug(node.getPath() + " <- " +
-                        xpathToStyle.get(xpath).getName());
+                        patternToStyle.get(pattern).getName());
                 }
                 break;
             }
@@ -158,8 +158,8 @@ public class FBSimpleStyler {
                 String value) {
             if ("parent".equals(property)) {
                 //nothing to do, already used in style creation
-            } else if ("xpath".equals(property)) {
-                setXPath(style, value);
+            } else if ("pattern".equals(property)) {
+                setPattern(style, value);
             } else if ("view".equals(property)) {
                 setView(style, value);
             } else if ("alignment".equals(property)) {
@@ -181,9 +181,9 @@ public class FBSimpleStyler {
             }
         }
 
-        void setXPath(String style, String xpath) {
-            xpathToStyle.put(xpath, styles.getStyle(style));
-            xpathList.add(xpath);
+        void setPattern(String style, String pattern) {
+            patternToStyle.put(pattern, styles.getStyle(style));
+            patternList.add(pattern);
         }
 
         void setAlignment(String style, String align) {
