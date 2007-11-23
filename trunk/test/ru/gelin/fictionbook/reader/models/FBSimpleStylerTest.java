@@ -87,6 +87,10 @@ public class FBSimpleStylerTest {
         assertEquals("style", spv[0]);
         assertEquals("property", spv[1]);
         assertEquals("value=", spv[2]);
+        spv = config.parseLine("epigraph.text-author.parent = epigraph");
+        assertEquals("epigraph.text-author", spv[0]);
+        assertEquals("parent", spv[1]);
+        assertEquals("epigraph", spv[2]);
     }
 
     @Test public void testSetXPath() {
@@ -117,6 +121,14 @@ public class FBSimpleStylerTest {
         assertEquals(false, StyleConstants.isBold(style));
         config.processProperty("test", "bold", "true");
         assertEquals(true, StyleConstants.isBold(style));
+    }
+
+    @Test public void testSetItalic() {
+        Style style = styler.styles.addStyle("test", null);
+        config.processProperty("test", "italic", "false");
+        assertEquals(false, StyleConstants.isItalic(style));
+        config.processProperty("test", "italic", "true");
+        assertEquals(true, StyleConstants.isItalic(style));
     }
 
     @Test public void testSetView() {

@@ -170,6 +170,8 @@ public class FBSimpleStyler {
                 setFontFamily(style, value);
             } else if ("bold".equals(property)) {
                 setBold(style, value);
+            } else if ("italic".equals(property)) {
+                setItalic(style, value);
             } else if ("space-above".equals(property)) {
                 setSpaceAbove(style, value);
             } else if ("space-below".equals(property)) {
@@ -217,6 +219,11 @@ public class FBSimpleStyler {
 
         void setBold(String style, String bold) {
             StyleConstants.setBold(styles.getStyle(style),
+                Boolean.parseBoolean(bold));
+        }
+
+        void setItalic(String style, String bold) {
+            StyleConstants.setItalic(styles.getStyle(style),
                 Boolean.parseBoolean(bold));
         }
 
