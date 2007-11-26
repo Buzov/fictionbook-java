@@ -313,6 +313,7 @@ public class FBSimpleDocument implements StyledDocument {
                 });
             style.addRule(textRule);
             style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:p//text()")));
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:text-author/text()")));
             style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:v/text()")));
             style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:v//text()")));
             style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td/text()")));
