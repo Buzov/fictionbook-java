@@ -89,6 +89,23 @@ voluptas nulla pariatur?</p>
     <section id="epigraph-test">
         <title><p>Epigraph test.</p></title>
         <epigraph>
+            <poem>
+                <title><p>Jabberwocky</p></title>
+                <stanza>
+                    <v>'Twas brillig, and the slithy toves</v>
+                    <v>Did gyre and gimble in the wabe:</v>
+                    <v>All mimsy were the borogoves,</v>
+                    <v>And the mome raths outgrabe.</v>
+                </stanza>
+                <stanza>
+                    <v>"Beware the Jabberwock, my son!</v>
+                    <v>The jaws that bite, the claws that catch!</v>
+                    <v>Beware the Jubjub bird, and shun</v>
+                    <v>The frumious Bandersnatch!"</v>
+                </stanza>
+                <text-author>Lewis Carroll</text-author>
+                <date>1871</date>
+            </poem>
             <p>Sed ut perspiciatis, unde omnis iste natus error sit voluptatem
 accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo
 inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.</p>
