@@ -242,12 +242,4 @@ public class FBSimpleDocumentTest {
                 element.getEndOffset() - element.getStartOffset()));
     }
 
-    @Test public void testEpigraphTextAuthor() throws BadLocationException {
-        Node node = fb.getDocument().selectSingleNode(
-                "//fb:section[@id='epigraph-test']/fb:epigraph/fb:text-author");
-        Element element = document.getElement(node);
-        assertEquals("Cicero", document.getText(element.getStartOffset(),
-                element.getEndOffset() - element.getStartOffset()));
-    }
-
 }

@@ -103,13 +103,15 @@ voluptas nulla pariatur?</p>
                     <v>Beware the Jubjub bird, and shun</v>
                     <v>The frumious Bandersnatch!"</v>
                 </stanza>
-                <text-author>Lewis Carroll</text-author>
+                <text-author><p>Lewis Carroll</p></text-author>
                 <date>1871</date>
             </poem>
+            <cite>
+            </cite>
             <p>Sed ut perspiciatis, unde omnis iste natus error sit voluptatem
 accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo
 inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.</p>
-            <text-author>Cicero</text-author>
+            <text-author><p>Cicero</p></text-author>
         </epigraph>
     </section>
 </body>
