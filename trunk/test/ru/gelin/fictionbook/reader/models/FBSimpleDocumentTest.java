@@ -45,6 +45,12 @@ public class FBSimpleDocumentTest {
         document = new FBSimpleDocument(fb);
     }
 
+    @Test public void printDocumentContent() {
+        System.out.println("------------");
+        System.out.println(document.content);
+        System.out.println("------------");
+    }
+
     @Test public void testConstructorPositionToElement() {
         assertNotNull(document.content);
         assertNotNull(document.positionToElement);

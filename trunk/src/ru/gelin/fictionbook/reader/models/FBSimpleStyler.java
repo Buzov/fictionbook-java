@@ -97,7 +97,7 @@ public class FBSimpleStyler {
     class Configuration {
 
         /** number of current reading line in the file */
-        int line;
+        int lineNumber;
 
         /**
          *  Loads configuration .properties file.
@@ -110,6 +110,7 @@ public class FBSimpleStyler {
                         "ISO-8859-1"));
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    lineNumber++;
                     String[] spv = parseLine(line); //[style, property, value]
                     if (spv != null) {
                         String style = spv[0];
@@ -123,7 +124,7 @@ public class FBSimpleStyler {
                             if ("parent".equals(property)) {
                                 parent = styles.getStyle(value);
                                 if (parent == null) {
-                                    log.warn("line " + line + ": parent style '" +
+                                    log.warn("line " + lineNumber + ": parent style '" +
                                         value + "' is not defined before");
                                 }
                             }
@@ -177,7 +178,7 @@ public class FBSimpleStyler {
             } else if ("space-below".equals(property)) {
                 setSpaceBelow(style, value);
             } else {
-                log.warn("line " + line + ": unknown property '" + property + "'");
+                log.warn("line " + lineNumber + ": unknown property '" + property + "'");
             }
         }
 
@@ -197,7 +198,7 @@ public class FBSimpleStyler {
             } else if ("justified".equals(align)) {
                 alignment = StyleConstants.ALIGN_JUSTIFIED;
             } else {
-                log.warn("line " + line + ": unknown alignment '" + align + "'");
+                log.warn("line " + lineNumber + ": unknown alignment '" + align + "'");
             }
             if (alignment != -1) {
                 StyleConstants.setAlignment(styles.getStyle(style), alignment);
@@ -209,7 +210,7 @@ public class FBSimpleStyler {
                 int fontSize = Integer.parseInt(value);
                 StyleConstants.setFontSize(styles.getStyle(style), fontSize);
             } catch (Exception e) {
-                log.warn("line " + line + ": not an integer '" + value + "'");
+                log.warn("line " + lineNumber + ": not an integer '" + value + "'");
             }
         }
 
@@ -232,7 +233,7 @@ public class FBSimpleStyler {
                 float space = Float.parseFloat(value);
                 StyleConstants.setSpaceAbove(styles.getStyle(style), space);
             } catch (Exception e) {
-                log.warn("line " + line + ": not a float '" + value + "'");
+                log.warn("line " + lineNumber + ": not a float '" + value + "'");
             }
         }
 
@@ -241,7 +242,7 @@ public class FBSimpleStyler {
                 float space = Float.parseFloat(value);
                 StyleConstants.setSpaceBelow(styles.getStyle(style), space);
             } catch (Exception e) {
-                log.warn("line " + line + ": not a float '" + value + "'");
+                log.warn("line " + lineNumber + ": not a float '" + value + "'");
             }
         }
 
