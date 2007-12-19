@@ -8,6 +8,7 @@ fi
 FB_HOME="$FB_HOME/.."
 
 CLASSPATH="$CLASSPATH"
+CLASSPATH="$FB_HOME/lib/thirdparty/commons-codec.jar:$CLASSPATH"
 CLASSPATH="$FB_HOME/lib/thirdparty/commons-logging.jar:$CLASSPATH"
 CLASSPATH="$FB_HOME/lib/thirdparty/dom4j.jar:$CLASSPATH"
 CLASSPATH="$FB_HOME/lib/thirdparty/jaxen.jar:$CLASSPATH"

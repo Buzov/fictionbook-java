@@ -26,6 +26,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import javax.swing.Icon;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -64,6 +65,13 @@ public class FBDocumentTest {
         assertEquals(false, doc.isInline(node));
         node = dom.selectSingleNode("//fb:a");
         assertEquals(true, doc.isInline(node));
+    }
+
+    @Test public void testGetImage() throws FBException {
+        FBDocument doc = new FBDocument(file);
+        Icon icon = doc.getImage("#crow.png");
+        assertEquals(150, icon.getIconWidth());
+        assertEquals(106, icon.getIconHeight());
     }
 
 }
