@@ -22,6 +22,7 @@
 
 package ru.gelin.fictionbook.common;
 
+import java.awt.Image;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
@@ -31,7 +32,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.GZIPInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.XPath;
@@ -41,6 +46,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.rule.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *  Document which represents Fiction Book.
@@ -143,6 +149,31 @@ public class FBDocument {
      */
     public boolean isInline(Node node) {
         return inlinesXPath.matches(node);
+    }
+
+    /**
+     *  Gets an image, embedded into the document.
+     *  @param  href    link to the image, "#cover.jpg" for example
+     *  @return image as an icon
+     *  @throws FBException if no such image
+     */
+    public Icon getImage(String href) throws FBException {
+        if (!href.startsWith("#")) {
+            throw new FBException("only local images are supported");
+        }
+        String id = href.substring(1);
+        Node node = dom.selectSingleNode("//fb:binary[@id='" + id + "']");
+        if (node == null) {
+            throw new FBException("no binary with id = '" + id + "'");
+        }
+        try {
+            String base64 = node.getText();
+            Image image = ImageIO.read(new ByteArrayInputStream(
+                    Base64.decodeBase64(base64.getBytes("ISO-8859-1"))));
+            return new ImageIcon(image);
+        } catch (Exception e) {
+            throw new FBException("error occurred while reading image", e);
+        }
     }
 
     void prepareXPaths() {

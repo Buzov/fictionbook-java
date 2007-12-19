@@ -118,6 +118,10 @@ inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.</p>
             <text-author><p>Cicero</p></text-author>
         </epigraph>
     </section>
+    <section id="image-test">
+        <title><p>Image test.</p></title>
+        <image l:href="#crow.png"/>
+    </section>
 </body>
 
 <body name="notes">
@@ -126,5 +130,37 @@ inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.</p>
         <p>Last Section. Content.</p>
     </section>
 </body>
+
+<binary id="crow.png" content-type="image/png">
+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
+RU5ErkJggg==
+</binary>
 
 </FictionBook>
