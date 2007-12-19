@@ -23,9 +23,13 @@
 package ru.gelin.fictionbook.reader.models;
 
 import java.util.List;
+import javax.swing.Icon;
 import javax.swing.text.Element;
 import javax.swing.text.Document;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import org.dom4j.Node;
 //import org.dom4j.Element;
 
@@ -125,6 +129,14 @@ public class FBSimpleElement implements Element {
      */
     public Node getNode() {
         return node;
+    }
+
+    /**
+     *  Sets the icon attribute to the internal attribute set.
+     */
+    void setIconAttribute(Icon icon) {
+        attributeSet = new SimpleAttributeSet(attributeSet);
+        StyleConstants.setIcon((MutableAttributeSet)attributeSet, icon);
     }
 
     public String toString() {

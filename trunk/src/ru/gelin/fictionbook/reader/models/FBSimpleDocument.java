@@ -49,6 +49,7 @@ import org.dom4j.rule.Action;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ru.gelin.fictionbook.common.FBDocument;
+import ru.gelin.fictionbook.common.FBException;
 
 /**
  *  Simple read-only styled document, which represents Fiction Book.
@@ -339,6 +340,7 @@ public class FBSimpleDocument implements StyledDocument {
                         processEmptyElement(element);
                         nodeToElement.put(node, element);
                         styler.applyStyle(element);
+                        processImageElement(element);
                         while (positionToElementBuilder.size() <
                                 contentBuilder.length()) {
                             positionToElementBuilder.add(element);
@@ -359,6 +361,18 @@ public class FBSimpleDocument implements StyledDocument {
                 return;
             contentBuilder.append(" ");
             element.endOffset = contentBuilder.length();
+        }
+
+        void processImageElement(FBSimpleElement element) {
+            org.dom4j.Element domElement = (org.dom4j.Element)element.getNode();
+            if (!"image".equals(domElement.getName()))
+                return;
+            String href = domElement.attributeValue("href");
+            try {
+                element.setIconAttribute(fb.getImage(href));
+            } catch (FBException e) {
+                log.warn("can't read image " + href);
+            }
         }
 
         void save() {

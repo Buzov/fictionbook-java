@@ -26,11 +26,13 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import javax.swing.Icon;
 import javax.swing.text.Document;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Segment;
 import javax.swing.text.Position;
 import javax.swing.text.Element;
+import javax.swing.text.StyleConstants;
 import org.dom4j.Node;
 import ru.gelin.fictionbook.common.FBDocument;
 import ru.gelin.fictionbook.common.FBException;
@@ -240,6 +242,16 @@ public class FBSimpleDocumentTest {
         assertEquals(1, element.getEndOffset() - element.getStartOffset());
         assertEquals(" ", document.getText(element.getStartOffset(),
                 element.getEndOffset() - element.getStartOffset()));
+    }
+
+    @Test public void testImageElement()
+            throws BadLocationException, FBException {
+        Node node = fb.getDocument().selectSingleNode("//fb:image");
+        Element element = document.getElement(node);
+        //Icon icon = fb.getImage("#crow.png");
+        //assertEquals(icon, StyleConstants.getIcon(element.getAttributes()));
+        //two icons are always differ :(
+        assertNotNull(StyleConstants.getIcon(element.getAttributes()));
     }
 
 }
