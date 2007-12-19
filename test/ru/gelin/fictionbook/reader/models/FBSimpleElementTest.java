@@ -26,7 +26,10 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import javax.swing.Icon;
 import javax.swing.text.Element;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.StyleConstants;
 import org.dom4j.Node;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -140,6 +143,15 @@ public class FBSimpleElementTest {
         Element parent = document.getElement(node);
         assertFalse(parent.isLeaf());
         assertTrue(element.isLeaf());
+    }
+
+    @Test public void testSetIconAttribute() throws FBException {
+        AttributeSet original = element.getAttributes();
+        Icon icon = fb.getImage("#crow.png");
+        element.setIconAttribute(icon);
+        AttributeSet modified = element.getAttributes();
+        assertNotSame(modified, original);
+        assertEquals(icon, StyleConstants.getIcon(modified));
     }
 
 }
