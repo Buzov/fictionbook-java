@@ -120,7 +120,8 @@ inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.</p>
     </section>
     <section id="image-test">
         <title><p>Image test.</p></title>
-        <image l:href="#crow.png"/>
+        <image l:href="#crow.png" id="crow-image"/>
+        <image l:href="#broken.jpg" id="broken-image" alt="alt text"/>
     </section>
 </body>
 
