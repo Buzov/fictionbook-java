@@ -30,6 +30,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.ParagraphView;
 import javax.swing.text.LabelView;
 import javax.swing.text.BoxView;
+import javax.swing.text.IconView;
 
 /**
  *  Extends StyledEditorKit to support read-only Fiction Book document.
@@ -57,6 +58,8 @@ public class FBSimpleEditorKit extends StyledEditorKit {
                 return new ParagraphView(elem);
             if ("label".equals(view))
                 return new LabelView(elem);
+            if ("icon".equals(view))
+                return new IconView(elem);
             return new LabelView(elem);
         }
 

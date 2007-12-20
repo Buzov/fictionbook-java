@@ -38,6 +38,7 @@ import javax.swing.text.Element;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyleContext;
 import javax.swing.text.Style;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditListener;
 import org.dom4j.Node;
@@ -320,6 +321,7 @@ public class FBSimpleDocument implements StyledDocument {
             style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td//text()")));
             style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:date/text()")));
             style.addRule(new Rule(textRule, fb.createPattern("//fb:book-title/text()")));
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:image/@alt")));
         }
 
         void addElementRule() {
@@ -337,9 +339,9 @@ public class FBSimpleDocument implements StyledDocument {
                         element.startOffset = contentBuilder.length();
                         style.applyTemplates(node);
                         element.endOffset = contentBuilder.length();
-                        processEmptyElement(element);
                         nodeToElement.put(node, element);
                         styler.applyStyle(element);
+                        processEmptyElement(element);
                         processImageElement(element);
                         while (positionToElementBuilder.size() <
                                 contentBuilder.length()) {
@@ -364,15 +366,23 @@ public class FBSimpleDocument implements StyledDocument {
         }
 
         void processImageElement(FBSimpleElement element) {
-            org.dom4j.Element domElement = (org.dom4j.Element)element.getNode();
-            if (!"image".equals(domElement.getName()))
+            Node node = element.getNode();
+            if (!"image".equals(node.getName()))
                 return;
-            String href = domElement.attributeValue("href");
+            String href = ((org.dom4j.Element)node).attributeValue("href");
             try {
                 element.setIconAttribute(fb.getImage(href));
             } catch (FBException e) {
-                log.warn("can't read image " + href);
+                log.warn("can't read image " + href, e);
+                processBrokenImageElement(element);
             }
+        }
+
+        void processBrokenImageElement(FBSimpleElement element) {
+            SimpleAttributeSet attrs =
+                        new SimpleAttributeSet(element.getAttributes());
+            attrs.addAttribute(FBSimpleStyler.ViewAttribute, "label");
+            element.setAttributeSet(attrs);
         }
 
         void save() {

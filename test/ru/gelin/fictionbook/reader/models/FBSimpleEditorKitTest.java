@@ -69,6 +69,9 @@ public class FBSimpleEditorKitTest {
         attributes.addAttribute(FBSimpleStyler.ViewAttribute, "label");
         assertEquals("javax.swing.text.LabelView",
             factory.create(element).getClass().getName());
+        attributes.addAttribute(FBSimpleStyler.ViewAttribute, "icon");
+        assertEquals("javax.swing.text.IconView",
+            factory.create(element).getClass().getName());
     }
 
 }

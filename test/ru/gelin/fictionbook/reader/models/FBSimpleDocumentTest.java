@@ -246,12 +246,31 @@ public class FBSimpleDocumentTest {
 
     @Test public void testImageElement()
             throws BadLocationException, FBException {
-        Node node = fb.getDocument().selectSingleNode("//fb:image");
+        Node node = fb.getDocument().selectSingleNode(
+                "//fb:image[@id='crow-image']");
         Element element = document.getElement(node);
         //Icon icon = fb.getImage("#crow.png");
         //assertEquals(icon, StyleConstants.getIcon(element.getAttributes()));
         //two icons are always differ :(
         assertNotNull(StyleConstants.getIcon(element.getAttributes()));
+    }
+
+    @Test public void testBrokenImageElement()
+            throws BadLocationException, FBException {
+        Node node = fb.getDocument().selectSingleNode(
+                "//fb:image[@id='broken-image']");
+        Element element = document.getElement(node);
+        assertEquals("label", element.getAttributes().getAttribute(
+                FBSimpleStyler.ViewAttribute));
+        //assertEquals("alt text", document.getText(element.getStartOffset(),
+        //        element.getEndOffset() - element.getStartOffset()));
+        //TODO: fix it
+    }
+
+    @Test public void testImageAltText() {
+        Node node = fb.getDocument().selectSingleNode(
+                "//fb:image[@id='broken-image']/@alt");
+        assertEquals("alt text", node.getText());
     }
 
 }
