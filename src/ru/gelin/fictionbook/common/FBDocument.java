@@ -169,11 +169,17 @@ public class FBDocument {
         try {
             String base64 = node.getText();
             Image image = ImageIO.read(new ByteArrayInputStream(
-                    Base64.decodeBase64(base64.getBytes("ISO-8859-1"))));
+                    Base64.decodeBase64(base64.getBytes(getXMLEncoding()))));
             return new ImageIcon(image);
         } catch (Exception e) {
             throw new FBException("error occurred while reading image", e);
         }
+    }
+
+    String getXMLEncoding() {
+        if (dom.getXMLEncoding() == null)
+            return "ISO-8859-1";
+        return dom.getXMLEncoding();
     }
 
     void prepareXPaths() {

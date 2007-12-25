@@ -74,4 +74,11 @@ public class FBDocumentTest {
         assertEquals(106, icon.getIconHeight());
     }
 
+    @Test public void testGetXMLEncoding() throws FBException {
+        FBDocument doc = new FBDocument(file);
+        assertEquals("UTF-8", doc.getXMLEncoding());
+        FBDocument doc2 = new FBDocument(new File("docs/test2.1.fb2"));
+        assertEquals("windows-1251", doc2.getXMLEncoding());
+    }
+
 }
