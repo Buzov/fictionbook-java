@@ -320,6 +320,8 @@ public class FBSimpleDocument implements StyledDocument {
             style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td/text()")));
             style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:td//text()")));
             style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:date/text()")));
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:subtitle/text()")));
+            style.addRule(new Rule(textRule, fb.createPattern("//fb:body//fb:subtitle//text()")));
             style.addRule(new Rule(textRule, fb.createPattern("//fb:book-title/text()")));
             style.addRule(new Rule(textRule, fb.createPattern("//fb:image/@alt")));
         }
